@@ -26,9 +26,9 @@
  <script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js"></script> 
  
  <script>
-	var ip = "192.168.1.151:1123";
-	var rurl = "http://"+ip+"/annihilation/v/beta.html";
-	document.getElementById("favicon").href="http://"+ip+"/media/website_icon.png";
+	var ip = "https://vortex418.github.io";
+	var rurl = ip+"/annihilation/v/beta.html";
+	document.getElementById("favicon").href=ip+"/media/website_icon.png";
     	var sketchProc = function(processingInstance) {
 	   var mouseIsPressed = false;
         processingInstance.mousePressed = function () { mouseIsPressed = true; };
@@ -157,10 +157,10 @@
 		// function to draw ships, I figured to put it here since it makes more sense next to the ship var than the other functions
 		// type: which type(0-4 yours,5-10 enemy) ,shields: % shields are at
 		var shipDraw = function(type,x,y,z){
-			image(getImage("http://"+ip+"/annihilation/models/"+type+".png"),x-20,y-20,ship.width[type]*z,ship.height[type]*z);
+			image(getImage(ip+"/annihilation/models/"+type+".png"),x-20,y-20,ship.width[type]*z,ship.height[type]*z);
 		};
 		var playSound = function(src) {
-			document.getElementById("audio").src="http://"+ip+"/annihilation/sound/"+src;
+			document.getElementById("audio").src=ip+"/annihilation/sound/"+src;
 			var sound = document.getElementById("audio");
   			sound.play();
 		}
@@ -295,7 +295,7 @@
 			}
 			if(scene === 0 && sub === 0){
 				background(0,0,0);
-				image(getImage("http://"+ip+"/annihilation/models/menu.png"),0,0,width,height);
+				image(getImage(ip+"/annihilation/models/menu.png"),0,0,width,height);
 				fill(128,128,128);
 				noStroke();
 				rect(width/2-width/8,height/2-height/32*1,width/4,height/16);
