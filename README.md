@@ -19,20 +19,20 @@ changed almost all variables to objects, to support object-oriented design, and 
 ###### campian 
 Added the infopedia! Improved all ship textures to images and made the shipyard interface better. Reload/Recharge research improves firing speed. Added 8 more levels and research costs now scale.
 
-### 0.1.0	
+### v0.1.0	
 ##### Released: 2020/11/16	
 ###### campain 
 Space Battles!!!
 
-### 0.0.3	
+### v0.0.3	
 ##### Released: 2020/11/09
 ###### campain 
 Planet overview tabs available.
-### 0.0.2	
+### v0.0.2	
 ##### Released: 2020/11/05
 ###### campain 
 Labraotry and shipyard tabs finished entirly.
-### 0.0.1
+### v0.0.1
 ##### Released: 2020/10/23	
 ###### campain 
 How To Play,Username screen, Settings, and Tabs finsihed.
