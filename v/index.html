@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html> 
+	<head>
+		<title>Annihilation - Version List</title> 
+		<link rel="icon" 
+	      type="image/png" 
+	      id = "favicon">
+		<style>
+			body{
+				background-color: black;
+				font-family: Arial;
+				color: red;
+			}
+			button{
+				background-color: gray;
+				color: red;
+				border: 1px, red;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Annihilation Version List</h1>
+		<a id="back"><button> &lt -- Home</button></a><br>
+		<a id="beta"><button>Beta</button></a>
+		<p>--</p>
+		<a id="0.1.2"><button>v0.1.2</button></a><br>
+		<a id="0.1.1"><button>v0.1.1</button></a><br>
+		<a id="0.1.0"><button>v0.1.0</button></a>
+		<p>--</p>
+		<a id="0.0.3"><button>v0.0.3</button></a><br>
+		<a id="0.0.2"><button>v0.0.2</button></a><br>
+		<a id="0.0.1"><button>v0.0.1</button></a><br>
+		<script>
+			var ip = "192.168.1.151:1123";
+			document.getElementById("back").href="http://"+ip+"/annihilation/";
+			document.getElementById("favicon").href="http://"+ip+"/media/website_icon.png";
+			document.getElementById("beta").onclick=function(){window.open("http://"+ip+"/annihilation/v/beta.html", "newwindow", "width=1024,height=576");};
+			document.getElementById("0.1.2").onclick=function(){window.open("http://"+ip+"/annihilation/v/0.1.2.html", "newwindow", "width=1024,height=576");};
+			document.getElementById("0.1.1").onclick=function(){window.open("http://"+ip+"/annihilation/v/0.1.1.html", "newwindow", "width=1024,height=576");};
+			document.getElementById("0.1.0").onclick=function(){window.open("http://"+ip+"/annihilation/v/0.1.0.html", "newwindow", "width=1024,height=576");};
+			document.getElementById("0.0.3").onclick=function(){window.open("http://"+ip+"/annihilation/v/0.0.3.html", "newwindow", "width=1024,height=576");};
+			document.getElementById("0.0.2").onclick=function(){window.open("http://"+ip+"/annihilation/v/0.0.2.html", "newwindow", "width=1024,height=576");};
+			document.getElementById("0.0.1").onclick=function(){window.open("http://"+ip+"/annihilation/v/0.0.1.html", "newwindow", "width=1024,height=576");};
+		</script>
+	</body>
+</html>
