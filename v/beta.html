@@ -2,7 +2,6 @@
 <html> 
  <head>
 	<title>Annihilation - Beta</title>
-	<!-- Build 2020.11.29d-->
 	<link rel="icon" 
       type="image/png" 
       id="favicon">
@@ -19,7 +18,7 @@
 	<center/>
 	<!-- This draws the Canvas on the webpage -->
 	<canvas id="mycanvas"></canvas>
-	<audio id = "audio"><source src="http://192.168.1.151:1123/media/error.mp3" type="audio/mp3"></audio>
+	<audio id = "audio"><source src="https://vortex418.github.io/annihilation/sound/error.mp3" type="audio/mp3"></audio>
 	<!--<a id="download_link" download="save.txt" href="" ><button>Download save as a text file</button></a>-->
 </body>
 
@@ -28,7 +27,7 @@
  <script>
 	var ip = "https://vortex418.github.io";
 	var rurl = ip+"/annihilation/v/beta.html";
-	document.getElementById("favicon").href=ip+"/media/website_icon.png";
+	document.getElementById("favicon").href=ip+"/annihilation/website_icon.png";
     	var sketchProc = function(processingInstance) {
 	   var mouseIsPressed = false;
         processingInstance.mousePressed = function () { mouseIsPressed = true; };
