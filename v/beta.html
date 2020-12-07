@@ -1316,7 +1316,7 @@
 					cX = round(random(cXmin[sub],cXmax[sub]));
 					cY = round(random(cYmin[sub],cYmax[sub]));
 					line(ship.x[bX],ship.y[bY],enemy.x[cX],enemy.y[cY]);
-					ship.shields -= sub**sub;
+					ship.shields -= sub*sub;
 					burn.time--;
 				}
 				if(sub===1){
