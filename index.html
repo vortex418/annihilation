@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html> 
+	<head>
+		<title>Annihilation - Home</title> 
+		<link rel="icon" 
+	      type="image/png" 
+	      id = "favicon">
+		<style>
+			body{
+				font-family: Arial;
+				color: red;
+			}
+			h1{
+				padding: 25px;
+				font-size: 50px;
+			}
+			p{
+				color: white;
+			}
+			button{
+				background-color: gray;
+				color: red;
+				border: solid 1px red;
+			}
+		</style>
+	</head>
+	<body id="body">
+		<center/>	
+		<h1>Annihilation</h1>
+		<a id="button_beta"><button>Play the Beta</button></a>
+		<a id="button_latest"><button>Play Latest Release</button></a>
+		<a id="button_list"><button>Version List</button></a>
+		<h3>About</h3>
+		<p>Annhilation is a online space battle simultor. <br> It is the theme and content of xcraft, <br> but in the liniear form and progression of island clash.</p>
+		<a id="button_log"><button>Changelog</button></a>
+		<script>
+			var ip = "192.168.1.151:1123";
+			document.body.style.backgroundColor = "black";
+			document.body.background = "http://"+ip+"/media/background.jpg";
+			document.body.style.backgroundSize = "cover";
+			document.body.style.backgroundPosition = "center";
+			document.getElementById("button_beta").onclick=function(){window.open("http://"+ip+"/annihilation/v/beta.html", "newwindow", "width=1024,height=576");};
+			document.getElementById("button_latest").onclick=function(){window.open("http://"+ip+"/annihilation/v/0.1.2.html", "newwindow", "width=1024,height=576");};
+			document.getElementById("button_list").href="http://"+ip+"/annihilation/v/";
+			document.getElementById("button_log").href="http://"+ip+"/annihilation/changelog.html";
+			document.getElementById("favicon").href="http://"+ip+"/media/website_icon.png";
+			
+		</script>
+	</body>
+</html>
