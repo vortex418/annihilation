@@ -25,28 +25,24 @@
 				padding: 3px;
 				margin: 3px;
 			}
-			.button_latest.button_latest{
-				font-size: 25px;
-				padding: 5px;
-				margin: 5px;
-			}
 		</style>
 	</head>
 	<body id="body">
 		<center/>	
 		<h1>Annihilation</h1>
-		<a class="button_latest"><button>Play Now</button></a><br>
+		<a id="button_latest"><img id="latest_img"></a><br>
 		<a id="button_beta"><button>Play the Beta</button></a>
 		<a id="button_list"><button>Version List</button></a>
 		<h3>About</h3>
 		<p>Annhilation is a online space battle simultor. <br> It is the theme and content of xcraft, <br> but in the liniear form and progression of island clash.</p>
 		<a id="button_log"><button>Changelog</button></a>
 		<script>
-			var ip = "https://vortex418.github.io";
+			var ip = "https://votex418.github.io";
 			document.body.style.backgroundColor = "black";
 			document.body.background = ip+"/annihilation/background.jpg";
 			document.body.style.backgroundSize = "cover";
 			document.body.style.backgroundPosition = "center";
+			document.getElementById("latest_img").src=ip+"/annihilation/play.png";
 			document.getElementById("button_beta").onclick=function(){window.open(ip+"/annihilation/v/beta.html", "newwindow", "width=1024,height=576");};
 			document.getElementById("button_latest").onclick=function(){window.open(ip+"/annihilation/v/0.1.2.html", "newwindow", "width=1024,height=576");};
 			document.getElementById("button_list").href=ip+"/annihilation/v/";
