@@ -2,6 +2,7 @@
 <html> 
  <head>
 	<title>Annihilation - Beta</title>
+	<!-- Build 2020.11.29d-->
 	<link rel="icon" 
       type="image/png" 
       id="favicon">
@@ -18,7 +19,7 @@
 	<center/>
 	<!-- This draws the Canvas on the webpage -->
 	<canvas id="mycanvas"></canvas>
-	<audio id = "audio"><source src="https://vortex418.github.io/annihilation/sound/error.mp3" type="audio/mp3"></audio>
+	<audio id = "audio"><source src="" type="audio/mp3"></audio>
 	<!--<a id="download_link" download="save.txt" href="" ><button>Download save as a text file</button></a>-->
 </body>
 
@@ -27,6 +28,7 @@
  <script>
 	var ip = "https://vortex418.github.io";
 	var rurl = ip+"/annihilation/v/beta.html";
+	document.getElementById("audio").src=ip+"/annihilation/error.mp3";
 	document.getElementById("favicon").href=ip+"/annihilation/website_icon.png";
     	var sketchProc = function(processingInstance) {
 	   var mouseIsPressed = false;
@@ -68,7 +70,6 @@
 		//basic vars
 		var scene = 0;
 		var sub = 0;
-		var Uname = "";
 		var skip = 0;
 		//star cords and size
 		var star = {
@@ -120,15 +121,15 @@
 		var ship = {
 			totalnum: 0,
 			total: 0,
-			num: [0,0,0,0,0,0,0],
+			num: [0,0,0,0,0,0,0,0],
 			strength: 0,
 			cost: {
-				met: [null,1000,2000,4000,10000,25000],
-				min: [null,500,2000,1000,4000,10000],
-				ful: [null,250,500,1000,2500,5000],
+				metal: [1000,2000,4000,10000,25000,100000],
+				minerals: [500,2000,1000,4000,10000,50000],
+				fuel: [250,500,1000,2500,5000,25000],
 			},
-			width: [null,25,36,75,100,150,0,0,0,0,0,25,35,75,100,150],
-			height: [null,24,18,50,50,60,0,0,0,0,0,24,18,50,50,60],
+			width: [null,25,36,75,100,150,160,0,0,0,0,25,35,75,100,150,160],
+			height: [null,24,18,50,50,60,131,0,0,0,0,24,18,50,50,60,131],
 			x:[width/64*28,width/64*28,width/64*28,width/64*28,width/64*28,width/64*28,width/64*28,width/64*20,width/64*20,width/64*20,width/64*20,width/64*20,width/64*20,width/64*20,width/64*12,width/64*12,width/64*12,width/64*12,width/64*12,width/64*12,width/64*12,width/64*4,width/64*4,width/64*4,width/64*4],
 			y: [width/64*16,width/64*12,width/64*20,width/64*8,width/64*24,width/64*4,width/64*28,width/64*2,width/64*36,width/64*56,width/64*41,width/64*51,width/64*48,width/64*10,width/64*31,width/64*31,width/64*8,width/64*40,width/64*4,width/64*10,width/64*59,width/64*52,width/64*29,width/64*10,width/64*27],
 			shields: 0,
@@ -169,81 +170,9 @@
 			play = true;
 			playSound(sound);
 		};
-		/**var savetext;
+		var savetext;
 		var savedata;
-		var saveurl;**/
-		//vars for text boxes
-		var chars     =["","","","","","","","","","    ","","","","\n","\n","","shift","ctrl","alt","pause/break","caps","","","","","","","esc","","","",""," ","pg up","pg down","end","home","","","","","","","","","insert","delete","","0","1","2","3","4","5","6","7","8","9","","","","","","","","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]; 
-		var shiftChars=["","","","","","","","","","    ","","","","","\n","\n","shift","ctrl","alt","pause/break","caps","","","","","","","esc","","","",""," ","pg up","pg down","end","home","","","","","","","","","insert","delete","",")","!","@","#","$","%","^","&","*","(","","","","","","","","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]; 
-
-		var shift = false;
-		var boxSelected = false;
-		var Text = "";
-		var textsize = height/32;
-		var cursorVisible = false;
-		var cursorTime=0;
-		var textBox = function(x,y,width){
-			textAlign(LEFT,CENTER);
-		    if(shift){
-
-				  Text = Text.substring(0,Text.length-6);
-				  Text+=shiftChars[keyCode];
-				  shift = false;
-
-		    }
-		    if(Text.substring(Text.length-6,Text.length-1)==="shift"&& !keyIsPressed){
-			   shift = true;
-		    }
-		    keyPressed = function() { 
-
-				  if(keyCode === 37||keyCode ===  8){
-					 Text = Text.substring(0,Text.length-1);
-				  }
-				  if(keyCode===188){
-					 Text+=","; 
-
-				  } else if(keyCode===190){
-					 Text+="."; 
-
-				  } else{
-					 Text+=chars[keyCode];
-				  } 
-		    }; 
-
-				  fill(128,128,128);
-				  rect(x,y,width,25);
-
-			   fill(255, 0, 0);
-			   text(Text.substring(Text.length-width/5.5,Text.length),x+5,y+16);
-			   if(mouseIsPressed){
-				  if(mouseX>x&&mouseY>y&&mouseX<x+width&&mouseY<y+22){ 
-				  boxSelected = true;
-				  } else{
-					 boxSelected = false;
-				  }
-			   }
-			   if(boxSelected){
-				  cursorTime-=1;
-				  if(cursorVisible)
-				  {
-				  line(x+5+Text.length*textsize,y+2,x+5+Text.length*textsize,y+20);
-					 if(cursorTime<0)
-					 {
-						cursorVisible=false;
-						cursorTime = 20;
-					 }
-				  }
-				  else
-				  {
-					 if(cursorTime<0)
-					 {
-						cursorVisible=true;
-						cursorTime = 20;
-					 }
-				  }
-			   }
-			textAlign(CENTER,CENTER);
-		};
+		var saveurl;
 		var starscape = function(num){
 			fill(255,255,255);
 			noStroke();
@@ -273,15 +202,15 @@
 			if(play === true){
 				playTime--;
 			}
-			ship.totalnum = ship.num[1]+ship.num[2]+ship.num[3]+ship.num[4]+ship.num[5];
+			ship.totalnum = ship.num[1]+ship.num[2]+ship.num[3]+ship.num[4]+ship.num[5]+ship.num[6];
 			if(planet.status[64] === 2){
 				scene = 0;
 				sub = 2;
 			}
 			tech.price = [tech.level.armor+5,tech.level.shield+10,tech.level.laser+5,tech.level.missle+10,tech.level.reload+5,tech.level.recharge+10];
-			ship.strength = (ship.num[1]*1 + ship.num[2]*5 + ship.num[3]*10 + ship.num[4]*25 + ship.num[5]*100)*(tech.level.missle+1+tech.level.laser*0.2);
+			ship.strength = (ship.num[1]*1 + ship.num[2]*5 + ship.num[3]*10 + ship.num[4]*25 + ship.num[5]*100 + ship.num[6]*250)*(tech.level.missle+1+tech.level.laser*0.2);
 			if(InBattle === false){
-				ship.shields = (ship.num[1]*10+ship.num[2]*25+ship.num[3]*50+ship.num[4]*100+ship.num[5]*250)*(tech.level.shield+1+tech.level.armor*0.2);
+				ship.shields = (ship.num[1]*10+ship.num[2]*25+ship.num[3]*50+ship.num[4]*100+ship.num[5]*250 + ship.num[6]*1000)*(tech.level.shield+1+tech.level.armor*0.2);
 				enemy.shields = [null,100,250,500,1000,3000,4000,5500,7500,25000,35000,50000,70000,95000,125000,160000,200000,250000,320000,400000,500000,620000,750000,880000,1000000,1250000,1550000,1800000,2250000,2750000,3300000,3900000,4750000,5000000,6000000,7500000,9000000,10000000,11000000,12000000,13000000,14000000,15000000,16000000,17000000,18000000,19000000,20000000,22000000,24000000,26000000,28000000,30000000,32500000,35000000,37500000,40000000,43300000,46600000,50000000,55000000,60000000,65000000,70000000,75000000];
 			}
 			ship.tick = round(random(0,100));
@@ -402,7 +331,6 @@
 					rect(width/4*1,0,width/4,height/8);
 					rect(width/4*2,0,width/4,height/8);
 					rect(width/4*3,0,width/4,height/8);
-					rect(width/2-width/8,height-25,width/4,25);
 					noStroke();
 					fill(64,64,64);
 					rect(width/32*3,height/32*8,width/32*12,height/32*8);
@@ -420,8 +348,6 @@
 					text("How To Play",width/32*23,height/8*3);
 					text("Ships",width/32*9,height/8*6);
 					text("Credits",width/32*23,height/8*6);
-					textSize(height/32);
-					text(Uname,width/2,height-height/32);
 					textSize(height/24);
 					fill(255,255,255);
 					textAlign(CENTER,CENTER);
@@ -440,22 +366,22 @@
 					}
 					if(mouseX < width/32*15 && mouseX > width/32*3 && mouseY < height/32*16 && mouseY > height/32*8 && mouseIsPressed) {
 						scene = 1;
-						sub = 6;
+						sub = 7;
 					}
 					if(mouseX < width/32*29 && mouseX > width/32*17 && mouseY < height/32*16 && mouseY > height/32*8 && mouseIsPressed) {
 						scene = 1;
-						sub = 8;
+						sub = 9;
 					}
 					if(mouseX < width/32*15 && mouseX > width/32*3 && mouseY < height/32*28 && mouseY > height/32*20 && mouseIsPressed) {
 						scene = 1;
-						sub = 7;
+						sub = 8;
 					}
 					if(mouseX < width/32*29 && mouseX > width/32*17 && mouseY < height/32*28 && mouseY > height/32*20 && mouseIsPressed) {
 						scene = 1;
-						sub = 9;
+						sub = 10;
 					}
 				}
-				if(sub>0 && sub <6){
+				if(sub>0 && sub <7){
 					// ship info GUI
 					background(0,0,0);
 					textAlign(CENTER,CENTER);
@@ -468,7 +394,6 @@
 					rect(width/4*1,0,width/4,height/8);
 					rect(width/4*2,0,width/4,height/8);
 					rect(width/4*3,0,width/4,height/8);
-					rect(width/2-width/8,height-25,width/4,25);
 					stroke(255,0,0);
 					fill(64,64,64);
 					rect(width/16*8,height/16*11,width/8,height/16);
@@ -480,16 +405,15 @@
 					text("Laboratory",width/4*2.5,height/8*0.5);
 					text("Settings",width/4*3.5,height/8*0.5);
 					textSize(height/32);
-					text(Uname,width/2,height-height/32);
 					text("Back",width/16*9,height/32*23);
 					textSize(height/24);
 					shipDraw(sub,width/4,height/2,6-sub);
 					textAlign(LEFT,CENTER);
 					noStroke();
 					fill(255,255,255);
-					text("metal cost: "+ship.cost.met[sub],width/2,height/16*7);
-					text("minerals cost: "+ship.cost.min[sub],width/2,height/16*8);
-					text("fuel cost: "+ship.cost.ful[sub],width/2,height/16*9);
+					text("metal cost: "+ship.cost.metal[sub-1],width/2,height/16*7);
+					text("minerals cost: "+ship.cost.minerals[sub-1],width/2,height/16*8);
+					text("fuel cost: "+ship.cost.fuel[sub-1],width/2,height/16*9);
 					textAlign(CENTER,CENTER);
 					if(mouseX < width/4*1 && mouseX > width/4*0 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
 						scene = 3;
@@ -504,11 +428,11 @@
 					if(mouseX < width/4*4 && mouseX > width/4*3 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
 						scene = 6;
 					}
-					if(mouseX < width/16*9 && mouseX > width/16*8 && mouseY < height/16*12 && mouseY > height/16*11 && mouseIsPressed){
-						sub = 7;
+					if(mouseX < width/16*10 && mouseX > width/16*8 && mouseY < height/16*12 && mouseY > height/16*11 && mouseIsPressed){
+						sub = 8;
 					}
 				}
-				if(sub === 6){
+				if(sub === 7){
 					// Story (In Game)
 					background(0,0,0);
 					textAlign(CENTER,CENTER);
@@ -518,7 +442,6 @@
 					rect(width/4*1,0,width/4,height/8);
 					rect(width/4*2,0,width/4,height/8);
 					rect(width/4*3,0,width/4,height/8);
-					rect(width/2-width/8,height-25,width/4,25);
 					noStroke();
 					rect(width*0.05,height/8+25,width*0.9,height/4*3);
 					textSize(height/16);
@@ -545,8 +468,6 @@
 					textAlign(CENTER,CENTER);
 					textSize(height/24);
 					text("Back",width/2,height/32*27);
-					textSize(height/32);
-					text(Uname,width/2,height-height/32);
 					if(mouseX < width/4*1 && mouseX > width/4*0 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
 						scene = 3;
 						sub = 0;
@@ -565,7 +486,7 @@
 						sub = 0;
 					}
 				}
-				if(sub === 7){
+				if(sub === 8){
 					// Ship info nav. GUI
 					background(0,0,0);
 					textAlign(CENTER,CENTER);
@@ -575,7 +496,6 @@
 					rect(width/4*1,0,width/4,height/8);
 					rect(width/4*2,0,width/4,height/8);
 					rect(width/4*3,0,width/4,height/8);
-					rect(width/2-width/8,height-25,width/4,25);
 					noStroke();
 					rect(width*0.05,height/8+25,width*0.9,height/4*3);
 					textSize(height/16);
@@ -592,6 +512,7 @@
 					rect(width/16*1,height/16*12-height/32,width/16*6,height/16);
 					rect(width/16*9,height/16*8-height/32,width/16*6,height/16);
 					rect(width/16*9,height/16*10-height/32,width/16*6,height/16);
+					rect(width/16*9,height/16*12-height/32,width/16*6,height/16);
 					fill(255,0,0);
 					noStroke();
 					textAlign(CENTER,CENTER);
@@ -601,7 +522,7 @@
 					text("Crusier",width/8*2,height/16*12);
 					text("Destoryer",width/8*6,height/16*8);
 					text("Battleship",width/8*6,height/16*10);
-					text(Uname,width/2,height-height/32);
+					text("Dreadnought",width/8*6,height/16*12);
 					if(mouseX < width/4*1 && mouseX > width/4*0 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
 						scene = 3;
 						sub = 0;
@@ -635,8 +556,12 @@
 						scene = 1;
 						sub = 5;
 					}
+					if(mouseX < width/16*15 && mouseX > width/16*9 && mouseY < height/16*13-height/32 && mouseY > height/16*11-height/32 && mouseIsPressed){
+						scene = 1;
+						sub = 6;
+					}
 				}
-				if(sub === 8){
+				if(sub === 9){
 					// How To Play
 					background(0,0,0);
 					textAlign(CENTER,CENTER);
@@ -646,7 +571,6 @@
 					rect(width/4*1,0,width/4,height/8);
 					rect(width/4*2,0,width/4,height/8);
 					rect(width/4*3,0,width/4,height/8);
-					rect(width/2-width/8,height-25,width/4,25);
 					noStroke();
 					rect(width*0.05,height/8+25,width*0.9,height/4*3);
 					textSize(height/16);
@@ -672,8 +596,6 @@
 					textAlign(CENTER,CENTER);
 					textSize(height/24);
 					text("Back",width/2,height/32*27);
-					textSize(height/32);
-					text(Uname,width/2,height-height/32);
 					if(mouseX < width/4*1 && mouseX > width/4*0 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
 						scene = 3;
 						sub = 0;
@@ -692,8 +614,8 @@
 						sub = 0;
 					}
 				}
-				if(sub === 9){
-					//Release notes
+				if(sub === 10){
+					//Credits
 					background(0,0,0);
 					textAlign(CENTER,CENTER);
 					stroke(64,64,64);
@@ -702,7 +624,6 @@
 					rect(width/4*1,0,width/4,height/8);
 					rect(width/4*2,0,width/4,height/8);
 					rect(width/4*3,0,width/4,height/8);
-					rect(width/2-width/8,height-25,width/4,25);
 					noStroke();
 					rect(width*0.05,height/8+25,width*0.9,height/4*3);
 					textSize(height/16);
@@ -727,8 +648,6 @@
 					textAlign(CENTER,CENTER);
 					textSize(height/24);
 					text("Back",width/2,height/32*27);
-					textSize(height/32);
-					text(Uname,width/2,height-height/32);
 					if(mouseX < width/4*1 && mouseX > width/4*0 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
 						scene = 3;
 					}
@@ -755,11 +674,18 @@
 				fill(128,128,128);
 				rect(width/2-width/8,height/2+height/16,width/4,height/16);
 				fill(255,0,0);
+				textSize(height/18);
+				text("Tips",width/2,height/36*9);
+				fill(255,255,255);
+				textSize(height/36);
+				text("Build ships in the shipyard tab",width/2,height/36*12);
+				text("Use the research tab to buff your ships abilities",width/2,height/36*14);
+				text("Attack planets to get rewards!",width/2,height/36*16);
+				text("Collect taxes to get resources, though only 10 per game!",width/2,height/36*18);
+				fill(255,0,0);
 				textSize(height/32*1.5);
 				textAlign(CENTER,CENTER);
-				text("Accept name",width/2,height/2+height/11);
-				Uname = Text;
-				textBox(width/2-width/8,height/2,width/4);
+				text("Lets Go!",width/2,height/2+height/11);
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/2+height/8 && mouseY > height/2+height/16 && mouseIsPressed) {
 					onceSound("on.mp3");
 					scene = 3;
@@ -790,7 +716,6 @@
 				rect(width/4*1,0,width/4,height/8);
 				rect(width/4*2,0,width/4,height/8);
 				rect(width/4*3,0,width/4,height/8);
-				rect(width/2-width/8,height-25,width/4,25);
 				if(sub < 7){
 					textSize(height/32);
 					rect(width/16*15,height/16*14,width/16,height/12);
@@ -811,8 +736,6 @@
 				text("Shipyard",width/4*1.5,height/8*0.5);
 				text("Laboratory",width/4*2.5,height/8*0.5);
 				text("Settings",width/4*3.5,height/8*0.5);
-				textSize(height/32);
-				text(Uname,width/2,height-height/32);
 				noStroke();
 				fill(255,255,255);
 				if(mouseX < width/4*1 && mouseX > width/4*0 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
@@ -882,7 +805,6 @@
 				rect(width/4*1,0,width/4,height/8);
 				rect(width/4*2,0,width/4,height/8);
 				rect(width/4*3,0,width/4,height/8);
-				rect(width/2-width/8,height-25,width/4,25);
 				noStroke();
 				rect(width*0.05,height/8+25,width*0.9,height/4*3);
 				textSize(height/16);
@@ -897,22 +819,55 @@
 				rect(width/4*2-width/10,height/4,width/5,height/24);
 				rect(width/4*2-width/9,height/24*8,width/4.5,height/24);
 				rect(width/4*3-width/10,height/4,width/5,height/24);
-				if(metal >= 1000 && minerals >= 500 && fuel >= 250){stroke(0,255,0);}else {stroke(255,0,0);}
+				if(metal >= ship.cost.metal[0] && minerals >= ship.cost.minerals[0] && fuel >= ship.cost.fuel[0]){
+					stroke(0,255,0);
+				}
+				else{
+					stroke(255,0,0);
+				}
 				rect(width/16*1,height/16*8-height/32,width/16*5,height/16);
-				if(metal >= 2000 && minerals >= 2000 && fuel >= 500){stroke(0,255,0);}else {stroke(255,0,0);}
+				if(metal >= ship.cost.metal[1] && minerals >= ship.cost.minerals[1] && fuel >= ship.cost.fuel[1]){
+					stroke(0,255,0);
+				}
+				else {
+					stroke(255,0,0);
+				}
 				rect(width/16*1,height/16*10-height/32,width/16*5,height/16);
-				if(metal >= 4000 && minerals >= 1000 && fuel >= 1000){stroke(0,255,0);}else {stroke(255,0,0);}
+				if(metal >= ship.cost.metal[2] && minerals >= ship.cost.minerals[2] && fuel >= ship.cost.fuel[2]){
+					stroke(0,255,0);
+				}
+				else {
+					stroke(255,0,0);
+				}
 				rect(width/16*1,height/16*12-height/32,width/16*5,height/16);
-				if(metal >= 10000 && minerals >= 4000 && fuel >= 2500){stroke(0,255,0);}else {stroke(255,0,0);}
+				if(metal >= ship.cost.metal[3] && minerals >= ship.cost.minerals[3] && fuel >= ship.cost.fuel[3]){
+					stroke(0,255,0);
+				}
+				else {
+					stroke(255,0,0);
+				}
 				rect(width/16*9,height/16*8-height/32,width/16*5,height/16);
-				if(metal >= 25000 && minerals >= 10000 && fuel >= 5000){stroke(0,255,0);}else {stroke(255,0,0);}
+				if(metal >= ship.cost.metal[4] && minerals >= ship.cost.minerals[4] && fuel >= ship.cost.fuel[4]){
+					stroke(0,255,0);
+				}
+				else {
+					stroke(255,0,0);
+				}
 				rect(width/16*9,height/16*10-height/32,width/16*5,height/16);
+				if(metal >= ship.cost.metal[5] && minerals >= ship.cost.minerals[5] && fuel >= ship.cost.fuel[5]){
+					stroke(0,255,0);
+				}
+				else {
+					stroke(255,0,0);
+				}
+				rect(width/16*9,height/16*12-height/32,width/16*5,height/16);
 				stroke(255,0,0);
 				rect(width/16*6,height/16*8-height/32,width/16,height/16);
 				rect(width/16*6,height/16*10-height/32,width/16,height/16);
 				rect(width/16*6,height/16*12-height/32,width/16,height/16);
 				rect(width/16*14,height/16*8-height/32,width/16,height/16);
 				rect(width/16*14,height/16*10-height/32,width/16,height/16);
+				rect(width/16*14,height/16*12-height/32,width/16,height/16);
 				fill(255,0,0);
 				noStroke();
 				textSize(height/24);
@@ -927,13 +882,14 @@
 				text("i",width/32*13,height/16*12);
 				text("i",width/32*29,height/16*8);
 				text("i",width/32*29,height/16*10);
+				text("i",width/32*29,height/16*12);
 				textSize(height/32);
 				text("Corvette ["+ship.num[1]+"]",width/8*2,height/16*8);
 				text("Frigate ["+ship.num[2]+"]",width/8*2,height/16*10);
 				text("Crusier ["+ship.num[3]+"]",width/8*2,height/16*12);
 				text("Destoryer ["+ship.num[4]+"]",width/8*6,height/16*8);
 				text("Battleship ["+ship.num[5]+"]",width/8*6,height/16*10);
-				text(Uname,width/2,height-height/32);
+				text("Dreadnought ["+ship.num[6]+"]",width/8*6,height/16*12);
 				if(mouseX < width/4*1 && mouseX > width/4*0 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
 					scene = 3;
 					sub = 0;
@@ -947,42 +903,48 @@
 				if(mouseX < width/4*4 && mouseX > width/4*3 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
 					scene = 6;
 				}
-				if(mouseX < width/2+width/10 && mouseX > width/2-width/10 && mouseY < height/24*9 && mouseY > height/24*8 && mouseIsPressed && tax < 11){
+				if(mouseX < width/2+width/10 && mouseX > width/2-width/10 && mouseY < height/24*9 && mouseY > height/24*8 && mouseIsPressed && tax < 10){
 					metal += planet.max*1000;
 					minerals += planet.max*500;
 					fuel += planet.max*250;
 					tech.points += planet.max*10;
 					tax++;
 				}
-				if(mouseX < width/16*5 && mouseX > width/16*1 && mouseY < height/16*9-height/32 && mouseY > height/16*8-height/32 && mouseIsPressed && metal >= 1000 && minerals >= 500 && fuel >= 250){
-					metal -= 1000;
-					minerals -= 500;
-					fuel -= 250;
+				if(mouseX < width/16*5 && mouseX > width/16*1 && mouseY < height/16*9-height/32 && mouseY > height/16*8-height/32 && mouseIsPressed && metal >= ship.cost.metal[0] && minerals >= ship.cost.minerals[0] && fuel >= ship.cost.fuel[0]){
+					metal -= ship.cost.metal[0];
+					minerals -= ship.cost.minerals[0];
+					fuel -= ship.cost.fuel[0];
 					ship.num[1]++;
 				}
-				if(mouseX < width/16*5 && mouseX > width/16*1 && mouseY < height/16*11-height/32 && mouseY > height/16*10-height/32 && mouseIsPressed && metal >= 2000 && minerals >= 2000 && fuel >= 500){
-					metal -= 2000;
-					minerals -= 2000;
-					fuel -= 500;
+				if(mouseX < width/16*5 && mouseX > width/16*1 && mouseY < height/16*11-height/32 && mouseY > height/16*10-height/32 && mouseIsPressed && metal >= ship.cost.metal[1] && minerals >= ship.cost.minerals[1] && fuel >= ship.cost.fuel[1]){
+					metal -= ship.cost.metal[1];
+					minerals -= ship.cost.minerals[1];
+					fuel -= ship.cost.fuel[1];
 					ship.num[2]++;
 				}
-				if(mouseX < width/16*5 && mouseX > width/16*1 && mouseY < height/16*13-height/32 && mouseY > height/16*12-height/32 && mouseIsPressed && metal >= 4000 && minerals >= 1000 && fuel >= 1000){
-					metal -= 4000;
-					minerals -= 1000;
-					fuel -= 1000;
+				if(mouseX < width/16*5 && mouseX > width/16*1 && mouseY < height/16*13-height/32 && mouseY > height/16*12-height/32 && mouseIsPressed && metal >= ship.cost.metal[2] && minerals >= ship.cost.minerals[2] && fuel >= ship.cost.fuel[2]){
+					metal -= ship.cost.metal[2];
+					minerals -= ship.cost.minerals[2];
+					fuel -= ship.cost.fuel[2];
 					ship.num[3]++;
 				}
-				if(mouseX < width/16*13 && mouseX > width/16*9 && mouseY < height/16*9-height/32 && mouseY > height/16*8-height/32 && mouseIsPressed && metal >= 10000 && minerals >= 4000 && fuel >= 2500){
-					metal -= 10000;
-					minerals -= 4000;
-					fuel -= 2500;
+				if(mouseX < width/16*13 && mouseX > width/16*9 && mouseY < height/16*9-height/32 && mouseY > height/16*8-height/32 && mouseIsPressed && metal >= ship.cost.metal[3] && minerals >= ship.cost.minerals[3] && fuel >= ship.cost.fuel[3]){
+					metal -= ship.cost.metal[3];
+					minerals -= ship.cost.minerals[3];
+					fuel -= ship.cost.fuel[3];
 					ship.num[4]++;
 				}
-				if(mouseX < width/16*13 && mouseX > width/16*9 && mouseY < height/16*11-height/32 && mouseY > height/16*10-height/32 && mouseIsPressed && metal >= 25000 && minerals >= 10000 && fuel >= 5000){
-					metal -= 25000;
-					minerals -= 10000;
-					fuel -= 5000;
+				if(mouseX < width/16*13 && mouseX > width/16*9 && mouseY < height/16*11-height/32 && mouseY > height/16*10-height/32 && mouseIsPressed && metal >= ship.cost.metal[4] && minerals >= ship.cost.minerals[4] && fuel >= ship.cost.fuel[4]){
+					metal -= ship.cost.metal[4];
+					minerals -= ship.cost.minerals[4];
+					fuel -= ship.cost.fuel[4];
 					ship.num[5]++;
+				}
+				if(mouseX < width/16*13 && mouseX > width/16*9 && mouseY < height/16*13-height/32 && mouseY > height/16*12-height/32 && mouseIsPressed && metal >= ship.cost.metal[5] && minerals >= ship.cost.minerals[5] && fuel >= ship.cost.fuel[5]){
+					metal -= ship.cost.metal[5];
+					minerals -= ship.cost.minerals[5];
+					fuel -= ship.cost.fuel[5];
+					ship.num[6]++;
 				}
 				if(mouseX < width/16*7 && mouseX > width/16*6 && mouseY < height/16*9-height/32 && mouseY > height/16*8-height/32 && mouseIsPressed){
 					scene = 1;
@@ -1004,6 +966,10 @@
 					scene = 1;
 					sub = 5;
 				}
+				if(mouseX < width/16*15 && mouseX > width/16*14 && mouseY < height/16*13-height/32 && mouseY > height/16*12-height/32 && mouseIsPressed){
+					scene = 1;
+					sub = 6;
+				}
 			}
 			if(scene === 5){
 				// Lab GUI
@@ -1018,7 +984,6 @@
 				rect(width/4*1,0,width/4,height/8);
 				rect(width/4*2,0,width/4,height/8);
 				rect(width/4*3,0,width/4,height/8);
-				rect(width/2-width/8,height-25,width/4,25);
 				if (tech.level.armor === 0){tech.color = 1;}
 				if (tech.level.armor >= 1){tech.color = 2;}
 				object("Armor "+ tech.level.armor+ "(cost: "+tech.price[0]+")",tech.color,width/4*1,height/4*3,width/16,64,64,64);
@@ -1055,8 +1020,6 @@
 				text("Settings",width/4*3.5,height/8*0.5);
 				textSize(height/24);
 				text("Research Points: "+tech.points,width/2,height/4*1);
-				textSize(height/32);
-				text(Uname,width/2,height-height/32);
 				noStroke();
 				fill(255,255,255);
 				if(mouseX < width/4*1 && mouseX > width/4*0 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
@@ -1112,7 +1075,6 @@
 				rect(width/4*1,0,width/4,height/8);
 				rect(width/4*2,0,width/4,height/8);
 				rect(width/4*3,0,width/4,height/8);
-				rect(width/2-width/8,height-25,width/4,25);
 				noStroke();
 				rect(width*0.05,height/8+25,width*0.9,height/4*3);
 				fill(64,64,64);
@@ -1128,12 +1090,10 @@
 				text("Laboratory",width/4*2.5,height/8*0.5);
 				text("Settings",width/4*3.5,height/8*0.5);
 				//Options
-				text("Reset Name",width/2,height/32*16);
+				text("Tips",width/2,height/32*16);
 				text("Infopedia",width/2,height/32*19);
 				text("Main Menu",width/2,height/32*22);
 				//text("Save Game",width/2,height/32*25);
-				textSize(height/32);
-				text(Uname,width/2,height-height/32);
 				noStroke();
 				fill(255,255,255);
 				if(mouseX < width/4*1 && mouseX > width/4*0 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
@@ -1187,7 +1147,6 @@
 				rect(width/4*1,0,width/4,height/8);
 				rect(width/4*2,0,width/4,height/8);
 				rect(width/4*3,0,width/4,height/8);
-				rect(width/2-width/8,height-25,width/4,25);
 				stroke(255,0,0);
 				fill(64,64,64);
 				rect(width/16*8,height/16*11,width/8,height/16);
@@ -1204,7 +1163,6 @@
 				text("Laboratory",width/4*2.5,height/8*0.5);
 				text("Settings",width/4*3.5,height/8*0.5);
 				textSize(height/32);
-				text(Uname,width/2,height-height/32);
 				text("Back",width/16*9,height/32*23);
 				if(sub !== 0 && planet.status[sub-1] === 2 && planet.status[sub] === 1){
 					text("Attack",width/16*12,height/32*23);
@@ -1237,7 +1195,7 @@
 					scene = 3;
 					sub = floor(sub/8-o);
 				}
-				if(mouseX < width/16*13 && mouseX > width/16*11 && mouseY < height/16*12 && mouseY > height/16*11 && mouseIsPressed && planet.status[sub] === 1){
+				if(mouseX < width/16*13 && mouseX > width/16*11 && mouseY < height/16*12 && mouseY > height/16*11 && mouseIsPressed && planet.status[sub-1] === 2 && planet.status[sub] === 1){
 					scene = 8;
 				}
 			}
@@ -1252,7 +1210,6 @@
 				object("",planet.status[sub],width*1.25,height/2,width,planet.color.r[sub],planet.color.g[sub],planet.color.b[sub]);
 				stroke(255,0,0);
 				fill(128,128,128);
-				rect(width/2-width/8,height-25,width/4,25);
 				noStroke();
 				rect(width/64*1,height/64*1,width/64*8,height/64*4);
 				stroke(255,0,0);
@@ -1263,11 +1220,13 @@
 				text("your shields: "+round(ship.shields),width/64*4.5,height/64*2);
 				text("enemy shields: "+round(enemy.shields[sub]),width/64*4.5,height/64*4);
 				text("surrender",width/64*4.5,height/64*8);
-				textSize(height/32);
-				text(Uname,width/2,height-height/32);
-				if(ship.total < 26){
+				if(ship.total < 25){
+					for(var i=0;i<ship.num[6];i++){
+						shipDraw(6,ship.x[ship.total],ship.y[ship.total]-ship.height[6]/2,1);
+						ship.total++;
+					}
 					for(var i=0;i<ship.num[5];i++){
-						shipDraw(5,ship.x[ship.total],ship.y[ship.total],1);
+						shipDraw(5,ship.x[ship.total],ship.y[ship.total]-ship.height[5]/2,1);
 						ship.total++;
 					}
 					for(var i=0;i<ship.num[4];i++){
@@ -1445,10 +1404,11 @@
 				rect(width/4*1,0,width/4,height/8);
 				rect(width/4*2,0,width/4,height/8);
 				rect(width/4*3,0,width/4,height/8);
-				rect(width/2-width/8,height-25,width/4,25);
 				stroke(255,0,0);
 				fill(64,64,64);
+				if(battleWon === false){
 				rect(width/16*8,height/16*11,width/8,height/16);
+				}
 				rect(width/16*11,height/16*11,width/8,height/16);
 				noStroke();
 				fill(255,0,0);
@@ -1458,11 +1418,15 @@
 				text("Laboratory",width/4*2.5,height/8*0.5);
 				text("Settings",width/4*3.5,height/8*0.5);
 				fill(255,255,255);
-				if(battleWon===true){text("You Won!",width/4*3,height/4*2);}
-				if(battleWon===false){text("You Lost!",width/4*3,height/4*2);}
+				if(battleWon===true){
+					text("You Won!",width/4*3,height/4*2);
+				}
+				if(battleWon===false){
+					text("You Lost!",width/4*3,height/4*2);
+					textSize(height/32);
+					text("Retry",width/16*9,height/32*23);
+				}
 				textSize(height/32);
-				text(Uname,width/2,height-height/32);
-				text("Retry",width/16*9,height/32*23);
 				text("Accept",width/16*12,height/32*23);
 				textSize(height/24);
 				object(planet.name[sub],planet.status[sub],width/4,height/2,width/6,planet.color.r[sub],planet.color.g[sub],planet.color.b[sub]);
@@ -1487,7 +1451,7 @@
 					scene = 6;
 					battleWon = null;
 				}
-				if(mouseX < width/16*10 && mouseX > width/16*8 && mouseY < height/16*12 && mouseY > height/16*11 && mouseIsPressed){
+				if(mouseX < width/16*10 && mouseX > width/16*8 && mouseY < height/16*12 && mouseY > height/16*11 && mouseIsPressed && battleWon === false){
 					scene = 8;
 					battleWon = null;
 				}
