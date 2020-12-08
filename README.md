@@ -5,10 +5,18 @@
  
 # Changelog
 
+### v0.1.3
+##### Released: 2020/12/8
+
+###### Campain
+Changed name interface to tips, bug fixes.
+###### Internal 
+Changed ship costs to objects
+
 ### v0.1.2	
 ##### Released: 2020/11/30
 
-###### campain
+###### Campain
 Added the tax button, removed repeat attacks, added 48 new levels widthout full titles or values, added ending (after level 64), added sounds, and changed release notes ingame to credits. 
 ###### Internal 
 changed almost all variables to objects, to support object-oriented design, and clear variable looks.
@@ -16,24 +24,24 @@ changed almost all variables to objects, to support object-oriented design, and 
 ### v0.1.1	
 ##### Released: 2020/11/23
 
-###### campian 
+###### Campian 
 Added the infopedia! Improved all ship textures to images and made the shipyard interface better. Reload/Recharge research improves firing speed. Added 8 more levels and research costs now scale.
 
 ### v0.1.0	
 ##### Released: 2020/11/16	
-###### campain 
-Space Battles!!!
+###### Campain 
+Space Battles added!
 
 ### v0.0.3	
 ##### Released: 2020/11/09
-###### campain 
+###### Campain 
 Planet overview tabs available.
 ### v0.0.2	
 ##### Released: 2020/11/05
-###### campain 
+###### Campain 
 Labraotry and shipyard tabs finished entirly.
 ### v0.0.1
 ##### Released: 2020/10/23	
-###### campain 
+###### Campain 
 How To Play,Username screen, Settings, and Tabs finsihed.
  
