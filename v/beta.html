@@ -2,7 +2,6 @@
 <html> 
  <head>
 	<title>Annihilation - Beta</title>
-	<!-- Build 0.12.9b-->
 	<link rel="icon" 
       type="image/png" 
       id="favicon">
@@ -319,11 +318,15 @@
 				sub = 2;
 			}
 			tech.points = parseFloat(tech.points);
+			metal = parseFloat(metal);
+			minerals = parseFloat(minerals);
+			fuel = parseFloat(fuel);
+			ship.strength = parseFloat(ship.strength);
 			tech.price =[parseFloat(tech.level.armor)+5,parseFloat(tech.level.shield)+10,parseFloat(tech.level.laser)+5,parseFloat(tech.level.missle)+10,parseFloat(tech.level.reload)+5,parseFloat(tech.level.recharge)+10];
 		
-			ship.strength = (ship.num[1]*1 + ship.num[2]*5 + ship.num[3]*10 + ship.num[4]*25 + ship.num[5]*100 + ship.num[6]*250)*(tech.level.missle+1+tech.level.laser*0.2);
+			ship.strength = (ship.num[1]*1 + ship.num[2]*5 + ship.num[3]*10 + ship.num[4]*25 + ship.num[5]*100 + ship.num[6]*250)*(parseFloat(tech.level.missle)+1+parseFloat(tech.level.laser)*0.2);
 			if(InBattle === false){
-				ship.shields = (ship.num[1]*10+ship.num[2]*25+ship.num[3]*50+ship.num[4]*100+ship.num[5]*250 + ship.num[6]*1000)*(tech.level.shield+1+tech.level.armor*0.2);
+				ship.shields = (ship.num[1]*10+ship.num[2]*25+ship.num[3]*50+ship.num[4]*100+ship.num[5]*250 + ship.num[6]*1000)*(parseFloat(tech.level.shield)+1+parseFloat(tech.level.armor)*0.2);
 				enemy.shields = [null,100,250,500,1000,3000,4000,5500,7500,25000,35000,50000,70000,95000,125000,160000,200000,250000,320000,400000,500000,620000,750000,880000,1000000,1250000,1550000,1800000,2250000,2750000,3300000,3900000,4750000,5000000,6000000,7500000,9000000,10000000,11000000,12000000,13000000,14000000,15000000,16000000,17000000,18000000,19000000,20000000,22000000,24000000,26000000,28000000,30000000,32500000,35000000,37500000,40000000,43300000,46600000,50000000,55000000,60000000,65000000,70000000,75000000];
 			}
 			ship.tick = round(random(0,100));
