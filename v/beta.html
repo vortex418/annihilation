@@ -322,7 +322,7 @@
 			minerals = parseFloat(minerals);
 			fuel = parseFloat(fuel);
 			ship.strength = parseFloat(ship.strength);
-			tech.price =[parseFloat(tech.level.armor)+5,parseFloat(tech.level.shield)+10,parseFloat(tech.level.laser)+5,parseFloat(tech.level.missle)+10,parseFloat(tech.level.reload)+5,parseFloat(tech.level.recharge)+10];
+			tech.price =[Number(tech.level.armor)+5,Number(tech.level.shield)+10,Number(tech.level.laser)+5,parseFloat(tech.level.missle)+10,Number(tech.level.reload)+5,parseFloat(tech.level.recharge)+10];
 		
 			ship.strength = (ship.num[1]*1 + ship.num[2]*5 + ship.num[3]*10 + ship.num[4]*25 + ship.num[5]*100 + ship.num[6]*250)*(parseFloat(tech.level.missle)+1+parseFloat(tech.level.laser)*0.2);
 			if(InBattle === false){
@@ -836,6 +836,7 @@
 					fuel += planet.max*250;
 					tech.points += planet.max*10;
 					tax++;
+					console.log(planet.max);
 				}
 				if(mouseX < width/16*5 && mouseX > width/16*1 && mouseY < height/16*9-height/32 && mouseY > height/16*8-height/32 && mouseIsPressed && metal >= ship.cost.metal[0] && minerals >= ship.cost.minerals[0] && fuel >= ship.cost.fuel[0]){
 					metal -= ship.cost.metal[0];
@@ -1049,7 +1050,7 @@
 						addElement("loadgame","br","useless8");
 						addElement("loadgame","a","download_link");
 						document.getElementById("download_link").innerHTML="download save";
-						document.getElementById("download_link").download="save.txt";
+						document.getElementById("download_link").download="save.asv";
 					savetext = metal+",\n"+ minerals+",\n"+ fuel+",\n"+ ship.num[1]+",\n"+ ship.num[2]+",\n"+ ship.num[3]+",\n"+ ship.num[4]+",\n"+ ship.num[5]+",\n"+ ship.num[6]+",\n"+ tech.points+",\n"+ tech.level.armor+",\n"+ tech.level.reload+",\n"+ tech.level.laser+",\n"+ tech.level.shield+",\n"+ tech.level.recharge+",\n"+ tech.level.missle+",\n"+ planet.max;
 					savedata = new Blob([savetext], {type: 'text/plain'});
 					saveurl = window.URL.createObjectURL(savedata);
