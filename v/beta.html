@@ -2,7 +2,7 @@
 <html> 
  <head>
 	<title>Annihilation - Beta</title>
-	<!-- Build 2020.11.29d-->
+	<!-- Build 0.12.9b-->
 	<link rel="icon" 
       type="image/png" 
       id="favicon">
@@ -13,23 +13,31 @@
 		 canvas{
 		 	outline: 1px solid gray;
 		 }
+		 div{
+		 	position: fixed;
+  			top: 52%;
+  			left: 40%;
+ 			width: 256px
+			height: 64px;
+		 }
 	 </style>
 </head>
 <body>
 	<center/>
 	<!-- This draws the Canvas on the webpage -->
 	<canvas id="mycanvas"></canvas>
+	<div id=loadgame>
+	</div>
 	<audio id = "audio"><source src="" type="audio/mp3"></audio>
-	<!--<a id="download_link" download="save.txt" href="" ><button>Download save as a text file</button></a>-->
 </body>
 
  <script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js"></script> 
  
  <script>
-	var ip = "https://vortex418.github.io";
+	var ip = "http://127.0.0.1:1123";
 	var rurl = ip+"/annihilation/v/beta.html";
-	document.getElementById("audio").src=ip+"/annihilation/error.mp3";
-	document.getElementById("favicon").href=ip+"/annihilation/website_icon.png";
+	document.getElementById("audio").src=ip+"/annihilation/sound/error.mp3";
+	document.getElementById("favicon").href=ip+"/annihilation/models/icon.png";
     	var sketchProc = function(processingInstance) {
 	   var mouseIsPressed = false;
         processingInstance.mousePressed = function () { mouseIsPressed = true; };
@@ -71,6 +79,8 @@
 		var scene = 0;
 		var sub = 0;
 		var skip = 0;
+		var tabText = 16;
+		var download;
 		//star cords and size
 		var star = {
 			x: [
@@ -88,7 +98,7 @@
 		//planets
 		var planet = {
 			max: 0,
-			name: ["crash site","[1] Abrigato","[2] Beta-Keralis","[3] Suzum","[4] Vespa","[5] Coruscare","[6] Vulca","[7] Jaeger","[8] Kashyyyk","[9] Outpost-42","[10] Victoria Alpha","[11] Victoria Bravo","[12] Gesht","[13] Sanctuary","[14] Snowmass","[15] Ja","[16] Keeg","[17]","[18]","[19]","[20]","[21]","[22]","[23]","[24]","[25]","[26]","[27]","[28]","[29]","[30]","[31]","[32]","[33]","[34]","[35]","[36]","[37]","[38]","[39]","[40]","[41]","[42]","[43]","[44]","[45]","[46]","[47]","[48]","[49]","[50]","[51]","[52]","[53]","[54]","[55]","[56]","[57]","[58]","[59]","[60]","[61]","[62]","[63]","[64] Home!"],
+			name: ["crash site","[1] Abrigato","[2] Beta-Keralis","[3] Suzum","[4] Vespa","[5] Coruscare","[6] Vulca","[7] Jaeger","[8] Kashyyyk","[9] Outpost-42","[10] Victoria Alpha","[11] Victoria Bravo","[12] Gesht","[13] Sanctuary","[14] Snowmass","[15] Ja","[16] Keeg","[17]Haemeiguli","[18]Borebalae","[19]","[20]","[21]","[22]","[23]","[24]","[25]","[26]","[27]","[28]","[29]","[30]","[31]","[32]","[33]","[34]","[35]","[36]","[37]","[38]","[39]","[40]","[41]","[42]","[43]","[44]","[45]","[46]","[47]","[48]","[49]","[50]","[51]","[52]","[53]","[54]","[55]","[56]","[57]","[58]","[59]","[60]","[61]","[62]","[63]","[64] Home!"],
 			status: [2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 			color: {
 				r: [100,98,30,90,187,214,255,234,57,69,62, 210, 209, 87, 242, 50, 78,114, 167, 85, 30, 182, 41, 89, 13, 213, 251, 105, 69, 116, 145, 152, 192, 171, 159, 54, 79, 249, 43, 72, 207, 212, 127, 16, 93, 45, 56, 27, 108, 236, 26, 220, 18, 38, 128, 117, 237, 139, 175, 163, 120, 109, 198, 231, 103],
@@ -173,6 +183,23 @@
 		var savetext;
 		var savedata;
 		var saveurl;
+		var addElement = function(parentId, elementTag, elementId, attr,html,attr2,html2,attr3,html3) {
+			// Adds an element to the document.
+			var attr = [attr,attr2,attr3] || ["id","id","id"];
+			var html = [html, html2,html3] || [elementId,elementId,elementId];
+			var p = document.getElementById(parentId);
+			var newElement = document.createElement(elementTag);
+			newElement.setAttribute("id", elementId);
+			for(var i=0;i<attr.length;i++){		
+			newElement.setAttribute(attr[i], html[i]);
+			}
+			p.appendChild(newElement);
+		};
+		var removeElement = function(elementId) {
+		    // Removes an element from the document
+		    var element = document.getElementById(elementId);
+		    element.parentNode.removeChild(element);
+		};
 		var starscape = function(num){
 			fill(255,255,255);
 			noStroke();
@@ -198,6 +225,86 @@
 			fill(a,b,c);
 			ellipse(x,y,z,z);
 		};
+		var drawUI = function(type){
+			background(0,0,0);
+			stroke(64,64,64);
+			fill(128,128,128);
+			rect(width/4*0,0,width/4,height/8);
+			rect(width/4*1,0,width/4,height/8);
+			rect(width/4*2,0,width/4,height/8);
+			rect(width/4*3,0,width/4,height/8);
+			noStroke();
+			if(type===1){
+				rect(width*0.05,height/8+25,width*0.9,height/4*3);
+			}
+			fill(255,0,0);
+			textSize(height/tabText);
+			text("Galaxy Map",width/4*0.5,height/8*0.5);
+			text("Shipyard",width/4*1.5,height/8*0.5);
+			text("Laboratory",width/4*2.5,height/8*0.5);
+			text("Settings",width/4*3.5,height/8*0.5);
+			if(mouseX < width/4*1 && mouseX > width/4*0 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
+				scene = 3;
+				sub = 0;
+				if(download === true){
+						removeElement("useless");
+						removeElement("useless1");
+						removeElement("useless2");
+						removeElement("useless3");
+						removeElement("useless4");
+						removeElement("useless5");
+						removeElement("useless6");
+						removeElement("useless7");
+						removeElement("useless8");
+						removeElement("download_link");
+					}
+			}
+			if(mouseX < width/4*2 && mouseX > width/4*1 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
+				scene = 4;
+				if(download === true){
+					removeElement("useless");
+					removeElement("useless1");
+					removeElement("useless2");
+					removeElement("useless3");
+					removeElement("useless4");
+					removeElement("useless5");
+					removeElement("useless6");
+					removeElement("useless7");
+					removeElement("useless8");
+					removeElement("download_link");
+				}
+			}
+			if(mouseX < width/4*3 && mouseX > width/4*2 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
+				scene = 5;
+				if(download === true){
+					removeElement("useless");
+					removeElement("useless1");
+					removeElement("useless2");
+					removeElement("useless3");
+					removeElement("useless4");
+					removeElement("useless5");
+					removeElement("useless6");
+					removeElement("useless7");
+					removeElement("useless8");
+					removeElement("download_link");
+				}
+			}
+			if(mouseX < width/4*4 && mouseX > width/4*3 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
+				if(download === true){
+					removeElement("useless");
+					removeElement("useless1");
+					removeElement("useless2");
+					removeElement("useless3");
+					removeElement("useless4");
+					removeElement("useless5");
+					removeElement("useless6");
+					removeElement("useless7");
+					removeElement("useless8");
+					removeElement("download_link");
+				}
+				scene = 6;
+			}
+		};
 		draw = function(){
 			if(play === true){
 				playTime--;
@@ -207,8 +314,10 @@
 				scene = 0;
 				sub = 2;
 			}
-			tech.price = [tech.level.armor+5,tech.level.shield+10,tech.level.laser+5,tech.level.missle+10,tech.level.reload+5,tech.level.recharge+10];
-			ship.strength = (ship.num[1]*1 + ship.num[2]*5 + ship.num[3]*10 + ship.num[4]*25 + ship.num[5]*100 + ship.num[6]*500)*(tech.level.missle+1+tech.level.laser*0.2);
+			tech.points = parseFloat(tech.points);
+			tech.price =[parseFloat(tech.level.armor)+5,parseFloat(tech.level.shield)+10,parseFloat(tech.level.laser)+5,parseFloat(tech.level.missle)+10,parseFloat(tech.level.reload)+5,parseFloat(tech.level.recharge)+10];
+		
+			ship.strength = (ship.num[1]*1 + ship.num[2]*5 + ship.num[3]*10 + ship.num[4]*25 + ship.num[5]*100 + ship.num[6]*250)*(tech.level.missle+1+tech.level.laser*0.2);
 			if(InBattle === false){
 				ship.shields = (ship.num[1]*10+ship.num[2]*25+ship.num[3]*50+ship.num[4]*100+ship.num[5]*250 + ship.num[6]*1000)*(tech.level.shield+1+tech.level.armor*0.2);
 				enemy.shields = [null,100,250,500,1000,3000,4000,5500,7500,25000,35000,50000,70000,95000,125000,160000,200000,250000,320000,400000,500000,620000,750000,880000,1000000,1250000,1550000,1800000,2250000,2750000,3300000,3900000,4750000,5000000,6000000,7500000,9000000,10000000,11000000,12000000,13000000,14000000,15000000,16000000,17000000,18000000,19000000,20000000,22000000,24000000,26000000,28000000,30000000,32500000,35000000,37500000,40000000,43300000,46600000,50000000,55000000,60000000,65000000,70000000,75000000];
@@ -234,8 +343,8 @@
 				textSize(width/28);
 				text("BETA",width/2,height/32*11);
 				textSize(height/24);
-				text("Campain",width/2,height/32*16);
-				text("Sandbox",width/2,height/32*19);
+				text("New Game",width/2,height/32*16);
+				text("Load Game",width/2,height/32*19);
 				text("Exit Game",width/2,height/32*22);
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/2+height/32 && mouseY > height/2-height/32 && mouseIsPressed && skip === 0) {
 					sub = 1;
@@ -245,9 +354,8 @@
 					playSound("on.mp3");
 				}
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/2+height/32*4 && mouseY > height/2+height/32*2 && mouseIsPressed) {
-					playSound("error.mp3");
-					window.alert(" =(  Sorry, this feature has not been added yet.");
-					mouseIsPressed = false;
+					sub = 4;
+					addElement("loadgame","input","inputsave","type","file");
 				}
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/2+height/32*7 && mouseY > height/2+height/32*5 && mouseIsPressed) {
 					onceSound("off.mp3");
@@ -317,20 +425,38 @@
 				text("Shutting Down...",width/2,height/2);
 				if(playTime <= 0){window.close();}
 			}
+			if(scene === 0 && sub===4){
+				background(128,128,128);
+				noStroke();
+				fill(64,64,64);
+				textAlign(CENTER,CENTER);
+				rect(width/2-width/8,height/32*23,width/4,height/16);
+				fill(255,0,0);
+				textSize(height/16);
+				text("Start Game",width/2,height/32*24);
+				document.getElementById('inputsave').addEventListener('change', function() {
+					mouseIsPressed = false;
+					var reader = new FileReader();
+					reader.onload = function(){ 
+						var Str = reader.result;				[metal,minerals,fuel,ship.num[1],ship.num[2],ship.num[3],ship.num[4],ship.num[5],ship.num[6],tech.points,tech.level.armor,tech.level.reload,tech.level.laser,tech.level.shield,tech.level.recharge,tech.level.missle,planet.max] = Str.split(",\n");
+					}
+					reader.readAsText(this.files[0]);
+					
+				});
+				for(var i=0; i<planet.max; i++){
+					planet.status[i] = 2;
+				}
+				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/32*25 && mouseY > height/32*23 && mouseIsPressed) {
+					removeElement("inputsave");
+					scene = 3;
+					sub = 0;
+				}
+			}
 			if(scene === 1){
 				if(sub===0){
 					// ship info GUI
-					background(0,0,0);
+					drawUI(1);
 					textAlign(CENTER,CENTER);
-					fill(128,128,128);
-					noStroke();
-					rect(width*0.05,height/8+25,width*0.9,height/4*3);
-					stroke(64,64,64);
-					fill(128,128,128);
-					rect(width/4*0,0,width/4,height/8);
-					rect(width/4*1,0,width/4,height/8);
-					rect(width/4*2,0,width/4,height/8);
-					rect(width/4*3,0,width/4,height/8);
 					noStroke();
 					fill(64,64,64);
 					rect(width/32*3,height/32*8,width/32*12,height/32*8);
@@ -340,10 +466,6 @@
 					stroke(255,0,0);
 					fill(255,0,0);
 					textSize(height/16);
-					text("Galaxy Map",width/4*0.5,height/8*0.5);
-					text("Shipyard",width/4*1.5,height/8*0.5);
-					text("Laboratory",width/4*2.5,height/8*0.5);
-					text("Settings",width/4*3.5,height/8*0.5);
 					text("Story",width/32*9,height/8*3);
 					text("How To Play",width/32*23,height/8*3);
 					text("Ships",width/32*9,height/8*6);
@@ -351,19 +473,6 @@
 					textSize(height/24);
 					fill(255,255,255);
 					textAlign(CENTER,CENTER);
-					if(mouseX < width/4*1 && mouseX > width/4*0 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-						scene = 3;
-						sub = 0;
-					}
-					if(mouseX < width/4*2 && mouseX > width/4*1 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-						scene = 4;
-					}
-					if(mouseX < width/4*3 && mouseX > width/4*2 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-						scene = 5;
-					}
-					if(mouseX < width/4*4 && mouseX > width/4*3 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-						scene = 6;
-					}
 					if(mouseX < width/32*15 && mouseX > width/32*3 && mouseY < height/32*16 && mouseY > height/32*8 && mouseIsPressed) {
 						scene = 1;
 						sub = 7;
@@ -383,27 +492,12 @@
 				}
 				if(sub>0 && sub <7){
 					// ship info GUI
-					background(0,0,0);
+					drawUI(1);
 					textAlign(CENTER,CENTER);
-					fill(128,128,128);
-					noStroke();
-					rect(width*0.05,height/8+25,width*0.9,height/4*3);
-					stroke(64,64,64);
-					fill(128,128,128);
-					rect(width/4*0,0,width/4,height/8);
-					rect(width/4*1,0,width/4,height/8);
-					rect(width/4*2,0,width/4,height/8);
-					rect(width/4*3,0,width/4,height/8);
 					stroke(255,0,0);
 					fill(64,64,64);
 					rect(width/16*8,height/16*11,width/8,height/16);
 					noStroke();
-					fill(255,0,0);
-					textSize(height/16);
-					text("Galaxy Map",width/4*0.5,height/8*0.5);
-					text("Shipyard",width/4*1.5,height/8*0.5);
-					text("Laboratory",width/4*2.5,height/8*0.5);
-					text("Settings",width/4*3.5,height/8*0.5);
 					textSize(height/32);
 					text("Back",width/16*9,height/32*23);
 					textSize(height/24);
@@ -415,42 +509,14 @@
 					text("minerals cost: "+ship.cost.minerals[sub-1],width/2,height/16*8);
 					text("fuel cost: "+ship.cost.fuel[sub-1],width/2,height/16*9);
 					textAlign(CENTER,CENTER);
-					if(mouseX < width/4*1 && mouseX > width/4*0 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-						scene = 3;
-						sub = 0;
-					}
-					if(mouseX < width/4*2 && mouseX > width/4*1 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-						scene = 4;
-					}
-					if(mouseX < width/4*3 && mouseX > width/4*2 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-						scene = 5;
-					}
-					if(mouseX < width/4*4 && mouseX > width/4*3 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-						scene = 6;
-					}
 					if(mouseX < width/16*10 && mouseX > width/16*8 && mouseY < height/16*12 && mouseY > height/16*11 && mouseIsPressed){
 						sub = 8;
 					}
 				}
 				if(sub === 7){
 					// Story (In Game)
-					background(0,0,0);
+					drawUI(1);
 					textAlign(CENTER,CENTER);
-					stroke(64,64,64);
-					fill(128,128,128);
-					rect(width/4*0,0,width/4,height/8);
-					rect(width/4*1,0,width/4,height/8);
-					rect(width/4*2,0,width/4,height/8);
-					rect(width/4*3,0,width/4,height/8);
-					noStroke();
-					rect(width*0.05,height/8+25,width*0.9,height/4*3);
-					textSize(height/16);
-					noStroke();
-					fill(255,0,0);
-					text("Galaxy Map",width/4*0.5,height/8*0.5);
-					text("Shipyard",width/4*1.5,height/8*0.5);
-					text("Laboratory",width/4*2.5,height/8*0.5);
-					text("Settings",width/4*3.5,height/8*0.5);
 					fill(255,255,255);
 					noStroke();
 					textSize(height/32);
@@ -468,19 +534,7 @@
 					textAlign(CENTER,CENTER);
 					textSize(height/24);
 					text("Back",width/2,height/32*27);
-					if(mouseX < width/4*1 && mouseX > width/4*0 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-						scene = 3;
-						sub = 0;
-					}
-					if(mouseX < width/4*2 && mouseX > width/4*1 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-						scene = 4;
-					}
-					if(mouseX < width/4*3 && mouseX > width/4*2 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-						scene = 5;
-					}
-					if(mouseX < width/4*4 && mouseX > width/4*3 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-						scene = 6;
-					}
+					
 					if(mouseX < width/32*18 && mouseX > width/32*14 && mouseY < height/32*28 && mouseY > height/32*26 && mouseIsPressed){
 						scene = 1;
 						sub = 0;
@@ -488,23 +542,8 @@
 				}
 				if(sub === 8){
 					// Ship info nav. GUI
-					background(0,0,0);
+					drawUI(1);
 					textAlign(CENTER,CENTER);
-					stroke(64,64,64);
-					fill(128,128,128);
-					rect(width/4*0,0,width/4,height/8);
-					rect(width/4*1,0,width/4,height/8);
-					rect(width/4*2,0,width/4,height/8);
-					rect(width/4*3,0,width/4,height/8);
-					noStroke();
-					rect(width*0.05,height/8+25,width*0.9,height/4*3);
-					textSize(height/16);
-					noStroke();
-					fill(255,0,0);
-					text("Galaxy Map",width/4*0.5,height/8*0.5);
-					text("Shipyard",width/4*1.5,height/8*0.5);
-					text("Laboratory",width/4*2.5,height/8*0.5);
-					text("Settings",width/4*3.5,height/8*0.5);
 					stroke(255,0,0);
 					fill(64,64,64);
 					rect(width/16*1,height/16*8-height/32,width/16*6,height/16);
@@ -523,19 +562,6 @@
 					text("Destoryer",width/8*6,height/16*8);
 					text("Battleship",width/8*6,height/16*10);
 					text("Dreadnought",width/8*6,height/16*12);
-					if(mouseX < width/4*1 && mouseX > width/4*0 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-						scene = 3;
-						sub = 0;
-					}
-					if(mouseX < width/4*2 && mouseX > width/4*1 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-						scene = 4;
-					}
-					if(mouseX < width/4*3 && mouseX > width/4*2 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-						scene = 5;
-					}
-					if(mouseX < width/4*4 && mouseX > width/4*3 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-						scene = 6;
-					}
 					if(mouseX < width/16*7 && mouseX > width/16*1 && mouseY < height/16*9-height/32 && mouseY > height/16*8-height/32 && mouseIsPressed){
 						scene = 1;
 						sub = 1;
@@ -563,23 +589,8 @@
 				}
 				if(sub === 9){
 					// How To Play
-					background(0,0,0);
+					drawUI(1);
 					textAlign(CENTER,CENTER);
-					stroke(64,64,64);
-					fill(128,128,128);
-					rect(width/4*0,0,width/4,height/8);
-					rect(width/4*1,0,width/4,height/8);
-					rect(width/4*2,0,width/4,height/8);
-					rect(width/4*3,0,width/4,height/8);
-					noStroke();
-					rect(width*0.05,height/8+25,width*0.9,height/4*3);
-					textSize(height/16);
-					noStroke();
-					fill(255,0,0);
-					text("Galaxy Map",width/4*0.5,height/8*0.5);
-					text("Shipyard",width/4*1.5,height/8*0.5);
-					text("Laboratory",width/4*2.5,height/8*0.5);
-					text("Settings",width/4*3.5,height/8*0.5);
 					fill(255,255,255);
 					noStroke();
 					textSize(height/32);
@@ -596,19 +607,6 @@
 					textAlign(CENTER,CENTER);
 					textSize(height/24);
 					text("Back",width/2,height/32*27);
-					if(mouseX < width/4*1 && mouseX > width/4*0 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-						scene = 3;
-						sub = 0;
-					}
-					if(mouseX < width/4*2 && mouseX > width/4*1 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-						scene = 4;
-					}
-					if(mouseX < width/4*3 && mouseX > width/4*2 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-						scene = 5;
-					}
-					if(mouseX < width/4*4 && mouseX > width/4*3 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-						scene = 6;
-					}
 					if(mouseX < width/32*18 && mouseX > width/32*14 && mouseY < height/32*28 && mouseY > height/32*26 && mouseIsPressed){
 						scene = 1;
 						sub = 0;
@@ -616,23 +614,8 @@
 				}
 				if(sub === 10){
 					//Credits
-					background(0,0,0);
+					drawUI(1);
 					textAlign(CENTER,CENTER);
-					stroke(64,64,64);
-					fill(128,128,128);
-					rect(width/4*0,0,width/4,height/8);
-					rect(width/4*1,0,width/4,height/8);
-					rect(width/4*2,0,width/4,height/8);
-					rect(width/4*3,0,width/4,height/8);
-					noStroke();
-					rect(width*0.05,height/8+25,width*0.9,height/4*3);
-					textSize(height/16);
-					noStroke();
-					fill(255,0,0);
-					text("Galaxy Map",width/4*0.5,height/8*0.5);
-					text("Shipyard",width/4*1.5,height/8*0.5);
-					text("Laboratory",width/4*2.5,height/8*0.5);
-					text("Settings",width/4*3.5,height/8*0.5);
 					fill(255,255,255);
 					noStroke();
 					textSize(height/32);
@@ -648,18 +631,6 @@
 					textAlign(CENTER,CENTER);
 					textSize(height/24);
 					text("Back",width/2,height/32*27);
-					if(mouseX < width/4*1 && mouseX > width/4*0 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-						scene = 3;
-					}
-					if(mouseX < width/4*2 && mouseX > width/4*1 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-						scene = 4;
-					}
-					if(mouseX < width/4*3 && mouseX > width/4*2 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-						scene = 5;
-					}
-					if(mouseX < width/4*4 && mouseX > width/4*3 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-						scene = 6;
-					}
 					if(mouseX < width/32*18 && mouseX > width/32*14 && mouseY < height/32*28 && mouseY > height/32*26 && mouseIsPressed){
 						scene = 1;
 						sub = 0;
@@ -693,15 +664,18 @@
 				}
 			}
 			if(scene === 3){
+				// Galaxy map GUI
+				drawUI(0);
+				starscape(1);
 				playTime = 20;
 				play = false;
-				// Galaxy map GUI
-				background(0,0,0);
 				fill(255,255,255);
 				noStroke();
-				starscape(1);
 				textAlign(CENTER,CENTER);
-				if(sub===0){object(planet.name[0],planet.status[0],width/16*6,height/16*13,width/24,planet.color.r[0],planet.color.g[0],planet.color.b[0]);}
+				textSize(height/(tabText*2));
+				if(sub===0){
+					object(planet.name[0], planet.status[0], width/16*6, height/16*13, width/24, planet.color.r[0], planet.color.g[0], planet.color.b[0]);
+				}
 				object(planet.name[1+(sub*8)],planet.status[1+(sub*8)],width/16*8,height/16*10,width/16,planet.color.r[1+(sub*8)],planet.color.g[1+(sub*8)],planet.color.b[1+(sub*8)]);
 				object(planet.name[2+(sub*8)],planet.status[2+(sub*8)],width/16*13,height/16*10,width/12,planet.color.r[2+(sub*8)],planet.color.g[2+(sub*8)],planet.color.b[2+(sub*8)]);
 				object(planet.name[3+(sub*8)],planet.status[3+(sub*8)],width/16*10,height/16*8,width/16,planet.color.r[3+(sub*8)],planet.color.g[3+(sub*8)],planet.color.b[3+(sub*8)]);
@@ -710,14 +684,9 @@
 				object(planet.name[6+(sub*8)],planet.status[6+(sub*8)],width/16*4,height/16*7,width/11,planet.color.r[6+(sub*8)],planet.color.g[6+(sub*8)],planet.color.b[6+(sub*8)]);
 				object(planet.name[7+(sub*8)],planet.status[7+(sub*8)],width/16*2,height/16*10,width/18,planet.color.r[7+(sub*8)],planet.color.g[7+(sub*8)],planet.color.b[7+(sub*8)]);
 				object(planet.name[8+(sub*8)],planet.status[8+(sub*8)],width/16*11,height/16*13,width/9,planet.color.r[8+(sub*8)],planet.color.g[8+(sub*8)],planet.color.b[8+(sub*8)]);
-				stroke(64,64,64);
-				fill(128,128,128);
-				rect(width/4*0,0,width/4,height/8);
-				rect(width/4*1,0,width/4,height/8);
-				rect(width/4*2,0,width/4,height/8);
-				rect(width/4*3,0,width/4,height/8);
 				if(sub < 7){
 					textSize(height/32);
+					fill(128,128,128);
 					rect(width/16*15,height/16*14,width/16,height/12);
 					fill(255,0,0);
 					text(">",width/32*31,height/32*29);
@@ -728,27 +697,6 @@
 					fill(255,0,0);
 					textSize(height/32);
 					text("<",width/32*1,height/32*29);
-				}
-				textSize(height/16);
-				noStroke();
-				fill(255,0,0);
-				text("Galaxy Map",width/4*0.5,height/8*0.5);
-				text("Shipyard",width/4*1.5,height/8*0.5);
-				text("Laboratory",width/4*2.5,height/8*0.5);
-				text("Settings",width/4*3.5,height/8*0.5);
-				noStroke();
-				fill(255,255,255);
-				if(mouseX < width/4*1 && mouseX > width/4*0 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-					scene = 3;
-				}
-				if(mouseX < width/4*2 && mouseX > width/4*1 && mouseY < height/8 && mouseY > 0 && mouseIsPressed ) {
-					scene = 4;
-				}
-				if(mouseX < width/4*3 && mouseX > width/4*2 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-					scene = 5;
-				}
-				if(mouseX < width/4*4 && mouseX > width/4*3 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-					scene = 6;
 				}
 				if(mouseX < width/16*6+width/48 && mouseX > width/16*6-width/48 && mouseY < height/16*13+width/48 && mouseY > height/16*13-height/48 && mouseIsPressed && sub === 0){
 					scene = 7;
@@ -797,23 +745,8 @@
 			}
 			if(scene === 4){
 				// Shipyard GUI
-				background(0,0,0);
+				drawUI(1);
 				textAlign(CENTER,CENTER);
-				stroke(64,64,64);
-				fill(128,128,128);
-				rect(width/4*0,0,width/4,height/8);
-				rect(width/4*1,0,width/4,height/8);
-				rect(width/4*2,0,width/4,height/8);
-				rect(width/4*3,0,width/4,height/8);
-				noStroke();
-				rect(width*0.05,height/8+25,width*0.9,height/4*3);
-				textSize(height/16);
-				noStroke();
-				fill(255,0,0);
-				text("Galaxy Map",width/4*0.5,height/8*0.5);
-				text("Shipyard",width/4*1.5,height/8*0.5);
-				text("Laboratory",width/4*2.5,height/8*0.5);
-				text("Settings",width/4*3.5,height/8*0.5);
 				fill(64,64,64);
 				rect(width/4*1-width/10,height/4,width/5,height/24);
 				rect(width/4*2-width/10,height/4,width/5,height/24);
@@ -890,19 +823,6 @@
 				text("Destoryer ["+ship.num[4]+"]",width/8*6,height/16*8);
 				text("Battleship ["+ship.num[5]+"]",width/8*6,height/16*10);
 				text("Dreadnought ["+ship.num[6]+"]",width/8*6,height/16*12);
-				if(mouseX < width/4*1 && mouseX > width/4*0 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-					scene = 3;
-					sub = 0;
-				}
-				if(mouseX < width/4*2 && mouseX > width/4*1 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-					scene = 4;
-				}
-				if(mouseX < width/4*3 && mouseX > width/4*2 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-					scene = 5;
-				}
-				if(mouseX < width/4*4 && mouseX > width/4*3 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-					scene = 6;
-				}
 				if(mouseX < width/2+width/10 && mouseX > width/2-width/10 && mouseY < height/24*9 && mouseY > height/24*8 && mouseIsPressed && tax < 10){
 					metal += planet.max*1000;
 					minerals += planet.max*500;
@@ -973,17 +893,9 @@
 			}
 			if(scene === 5){
 				// Lab GUI
-				background(0,0,0);
+				drawUI(1);
+				textSize(height/36);
 				textAlign(CENTER,CENTER);
-				fill(128,128,128);
-				noStroke();
-				rect(width*0.05,height/8+25,width*0.9,height/4*3);
-				stroke(64,64,64);
-				fill(128,128,128);
-				rect(width/4*0,0,width/4,height/8);
-				rect(width/4*1,0,width/4,height/8);
-				rect(width/4*2,0,width/4,height/8);
-				rect(width/4*3,0,width/4,height/8);
 				if (tech.level.armor === 0){tech.color = 1;}
 				if (tech.level.armor >= 1){tech.color = 2;}
 				object("Armor "+ tech.level.armor+ "(cost: "+tech.price[0]+")",tech.color,width/4*1,height/4*3,width/16,64,64,64);
@@ -1013,28 +925,8 @@
 				line(width/4*2,height/4*3-height/16,width/4*2,height/4*2+height/16);
 				noStroke();
 				fill(255,0,0);
-				textSize(height/16);
-				text("Galaxy Map",width/4*0.5,height/8*0.5);
-				text("Shipyard",width/4*1.5,height/8*0.5);
-				text("Laboratory",width/4*2.5,height/8*0.5);
-				text("Settings",width/4*3.5,height/8*0.5);
 				textSize(height/24);
 				text("Research Points: "+tech.points,width/2,height/4*1);
-				noStroke();
-				fill(255,255,255);
-				if(mouseX < width/4*1 && mouseX > width/4*0 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-					scene = 3;
-					sub = 0;
-				}
-			    	if(mouseX < width/4*2 && mouseX > width/4*1 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-					scene = 4;
-				}
-			    	if(mouseX < width/4*3 && mouseX > width/4*2 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-					scene = 5;
-				}
-			    	if(mouseX < width/4*4 && mouseX > width/4*3 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-					scene = 6;
-				}
 				if( mouseX > width/4*1-width/32 && mouseX < width/4*1+width/32 && mouseY > height/4*3-width/32 && mouseY < height/4*3+width/32 && mouseIsPressed && tech.points >= 5+tech.level.armor){
 					tech.points -= (5+tech.level.armor);
 					tech.level.armor++;
@@ -1068,85 +960,102 @@
 			}
 			if(scene === 6){
 				// Settings GUI
-				background(0,0,0);
-				stroke(64,64,64);
-				fill(128,128,128);
-				rect(width/4*0,0,width/4,height/8);
-				rect(width/4*1,0,width/4,height/8);
-				rect(width/4*2,0,width/4,height/8);
-				rect(width/4*3,0,width/4,height/8);
+				drawUI(1);
 				noStroke();
-				rect(width*0.05,height/8+25,width*0.9,height/4*3);
 				fill(64,64,64);
 				rect(width/2-width/8,height/32*15,width/4,height/16);
 				rect(width/2-width/8,height/32*18,width/4,height/16);
 				rect(width/2-width/8,height/32*21,width/4,height/16);
-				//rect(width/2-width/8,height/32*24,width/4,height/16);
-				textSize(height/16);
+				rect(width/2-width/8,height/32*24,width/4,height/16);
+				textSize(height/tabText);
 				noStroke();
 				fill(255,0,0);
-				text("Galaxy Map",width/4*0.5,height/8*0.5);
-				text("Shipyard",width/4*1.5,height/8*0.5);
-				text("Laboratory",width/4*2.5,height/8*0.5);
-				text("Settings",width/4*3.5,height/8*0.5);
 				//Options
 				text("Tips",width/2,height/32*16);
 				text("Infopedia",width/2,height/32*19);
 				text("Main Menu",width/2,height/32*22);
-				//text("Save Game",width/2,height/32*25);
-				noStroke();
-				fill(255,255,255);
-				if(mouseX < width/4*1 && mouseX > width/4*0 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-					scene = 3;
-					sub = 0;
-				}
-				if(mouseX < width/4*2 && mouseX > width/4*1 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-					scene = 4;
-				}
-				if(mouseX < width/4*3 && mouseX > width/4*2 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-					scene = 5;
-				}
-				if(mouseX < width/4*4 && mouseX > width/4*3 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-					scene = 6;
-				}
+				text("Save Game",width/2,height/32*25);
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/32*18 && mouseY > height/32*15 && mouseIsPressed) {
-					Text = "";
+					if(download === true){
+						removeElement("useless");
+						removeElement("useless1");
+						removeElement("useless2");
+						removeElement("useless3");
+						removeElement("useless4");
+						removeElement("useless5");
+						removeElement("useless6");
+						removeElement("useless7");
+						removeElement("useless8");
+						removeElement("download_link");
+					}
 					skip = 1;
 					scene = 2;
+					
 				}
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/32*20 && mouseY > height/32*18 && mouseIsPressed) {
+					if(download === true){
+						removeElement("useless");
+						removeElement("useless1");
+						removeElement("useless2");
+						removeElement("useless3");
+						removeElement("useless4");
+						removeElement("useless5");
+						removeElement("useless6");
+						removeElement("useless7");
+						removeElement("useless8");
+						removeElement("download_link");
+					}
 					skip = 1;
 					scene = 1;
 					sub = 0;
 				}
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/32*23 && mouseY > height/32*21 && mouseIsPressed) {
+					if(download === true){
+						removeElement("useless");
+						removeElement("useless1");
+						removeElement("useless2");
+						removeElement("useless3");
+						removeElement("useless4");
+						removeElement("useless5");
+						removeElement("useless6");
+						removeElement("useless7");
+						removeElement("useless8");
+						removeElement("download_link");
+					}
 					skip = 2;
 					scene = 0;
 					sub = 0;
 				}
-				/**if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/32*26 && mouseY > height/32*24 && mouseIsPressed) {
-					savetext = metal+","+minerals+","+fuel+","+planetOccupied[1]+","+planetOccupied[1]+","+planetOccupied[2]+","+planetOccupied[3]+",";
+				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/32*26 && mouseY > height/32*24 && mouseIsPressed) {
+						download = true;
+						addElement("loadgame","br","useless");
+						addElement("loadgame","br","useless1");
+						addElement("loadgame","br","useless2");
+						addElement("loadgame","br","useless3");
+						addElement("loadgame","br","useless4");
+						addElement("loadgame","br","useless5");
+						addElement("loadgame","br","useless6");
+						addElement("loadgame","br","useless7");
+						addElement("loadgame","br","useless8");
+						addElement("loadgame","a","download_link");
+						document.getElementById("download_link").innerHTML="download save";
+						document.getElementById("download_link").download="save.txt";
+					savetext = metal+",\n"+ minerals+",\n"+ fuel+",\n"+ ship.num[1]+",\n"+ ship.num[2]+",\n"+ ship.num[3]+",\n"+ ship.num[4]+",\n"+ ship.num[5]+",\n"+ ship.num[6]+",\n"+ tech.points+",\n"+ tech.level.armor+",\n"+ tech.level.reload+",\n"+ tech.level.laser+",\n"+ tech.level.shield+",\n"+ tech.level.recharge+",\n"+ tech.level.missle+",\n"+ planet.max;
 					savedata = new Blob([savetext], {type: 'text/plain'});
 					saveurl = window.URL.createObjectURL(savedata);
 					document.getElementById('download_link').href = saveurl;
-				}**/
+					window.alert("game saved!");
+					mouseIsPressed = false;
+					//<a id="download_link" download="save.txt" href="" >download save</a>
+				}
 			}
 			if(scene === 7){
+				// planet tab GUI
+				drawUI(1);
+				textAlign(CENTER,CENTER);
 				var o;
                     if (sub === 0){o= 0;}
 				if (sub > 0){o=0.01;}
-				// planet tab GUI
-				background(0,0,0);
-				textAlign(CENTER,CENTER);
-				fill(128,128,128);
-				noStroke();
-				rect(width*0.05,height/8+25,width*0.9,height/4*3);
-				stroke(64,64,64);
-				fill(128,128,128);
-				rect(width/4*0,0,width/4,height/8);
-				rect(width/4*1,0,width/4,height/8);
-				rect(width/4*2,0,width/4,height/8);
-				rect(width/4*3,0,width/4,height/8);
 				stroke(255,0,0);
 				fill(64,64,64);
 				rect(width/16*8,height/16*11,width/8,height/16);
@@ -1157,11 +1066,6 @@
 				}
 				noStroke();
 				fill(255,0,0);
-				textSize(height/16);
-				text("Galaxy Map",width/4*0.5,height/8*0.5);
-				text("Shipyard",width/4*1.5,height/8*0.5);
-				text("Laboratory",width/4*2.5,height/8*0.5);
-				text("Settings",width/4*3.5,height/8*0.5);
 				textSize(height/32);
 				text("Back",width/16*9,height/32*23);
 				if(sub !== 0 && planet.status[sub-1] === 2 && planet.status[sub] === 1){
@@ -1178,19 +1082,6 @@
 				text("your fleet strength: "+round(ship.strength),width/2,height/16*8);
 				text("difficulty: "+planet.difficulty[floor(sub/8-0.01)],width/2,height/16*9);
 				textAlign(CENTER,CENTER);
-				if(mouseX < width/4*1 && mouseX > width/4*0 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-					scene = 3;
-					sub=0;
-				}
-				if(mouseX < width/4*2 && mouseX > width/4*1 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-					scene = 4;
-				}
-				if(mouseX < width/4*3 && mouseX > width/4*2 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-					scene = 5;
-				}
-				if(mouseX < width/4*4 && mouseX > width/4*3 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-					scene = 6;
-				}
 				if(mouseX < width/16*10 && mouseX > width/16*8 && mouseY < height/16*12 && mouseY > height/16*11 && mouseIsPressed){
 					scene = 3;
 					sub = floor(sub/8-o);
