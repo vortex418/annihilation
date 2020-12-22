@@ -2,37 +2,9 @@
 <html> 
 	<head>
 		<title>Annihilation - Changlog</title> 
-		<link rel="icon" 
-	      type="image/png" 
-	      id="favicon">
+		<link rel="icon" type="image/png" id="favicon">
+		<link id="stylesheet" rel="stylesheet">
 		<style>
-			table,tr,td {
-				padding: 5px;
-				border: 1px solid white;
-				border-collapse: collapse;
-			}
-			body{
-				background-color: black;
-				font-family: Arial;
-				color: red;
-			}
-			button{
-				cursor:pointer;
-		 		background:radial-gradient(ellipse at center,hsla(200,50%,0%,1) 0,hsla(200,100%,70%,.5) 150%);
-				box-shadow:0 0 6px hsla(200,100%,80%,1);
-				text-shadow:0 0 7px hsla(200,100%,80%,1);
-				color:hsla(200,100%,90%,.8);
-				font-family:Play,Verdana;border:0}
-			button:hover{
-				background:radial-gradient(ellipse at center,hsla(200,50%,0%,1) 0,hsla(200,100%,70%,.5) 100%);
-				box-shadow:0 0 8px hsla(200,100%,90%,1);
-				color:#FFF	
-			}
-			table{
-				font-family: Courier;
-				color: white;
-				
-			}
 			.content{
 				font-size: 15px;
 			}
@@ -91,7 +63,8 @@
 		</table>
 	</body>
 	<script>
-		var ip = "https://vortex418.github.io";
+		var ip = "http://127.0.0.1:1123";
+		document.getElementById("stylesheet").href=ip+"/annihilation/styles.css";
 		document.getElementById("back").addEventListener("click", function(){
 			window.location.assign(ip+"/annihilation");
 		}, false);

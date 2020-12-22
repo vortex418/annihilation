@@ -1,0 +1,68 @@
+body{
+	font-family: Play, Arial, Sans-Serif;
+	background: rgb(0,0,0);
+	background-image: url("https://vortex418.github.io/annihilation/models/background.jpg");
+	background-size: cover;
+	background-position: absolute;
+}
+h1,h2,h3,h4,h5,h6{
+	color: rgb(255,0,0);
+	text-shadow:0 0 7px hsla(360,80%,50%,1)
+}
+h1{
+	padding: 25px;
+	font-size: 50px;
+}
+p{
+	color: rgb(255,255,255);
+	text-shadow:0 0 7px hsla(200,80%,80%,1);
+}
+table,tr,td{
+	border: 1px solid white;
+	text-shadow: rgb(245, 245, 245) 0px 0px 7px;
+	border-collapse: collapse;
+}
+table{
+	background: hsla(200,50%,0%,1);
+	box-shadow:0 0 6px hsla(200,80%,80%,1);
+	display:inline-block;
+	border-radius:4px;
+	position:relative;
+	max-width:100%;
+	color: rgba(255, 255, 255, 0.9); 
+	border-collapse: collapse;
+}
+td{
+	padding: 3px;
+}
+button{
+	cursor:pointer; 
+	background:radial-gradient(ellipse at center,hsla(200,50%,0%,1) 0,hsla(200,100%,70%,.5) 150%);
+	box-shadow:0 0 6px hsla(200,100%,80%,1);
+	text-shadow:0 0 7px hsla(200,100%,80%,1);
+	color:hsla(200,100%,90%,.8);
+	font-family:Play,Verdana;
+	border:0;
+	margin: 5px;
+	padding: 5px 15px;
+}
+button:hover{
+	background:radial-gradient(ellipse at center,hsla(200,50%,0%,1) 0,hsla(200,100%,70%,.5) 100%);
+	box-shadow:0 0 8px hsla(200,100%,90%,1);
+	color:#FFF	
+}
+input{
+	display:inline-block;
+	background: linear-gradient(to top,hsla(200,70%,70%,.5) 0,hsla(200,50%,0%,1) 20%,hsla(200,50%,0%,1) 60%,hsla(200,20%,40%,.5) 100%);
+	box-shadow:0 0 6px hsla(200,80%,80%,1);
+	text-shadow:0 0 7px hsla(200,80%,80%,1);
+	border-radius:4px;
+	margin-top: 10px;
+	position:relative;
+	max-width:100%;
+	color: rgba(255, 255, 255, 0.9); 
+	text-shadow: rgb(245, 245, 245) 0px 0px 7px;
+}
+input:hover{
+	cursor: text;
+}
