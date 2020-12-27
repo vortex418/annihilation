@@ -11,12 +11,14 @@
 				text-shadow:0 0 7px hsla(200,100%,80%,1);
 				color:hsla(200,100%,90%,.8);
 				width: 500px;
+				display: none;
 			}
 			.accordian-button{
 				width: 500px;
 			}
 			.accordian-active{
 				color: #FFF;
+				display: block;
 			}
 		</style>
 	</head>
@@ -50,15 +52,10 @@
 			  acc[i].addEventListener("click", function() {
 			  /* Toggle between adding and removing the "active" class,
 			    to highlight the button that controls the panel */
-			    this.classList.toggle("accordian-active");
 
 			    /* Toggle between hiding and showing the active panel */
 			    var panel = this.nextElementSibling;
-			    if (panel.style.display === "block") {
-			      panel.style.display = "none";
-			    } else {
-			      panel.style.display = "block";
-			    }
+			    panel.classList.toggle("accordian-active");
 			  }, false);
 			}
 			document.getElementById("stylesheet").href=ip+"/annihilation/styles.css";
