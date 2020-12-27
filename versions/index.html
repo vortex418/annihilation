@@ -45,7 +45,7 @@
 			var panel = document.getElementByClassName("accordian-content");
 			for (var i = 0; i < acc.length; i++) {
 			  acc[i].addEventListener("click", function() {
-			    this.classList.toggle("accordian-active")
+			    this.classList.toggle("accordian-active");
 			    if (panel[i].style.maxHeight) {
 			      panel[i].style.maxHeight = null;
 			    } else {
