@@ -19,13 +19,14 @@
 		<h1>Annihilation Version List</h1>
 		<button id="back"> &lt -- Home</button>
 		<button id="beta">Beta</button>
-		<button class="accordian-button"></button>
+		<button class="accordian-button">Indev, 0.1.x</button>
 		<div class="accordian-content">
 			<button id="0.1.3">v0.1.3</button>
 			<button id="0.1.2">v0.1.2</button>
 			<button id="0.1.1">v0.1.1</button>
 			<button id="0.1.0">v0.1.0</button>
 		</div>
+		<button class="accordian-button">Indev, 0.0.x</button>
 		<div class="accordian-content">
 			<button id="0.0.3">v0.0.3</button>
 			<button id="0.0.2">v0.0.2</button>
@@ -34,7 +35,7 @@
 		<script>
 			var ip = "https://vortex418.github.io";
 			<script>
-			var acc = document.getElementsByClassName("accordion-button");
+			var acc = document.getElementsByClassName("accordian-button");
 			for (var i = 0; i < acc.length; i++) {
 			  acc[i].addEventListener("click", function() {
 			    this.classList.toggle("accordian-active");
