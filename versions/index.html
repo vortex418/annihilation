@@ -6,17 +6,11 @@
 		<link id="stylesheet" rel="stylesheet">
 		<style>	
 			.accordian-content{
-				padding: 0 18px;
-				background-color: white;
-				max-height: 0;
-				overflow: hidden;
-				transition: max-height 0.2s ease-out;
+				padding: 20px;
+				background-color: black;
 			}
 			.accordian-button{
 				width: 200px;
-			}
-			.accordian-active{
-				display: block;
 			}
 		</style>
 	</head>
@@ -45,8 +39,8 @@
 		<script>
 			var ip = "https://vortex418.github.io";
 			var acc = document.getElementsByClassName("accordian-button");
-			/*var panel = document.getElementByClassName("accordian-content");
-			for (var i = 0; i < acc.length; i++) {
+			var panel = document.getElementByClassName("accordian-content");
+			/*for (var i = 0; i < acc.length; i++) {
 			  acc[i].addEventListener("click", function() {
 			    this.classList.toggle("accordian-active");
 			    var panel = this.nextElementSibling;
@@ -60,11 +54,10 @@
 			for (i = 0; i < acc.length; i++) {
 			  acc[i].addEventListener("click", function() {
 			    /* Toggle between hiding and showing the active panel */
-			    var panel = this.nextElementSibling;
-			    if (panel.style.display === "block") {
-			      panel.style.display = "none";
+			    if (panel[i].style.display === "block") {
+			      panel[i].style.display = "none";
 			    } else {
-			      panel.style.display = "block";
+			      panel[i].style.display = "block";
 			    }
 			  });
 			}
