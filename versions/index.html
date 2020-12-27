@@ -4,23 +4,48 @@
 		<title>Annihilation - Version List</title> 
 		<link rel="icon" type="image/png" id = "favicon">
 		<link id="stylesheet" rel="stylesheet">
+		<style>	
+			.accordian-content{
+			  padding: 0 18px;
+			  background-color: white;
+			  max-height: 0;
+			  overflow: hidden;
+			  transition: max-height 0.2s ease-out;
+			}
+		</style>
 	</head>
 	<body>
 		<center/>
 		<h1>Annihilation Version List</h1>
 		<button id="back"> &lt -- Home</button>
 		<button id="beta">Beta</button>
-		<p>--</p>
-		<button id="0.1.3">v0.1.3</button>
-		<button id="0.1.2">v0.1.2</button>
-		<button id="0.1.1">v0.1.1</button>
-		<button id="0.1.0">v0.1.0</button>
-		<p>--</p>
-		<button id="0.0.3">v0.0.3</button>
-		<button id="0.0.2">v0.0.2</button>
-		<button id="0.0.1">v0.0.1</button>
+		<button class="accordian-button"></button>
+		<div class="accordian-content">
+			<button id="0.1.3">v0.1.3</button>
+			<button id="0.1.2">v0.1.2</button>
+			<button id="0.1.1">v0.1.1</button>
+			<button id="0.1.0">v0.1.0</button>
+		</div>
+		<div class="accordian-content">
+			<button id="0.0.3">v0.0.3</button>
+			<button id="0.0.2">v0.0.2</button>
+			<button id="0.0.1">v0.0.1</button>
+		</div>
 		<script>
 			var ip = "https://vortex418.github.io";
+			<script>
+			var acc = document.getElementsByClassName("accordion-button");
+			for (var i = 0; i < acc.length; i++) {
+			  acc[i].addEventListener("click", function() {
+			    this.classList.toggle("accordian-active");
+			    var panel = this.nextElementSibling;
+			    if (panel.style.maxHeight) {
+			      panel.style.maxHeight = null;
+			    } else {
+			      panel.style.maxHeight = panel.scrollHeight + "px";
+			    } 
+			  });
+			}
 			document.getElementById("stylesheet").href=ip+"/annihilation/styles.css";
 			document.getElementById("back").href=ip+"/annihilation/";
 			document.getElementById("favicon").href=ip+"/annihilation/models/icon.png";
