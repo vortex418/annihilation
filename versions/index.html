@@ -47,7 +47,7 @@
 			var acc = document.getElementsByClassName("accordian-button");
 			//var panel = document.getElementByClassName("accordian-content");
 			for (var i = 0; i < acc.length; i++) {
-			  document.getElementByClassName("accordian-button")[i].addEventListener("click", function() {
+			  acc[i].addEventListener("click", function() {
 			  /* Toggle between adding and removing the "active" class,
 			    to highlight the button that controls the panel */
 			    this.classList.toggle("accordian-active");
@@ -59,7 +59,7 @@
 			    } else {
 			      panel.style.display = "block";
 			    }
-			  });
+			  }, false);
 			}
 			document.getElementById("stylesheet").href=ip+"/annihilation/styles.css";
 			document.getElementById("back").href=ip+"/annihilation/";
