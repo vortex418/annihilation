@@ -42,14 +42,15 @@
 		<script>
 			var ip = "https://vortex418.github.io";
 			var acc = document.getElementsByClassName("accordian-button");
-			var panel = document.getElementByClassName("accordian-content");
+			//var panel = document.getElementByClassName("accordian-content");
 			for (var i = 0; i < acc.length; i++) {
 			  acc[i].addEventListener("click", function() {
 			    this.classList.toggle("accordian-active");
-			    if (panel[i].style.maxHeight) {
-			      panel[i].style.maxHeight = null;
+			    var panel = this.nextElementSibling;
+			    if (panel.style.maxHeight) {
+			      panel.style.maxHeight = null;
 			    } else {
-			      panel[i].style.maxHeight = panel.scrollHeight + "px";
+			      panel.style.maxHeight = panel.scrollHeight + "px";
 			    } 
 			  });
 			}
