@@ -66,12 +66,3 @@ input{
 input:hover{
 	cursor: text;
 }
-div{
-	box-shadow:0 0 6px hsla(200,100%,80%,1);
-	text-shadow:0 0 7px hsla(200,100%,80%,1);
-	color: hsla(200,100%,90%,.8);
-	font-family: Play,Verdana;
-	border: 0;
-	margin: 5px;
-	padding: 5px 15px;
-}
