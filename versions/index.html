@@ -13,7 +13,7 @@
 				width: 500px;
 			}
 			accordian-hidden{
-				display: block;
+				display: none;
 			}
 		</style>
 	</head>
@@ -25,7 +25,7 @@
 		<br>
 		<button class="accordian-button" id="button-1">Indev, 0.1.x</button>
 		<br>
-		<div class="accordian-hidden" id="content-1">
+		<div style="display: none;" id="content-1">
 			<button id="0.1.3">v0.1.3</button>
 			<button id="0.1.2">v0.1.2</button>
 			<button id="0.1.1">v0.1.1</button>
@@ -34,7 +34,7 @@
 		<br>
 		<button class="accordian-button" id="button-2">Indev, 0.0.x</button>
 		<br>
-		<div class="accordian-hidden" id="content-2">
+		<div style="diplay: none;" id="content-2">
 			<button id="0.0.3">v0.0.3</button>
 			<button id="0.0.2">v0.0.2</button>
 			<button id="0.0.1">v0.0.1</button>
@@ -43,10 +43,10 @@
 			var ip = "https://vortex418.github.io";
 			var accDisplay = [document.getElementById("content-1").display,document.getElementById("content-2").display];
 			document.getElementById("button-1").addEventListener("click", function() {
-				if(accDisplay === "hidden"){
+				if(accDisplay === "none"){
 					accDisplay = "block";
 				} else {
-					accDisplay = "hidden"
+					accDisplay = "none"
 				}
 			}, false);
 			document.getElementById("button-2").addEventListener("click", function() {
