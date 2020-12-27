@@ -8,7 +8,6 @@
 			.accordian-content{
 				padding: 20px;
 				background-color: black;
-				display: none;
 			}
 			.accordian-button{
 				width: 200px;
@@ -40,25 +39,19 @@
 		<script>
 			var ip = "https://vortex418.github.io";
 			var acc = document.getElementsByClassName("accordian-button");
-			var panel = document.getElementByClassName("accordian-content");
-			/*for (var i = 0; i < acc.length; i++) {
+			//var panel = document.getElementByClassName("accordian-content");
+			for (var i = 0; i < acc.length; i++) {
 			  acc[i].addEventListener("click", function() {
-			    this.classList.toggle("accordian-active");
-			    var panel = this.nextElementSibling;
-			    if (panel.style.maxHeight) {
-			      panel.style.maxHeight = null;
-			    } else {
-			      panel.style.maxHeight = panel.scrollHeight + "px";
-			    } 
-			  });
-			}*/
-			for (i = 0; i < acc.length; i++) {
-			  acc[i].addEventListener("click", function() {
+			  /* Toggle between adding and removing the "active" class,
+			    to highlight the button that controls the panel */
+			    this.classList.toggle("active");
+
 			    /* Toggle between hiding and showing the active panel */
-			    if (panel[i].style.display === "block") {
-			      panel[i].style.display = "none";
+			    var panel = this.nextElementSibling;
+			    if (panel.style.display === "block") {
+			      panel.style.display = "none";
 			    } else {
-			      panel[i].style.display = "block";
+			      panel.style.display = "block";
 			    }
 			  });
 			}
