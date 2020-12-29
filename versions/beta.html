@@ -33,7 +33,7 @@
  <script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js"></script> 
  
  <script>
-	var ip = "http://127.0.0.1:1123";
+	var ip = "https://vortex418.github.io";
 	var rurl = ip+"/annihilation/v/beta.html";
 	document.getElementById("audio").src=ip+"/annihilation/sound/error.mp3";
 	document.getElementById("favicon").href=ip+"/annihilation/models/icon.png";
@@ -99,7 +99,7 @@
 		var planet = {
 			max: 0,
 			name: ["crash site","[1] Abrigato","[2] Beta-Keralis","[3] Suzum","[4] Vespa","[5] Coruscare","[6] Vulca","[7] Jaeger","[8] Kashyyyk","[9] Outpost-42","[10] Victoria Alpha","[11] Victoria Bravo","[12] Gesht","[13] Sanctuary","[14] Snowmass","[15] Ja","[16] Keeg","[17]Haemeiguli","[18]Borebalae","[19]Albataetarius","[20]Hataerius","[21]Achernaiphoros","[22]Antadrophei","[23]Hoemeirai","[24]Antabalis","[25]Hoereo","[26]Pazadam","[27]Equidor","[28]Pax","[29]Xena","[30]Titan","[31]Oturn","[32]Thuamia","[33]Heuthea","[34]Ditharus","[35]Muxater","[36]Trukovis","[37]Bichotune","[38]Etis","[39]Leorus","[40]Aphus","[41]Harophos","[42]","[43]","[44]","[45]","[46]","[47]","[48]","[49]","[50]","[51]","[52]","[53]","[54]","[55]","[56]","[57]","[58]","[59]","[60]","[61]","[62]","[63]","[64] Home!"],
-			status: [2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			status: [0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
 			str: {
 				r: "",
 				g: "",
@@ -240,18 +240,9 @@
 		};
 		var object = function(name,alligence,x,y,z,a,b,c){
 			fill(255,255,255);
-			if(alligence === 0){
-				noStroke();
-			}
-			if(alligence === 1){
-				stroke(255,0,0);
-			}
-			if(alligence === 2){
-				stroke(0,255,0);
-			}
-			if(alligence === 3){
-				stroke(255,255,255);
-			}
+			if(alligence == 0){noStroke();}
+			if(alligence < 0){stroke(255,0,0);}
+			if(alligence > 0){stroke(0,255,0);}
 			text(name,x,y+(z*0.6));
 			fill(a,b,c);
 			ellipse(x,y,z,z);
