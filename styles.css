@@ -75,3 +75,6 @@ div{
 .hidden{
 	display: none;
 }
+.accordion{
+	width: 500px;	
+}
