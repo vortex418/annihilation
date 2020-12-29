@@ -10,17 +10,41 @@
 		<h1>Annihilation Version List</h1>
 		<button id="back"> &lt -- Home</button>
 		<button id="beta">Beta</button>
-		<p>--</p>
-		<button id="0.1.3">v0.1.3</button>
-		<button id="0.1.2">v0.1.2</button>
-		<button id="0.1.1">v0.1.1</button>
-		<button id="0.1.0">v0.1.0</button>
-		<p>--</p>
-		<button id="0.0.3">v0.0.3</button>
-		<button id="0.0.2">v0.0.2</button>
-		<button id="0.0.1">v0.0.1</button>
+		<br>
+		<button class="accordion" id="button-1">Indev, 0.1.x</button>
+		<br>
+		<div class="accordian hidden" id="content-1">
+			<button id="0.1.3">v0.1.3</button>
+			<button id="0.1.2">v0.1.2</button>
+			<button id="0.1.1">v0.1.1</button>
+			<button id="0.1.0">v0.1.0</button>
+		</div>
+		<br>
+		<button class="accordion" id="button-2">Indev, 0.0.x</button>
+		<br>
+		<div  class="accordian hidden" id="content-2">
+			<button id="0.0.3">v0.0.3</button>
+			<button id="0.0.2">v0.0.2</button>
+			<button id="0.0.1">v0.0.1</button>
+		</div>
 		<script>
-			var ip = "https://vortex418.github.io";
+			var ip = "http://127.0.0.1:1123";
+			document.getElementById("button-1").addEventListener("click",function(){
+				if(document.getElementById("content-1").classList.contains("hidden") == true){
+					document.getElementById("content-1").classList.remove("hidden");
+				}
+				else if(document.getElementById("content-1").classList.contains("hidden") == false){
+					document.getElementById("content-1").classList.add("hidden");
+				}
+			});
+			document.getElementById("button-2").addEventListener("click",function(){
+				if(document.getElementById("content-2").classList.contains("hidden") == true){
+					document.getElementById("content-2").classList.remove("hidden");
+				}
+				else if(document.getElementById("content-2").classList.contains("hidden") == false){
+					document.getElementById("content-2").classList.add("hidden");
+				}
+			});
 			document.getElementById("stylesheet").href=ip+"/annihilation/styles.css";
 			document.getElementById("back").href=ip+"/annihilation/";
 			document.getElementById("favicon").href=ip+"/annihilation/models/icon.png";
