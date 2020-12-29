@@ -67,8 +67,11 @@ input:hover{
 	cursor: text;
 }
 div{
+	border-radius:4px;
 	box-shadow:0 0 6px hsla(200,100%,80%,1);
 	text-shadow:0 0 7px hsla(200,100%,80%,1);
 	color: hsla(200,100%,90%,.8);
-	border: 0;
+}
+.hidden{
+	display: none;
 }
