@@ -4,46 +4,23 @@
 		<title>Annihilation - Version List</title> 
 		<link rel="icon" type="image/png" id = "favicon">
 		<link id="stylesheet" rel="stylesheet">
-		<style>	
-			.accordion{
-				width: 500px;
-			}
-			.hidden{
-				display: none;
-				overflow: hidden;
-			}
-		</style>
 	</head>
 	<body>
 		<center/>
 		<h1>Annihilation Version List</h1>
 		<button id="back"> &lt -- Home</button>
 		<button id="beta">Beta</button>
-		<br>
-		<button class="accordion" id="button-1">Indev, 0.1.x</button>
-		<br>
-		<div class="accordion hidden" id="content-1">
-			<button id="0.1.3">v0.1.3</button>
-			<button id="0.1.2">v0.1.2</button>
-			<button id="0.1.1">v0.1.1</button>
-			<button id="0.1.0">v0.1.0</button>
-		</div>
-		<br>
-		<button class="accordion" id="button-2">Indev, 0.0.x</button>
-		<br>
-		<div class="accordion  hidden" id="content-2">
-			<button id="0.0.3">v0.0.3</button>
-			<button id="0.0.2">v0.0.2</button>
-			<button id="0.0.1">v0.0.1</button>
-		</div>
+		<p>--</p>
+		<button id="0.1.3">v0.1.3</button>
+		<button id="0.1.2">v0.1.2</button>
+		<button id="0.1.1">v0.1.1</button>
+		<button id="0.1.0">v0.1.0</button>
+		<p>--</p>
+		<button id="0.0.3">v0.0.3</button>
+		<button id="0.0.2">v0.0.2</button>
+		<button id="0.0.1">v0.0.1</button>
 		<script>
-			var ip = "https://vortex418.github.io";
-			document.getElementById("button-1").addEventListener("click",function(){
-				document.getElementById("content-1").classList.toggle("accordion hidden");
-			});
-			document.getElementById("button-2").addEventListener("click",function(){
-				document.getElementById("content-2").classList.toggle("accordion hidden");
-			});
+			var ip = "http://127.0.0.1:1123";
 			document.getElementById("stylesheet").href=ip+"/annihilation/styles.css";
 			document.getElementById("back").href=ip+"/annihilation/";
 			document.getElementById("favicon").href=ip+"/annihilation/models/icon.png";
