@@ -80,20 +80,21 @@
 		var skip = 0;
 		var tabText = 16;
 		var download;
-		//star cords and size
 		var star = {
 			x: [
-				[776,447,567,910,219,640,440,991,669,734,715,730,807,692,714,97,944,294,168,431,765,730,468,298,579],
-				[311,157,625,759,517,376,392,277,502,258,936,854,832,194,380,730,859,158,77,145,146,397,500,709,290],
-				[495,764,594,485,295,169,833,502,178,296,023,123,934,564,299,554,722,781,986,442,912,93,655,241,961]
+[round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width))],
+				[round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width))],
+				[round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width))]
 			],
 			y: [
-				[561,570,420,298,229,532,253,323,305,384,290,104,409,115,117,315,179,267,515,471,240,421,229,107,236],
-				[225,395,558,299,308,399,255,526,459,404,377,559,257,357,483,426,226,398,127,347,515,168,553,249,322],
-				[265,151,240,569,76,410,450,154,134,467,154,312,465,354,232,436,448,217,223,145,438,258,573,513,464]
+				[round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height))],
+				[round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height))],
+				[round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height)),round(random(0,height))]
 			],
-			size:[2,3,5,4,5,3,5,3,1,4,5,3,5,3,5,2,5,5,4,2,3,4,5,5,3],
+			max: 5,
+			size: []
 		};
+		star.size = [round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max))];
 		//planets
 		var planet = {
 			max: 0,
@@ -110,7 +111,7 @@
 				b: [128,round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),200],
 			},
 			recommended: ["n/a",25,50,100,175,275,400,550,675,5000,2500,5000,10000,15000,25000,35000,50000,70000,95000,130000,170000,215000,270000,340000,420690,510000,610000,720000,830000,940000,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999],
-			difficulty: ["very easy","easy","easy-medium","medium","medium-hard","hard","very hard","extremly hard","hard-insane","insane"],
+			difficulty: ["very easy","easy","easy-medium","medium","medium-hard","hard","very hard","extremly hard","hard-insane","insane"]
 		};
 		//vars for research
 		var tech = {
@@ -137,8 +138,8 @@
 		// everything ship related!
 		var ship = {
 			generic: {
-				strength: 0,
-				shields: 0,
+				strength: 10,
+				shields: 10,
 			},
 			totalnum: 0,
 			total: 0,
@@ -199,6 +200,13 @@
 			str: "",
 			valid: false,
 			new: 0,
+			json: {
+				planet: "",
+				star: "",
+				ship: "",
+				tech: "",
+				tax: ""
+			}
 		};
 		var command = {
 			str: "",
@@ -623,7 +631,12 @@
 				}
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/32*25 && mouseY > height/32*23 && save.valid !== true){document.body.style.cursor = "not-allowed";} else {document.body.style.cursor = "default";}
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/32*25 && mouseY > height/32*23 && mouseIsPressed && save.valid === true) {
-[metal,minerals,fuel,ship.num[1],ship.num[2],ship.num[3],ship.num[4],ship.num[5],ship.num[6],tech.points,tech.level.armor,tech.level.reload,tech.level.laser,tech.level.shield,tech.level.recharge,tech.level.missle,tax.claimed,tax.max,ship.generic.strength,ship.generic.shields,planet.max,planet.color.r[0],planet.color.r[1],planet.color.r[2],planet.color.r[3],planet.color.r[4],planet.color.r[5],planet.color.r[6],planet.color.r[7],planet.color.r[8],planet.color.r[9],planet.color.r[10],planet.color.r[11],planet.color.r[12],planet.color.r[13],planet.color.r[14],planet.color.r[15],planet.color.r[16],planet.color.r[17],planet.color.r[18],planet.color.r[19],planet.color.r[20],planet.color.r[21],planet.color.r[22],planet.color.r[23],planet.color.r[24],planet.color.r[25],planet.color.r[26],planet.color.r[27],planet.color.r[28],planet.color.r[29],planet.color.r[30],planet.color.r[31],planet.color.r[32],planet.color.r[33],planet.color.r[34],planet.color.r[35],planet.color.r[36],planet.color.r[37],planet.color.r[38],planet.color.r[39],planet.color.r[40],planet.color.r[41],planet.color.r[42],planet.color.r[43],planet.color.r[44],planet.color.r[45],planet.color.r[46],planet.color.r[47],planet.color.r[48],planet.color.r[49],planet.color.r[50],planet.color.r[51],planet.color.r[52],planet.color.r[53],planet.color.r[54],planet.color.r[55],planet.color.r[56],planet.color.r[57],planet.color.r[58],planet.color.r[59],planet.color.r[60],planet.color.r[61],planet.color.r[62],planet.color.r[63],planet.color.r[64],planet.color.g[0],planet.color.g[1],planet.color.g[2],planet.color.g[3],planet.color.g[4],planet.color.g[5],planet.color.g[6],planet.color.g[7],planet.color.g[8],planet.color.g[9],planet.color.g[10],planet.color.g[11],planet.color.g[12],planet.color.g[13],planet.color.g[14],planet.color.g[15],planet.color.g[16],planet.color.g[17],planet.color.g[18],planet.color.g[19],planet.color.g[20],planet.color.g[21],planet.color.g[22],planet.color.g[23],planet.color.g[24],planet.color.g[25],planet.color.g[26],planet.color.g[27],planet.color.g[28],planet.color.g[29],planet.color.g[30],planet.color.g[31],planet.color.g[32],planet.color.g[33],planet.color.g[34],planet.color.g[35],planet.color.g[36],planet.color.g[37],planet.color.g[38],planet.color.g[39],planet.color.g[40],planet.color.g[41],planet.color.g[42],planet.color.g[43],planet.color.g[44],planet.color.g[45],planet.color.g[46],planet.color.g[47],planet.color.g[48],planet.color.g[49],planet.color.g[50],planet.color.g[51],planet.color.g[52],planet.color.g[53],planet.color.g[54],planet.color.g[55],planet.color.g[56],planet.color.g[57],planet.color.g[58],planet.color.g[59],planet.color.g[60],planet.color.g[61],planet.color.g[62],planet.color.g[63],planet.color.g[64],planet.color.b[0],planet.color.b[1],planet.color.b[2],planet.color.b[3],planet.color.b[4],planet.color.b[5],planet.color.b[6],planet.color.b[7],planet.color.b[8],planet.color.b[9],planet.color.b[10],planet.color.b[11],planet.color.b[12],planet.color.b[13],planet.color.b[14],planet.color.b[15],planet.color.b[16],planet.color.b[17],planet.color.b[18],planet.color.b[19],planet.color.b[20],planet.color.b[21],planet.color.b[22],planet.color.b[23],planet.color.b[24],planet.color.b[25],planet.color.b[26],planet.color.b[27],planet.color.b[28],planet.color.b[29],planet.color.b[30],planet.color.b[31],planet.color.b[32],planet.color.b[33],planet.color.b[34],planet.color.b[35],planet.color.b[36],planet.color.b[37],planet.color.b[38],planet.color.b[39],planet.color.b[40],planet.color.b[41],planet.color.b[42],planet.color.b[43],planet.color.b[44],planet.color.b[45],planet.color.b[46],planet.color.b[47],planet.color.b[48],planet.color.b[49],planet.color.b[50],planet.color.b[51],planet.color.b[52],planet.color.b[53],planet.color.b[54],planet.color.b[55],planet.color.b[56],planet.color.b[57],planet.color.b[58],planet.color.b[59],planet.color.b[60],planet.color.b[61],planet.color.b[62],planet.color.b[63],planet.color.b[64]] = save.str.split(",");
+[metal,minerals,fuel,save.json.planet,save.json.star,save.json.ship,save.json.tech,save.json.tax] = save.str.split("\n!sep!\n");
+					planet = JSON.parse(save.json.planet);
+					star = JSON.parse(save.json.star);
+					ship = JSON.parse(save.json.ship);
+					tech = JSON.parse(save.json.tech);
+					tax = JSON.parse(save.json.tax);
 					removeElement("inputsave");
 					scene = 3;
 					sub = 0;
@@ -1239,38 +1252,9 @@
 						addElement("loadgame","br","useless8");
 						addElement("loadgame","a","download_link");
 						document.getElementById("download_link").innerHTML="download save";
-						document.getElementById("download_link").download="save.asv"
-						save.content = metal+","+ minerals+","+ fuel+","+ ship.num[1]+","+ ship.num[2]+","+ ship.num[3]+","+ ship.num[4]+","+ ship.num[5]+","+ ship.num[6]+","+ tech.points+","+ tech.level.armor+","+ tech.level.reload+","+ tech.level.laser+","+ tech.level.shield+","+ tech.level.recharge+","+ tech.level.missle+","+tax.claimed+","+tax.max+","+ship.generic.strength+","+ ship.generic.shields+","+planet.max+",";
-						if(finished === 0){
-							for(var i=0;i<65;i++){
-								if( i < 65){
-								save.content += planet.color.r[i]+",";
-								}
-								if(i === 64){
-									finished = 1;
-								}
-							}
-						}
-						if(finished === 1){
-							for(var i=0;i<65;i++){
-								if( i < 65){
-								save.content += planet.color.g[i]+",";
-								}
-								if(i === 64){
-									finished = 2;
-								}
-							}
-						}
-						if(finished === 2){
-							for(var i=0;i<65;i++){
-								if( i < 65){
-								save.content += planet.color.b[i]+",";
-								}
-								if(i === 64){
-									finished = 3;
-								}
-							}
-						}
+						document.getElementById("download_link").download="save.json";
+						save.content = metal+"\n!sep!\n"+minerals+"\n!sep!\n"+fuel+"\n!sep!\n"+JSON.stringify(planet)+"\n!sep!\n"+JSON.stringify(star)+"\n!sep!\n"+JSON.stringify(ship)+"\n!sep!\n"+JSON.stringify(tech)+"\n!sep!\n"+JSON.stringify(tax);
+						finished = 3;
 						if(finished === 3){
 							save.new = prompt("Which save slot do you want to save to (0-3, 0 will not save locally)",0);
 							save.url = window.URL.createObjectURL(new Blob([save.content], {type: "text/plain"}));
@@ -1600,15 +1584,11 @@
 				}
 			}
 		};
-
         // ProgramCode A A A
     }};
-
     // Get the canvas that Processing-js will use
     var canvas = document.getElementById("mycanvas"); 
     // Pass the function sketchProc (defined in myCode.js) to Processing's constructor.
     var processingInstance = new Processing(canvas, sketchProc); 
  </script>
-
 </html>
-
