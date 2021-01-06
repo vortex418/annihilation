@@ -12,21 +12,17 @@
 		 canvas{
 		 	outline: 1px solid gray;
 		 }
-		 div{
-		 	position: fixed;
-  			top: 52%;
-  			left: 40%;
- 			width: 256px
-			height: 64px;
+		 .hidden{
+			display: none;
 		 }
-	 </style>
+	</style>
 </head>
 <body>
 	<center/>
 	<!-- This draws the Canvas on the webpage -->
 	<canvas id="mycanvas"></canvas>
-	<div id=loadgame>
-	</div>
+	<a id="download_link" class="hidden" style="position:absolute;left:480px;top:480px;"></a>
+	<input id="inputsave" class="hidden" type="file"  style="position:absolute;left:412px;top:400px">
 	<audio id = "audio"><source src="" type="audio/mp3"></audio>
 </body>
 
@@ -51,8 +47,9 @@
             return processingInstance.loadImage(url);
         }
      with (processingInstance) {
-		size(1024, 576);
-        	frameRate(10);
+		resizeTo(1024, 576);
+		size(1024,576);
+        frameRate(10);
 		window.scrollTo(10,8);
         // ProgramCode V V V
 		/**
@@ -79,7 +76,7 @@
 		var sub = 0;
 		var skip = 0;
 		var tabText = 16;
-		var download;
+		var log = [0,1];
 		var star = {
 			x: [
 [round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width))],
@@ -212,25 +209,36 @@
 			str: "",
 			type: "",
 			subtype: "",
-			value: null,
+			value: ""
 		};
-		var addElement = function(parentId, elementTag, elementId, attr,html,attr2,html2,attr3,html3) {
-			// Adds an element to the document.
-			var attr = [attr,attr2,attr3] || ["id","id","id"];
-			var html = [html, html2,html3] || [elementId,elementId,elementId];
-			var p = document.getElementById(parentId);
-			var newElement = document.createElement(elementTag);
-			newElement.setAttribute("id", elementId);
-			for(var i=0;i<attr.length;i++){		
-			newElement.setAttribute(attr[i], html[i]);
+		var element = {
+			show: function(id){
+					if(document.getElementById(id).classList.contains("hidden") == true){
+					document.getElementById(id).classList.remove("hidden");
+					console.log('"'+id+'" shown');
+				}
+			},
+			hide: function(id){
+				if(document.getElementById(id).classList.contains("hidden") == false){
+					document.getElementById(id).classList.add("hidden");
+					console.log('"'+id+ '" hidden');
+				}
+			},
+			toggle: function(id, classTotoggle){
+				if(document.getelementById(id).classList.contains(classTotoggle) == true){
+					document.getElementById(id).classList.remove(classTotoggle);
+				}
+				if(document.getelementById(id).classList.contains(classTotoggle) == false){
+					document.getElementById(id).classList.add(classTotoggle);
+				}
 			}
-			p.appendChild(newElement);
 		};
-		var removeElement = function(elementId) {
-		    // Removes an element from the document
-		    var element = document.getElementById(elementId);
-		    element.parentNode.removeChild(element);
+		var box = function(x,y,width,height){
+			image(getImage(ip+"/annihilation/models/box.png"),x,y,width,height);
 		};
+		var button = function(x,y,width,height){
+			image(getImage(ip+"/annihilation/models/button.png"),x,y,width,height);
+		}; 
 		var starscape = function(num){
 			fill(255,255,255);
 			noStroke();
@@ -251,13 +259,13 @@
 			background(0,0,0);
 			stroke(64,64,64);
 			fill(128,128,128);
-			rect(width/4*0,0,width/4,height/8);
-			rect(width/4*1,0,width/4,height/8);
-			rect(width/4*2,0,width/4,height/8);
-			rect(width/4*3,0,width/4,height/8);
+			box(width/4*0,0,width/4,height/8);
+			box(width/4*1,0,width/4,height/8);
+			box(width/4*2,0,width/4,height/8);
+			box(width/4*3,0,width/4,height/8);
 			noStroke();
 			if(type===1){
-				rect(width*0.05,height/8+25,width*0.9,height/4*3);
+				box(width*0.05,height/8+25,width*0.9,height/4*3);
 			}
 			fill(255,0,0);
 			textSize(height/tabText);
@@ -268,70 +276,25 @@
 			if(mouseX < width/4*1 && mouseX > width/4*0 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
 				scene = 3;
 				sub = 0;
-				if(download === true){
-						removeElement("useless");
-						removeElement("useless1");
-						removeElement("useless2");
-						removeElement("useless3");
-						removeElement("useless4");
-						removeElement("useless5");
-						removeElement("useless6");
-						removeElement("useless7");
-						removeElement("useless8");
-						removeElement("download_link");
-						download = false;
-					}
+				element.hide("download_link");
 			}
 			if(mouseX < width/4*2 && mouseX > width/4*1 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
 				scene = 4;
-				if(download === true){
-					removeElement("useless");
-					removeElement("useless1");
-					removeElement("useless2");
-					removeElement("useless3");
-					removeElement("useless4");
-					removeElement("useless5");
-					removeElement("useless6");
-					removeElement("useless7");
-					removeElement("useless8");
-					removeElement("download_link");
-					download = false;
-				}
+				element.hide("download_link");
 			}
 			if(mouseX < width/4*3 && mouseX > width/4*2 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
 				scene = 5;
-				if(download === true){
-					removeElement("useless");
-					removeElement("useless1");
-					removeElement("useless2");
-					removeElement("useless3");
-					removeElement("useless4");
-					removeElement("useless5");
-					removeElement("useless6");
-					removeElement("useless7");
-					removeElement("useless8");
-					removeElement("download_link");
-					download = false;
-				}
+				element.hide("download_link");
 			}
 			if(mouseX < width/4*4 && mouseX > width/4*3 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
-				if(download === true){
-					removeElement("useless");
-					removeElement("useless1");
-					removeElement("useless2");
-					removeElement("useless3");
-					removeElement("useless4");
-					removeElement("useless5");
-					removeElement("useless6");
-					removeElement("useless7");
-					removeElement("useless8");
-					removeElement("download_link");
-					download = false;
-				}
 				scene = 6;
+				element.hide("download_link");
 			}
 		};
-		draw = function(){
+		draw = function(){	
+		if(scene != 0 && sub != 4){
+			element.hide("inputsave");
+		}
 			if(play === true){
 				playTime--;
 			}
@@ -475,9 +438,9 @@
 				image(getImage(ip+"/annihilation/models/menu.png"),0,0,width,height);
 				fill(128,128,128);
 				noStroke();
-				rect(width/2-width/8,height/2-height/32*1,width/4,height/16);
-				rect(width/2-width/8,height/2+height/32*2,width/4,height/16);
-				rect(width/2-width/8,height/2+height/32*5,width/4,height/16);
+				box(width/2-width/8,height/2-height/32*1,width/4,height/16);
+				box(width/2-width/8,height/2+height/32*2,width/4,height/16);
+				box(width/2-width/8,height/2+height/32*5,width/4,height/16);
 				fill(255,0,0);
 				textAlign(CENTER,CENTER);
 				textSize(width/28);
@@ -495,7 +458,7 @@
 				}
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/2+height/32*4 && mouseY > height/2+height/32*2 && mouseIsPressed) {
 					sub = 4;
-					addElement("loadgame","input","inputsave","type","file");
+					element.show("inputsave");
 				}
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/2+height/32*7 && mouseY > height/2+height/32*5 && mouseIsPressed) {
 					onceSound("off.mp3");
@@ -504,6 +467,10 @@
 			}
 			if(scene === 0 && sub===1){
 				background(0,0,0);
+				if(log[1] > 0){
+					console.log("This is an intentional feature, not an error");
+					log[1]--;
+				}
 				playSound("sans.mp3");
 				noStroke();
 				fill(255,255,255);
@@ -520,7 +487,7 @@
 				text("You wake up at the right time, but not in the right place. Now, you're over 25 years away from help. ",width/2,height/2+height/20); 
 				text("But you have a fleet and troops. You're new goal: Get back home, at whatever costs!",width/2,height/2+height/12);
 				fill(128,128,128);
-				rect(width/2-width/8*1.25,height/2+height/8+height/32,width/4*1.25,height/16);
+				box(width/2-width/8*1.25,height/2+height/8+height/32,width/4*1.25,height/16);
 				fill(255,0,0);
 				textSize(height/32*1.5);
 				text("Start Game",width/2,height/2*1.375);
@@ -548,7 +515,7 @@
 				text("Support the game by joing the discord (https://discord.gg/7mQsXb3EdY) and telling everyone you know!",width/2,height/2+height/20); 
 				text("All credit goes to Vortex418",width/2,height/2+height/12);
 				fill(64,64,64);
-				rect(width/2-width/8*1.25,height/2+height/8+height/32,width/4*1.25,height/16);
+				box(width/2-width/8*1.25,height/2+height/8+height/32,width/4*1.25,height/16);
 				fill(255,0,0);
 				textSize(height/32*1.5);
 				text("Restart",width/2,height/2*1.375);
@@ -572,14 +539,14 @@
 				textAlign(CENTER,CENTER);
 				stroke(255,0,0);
 				if(save.selected === 1){stroke(0,255,0)}else{stroke(255,0,0)}
-				rect(width/4*1-width/12,height/64*19,width/6,height/6);
+				box(width/4*1-width/12,height/64*19,width/6,height/6);
 				if(save.selected === 2){stroke(0,255,0)}else{stroke(255,0,0)}
-				rect(width/4*2-width/12,height/64*19,width/6,height/6);
+				box(width/4*2-width/12,height/64*19,width/6,height/6);
 				if(save.selected === 3){stroke(0,255,0)}else{stroke(255,0,0)}
-				rect(width/4*3-width/12,height/64*19,width/6,height/6);
+				box(width/4*3-width/12,height/64*19,width/6,height/6);
 				noStroke();
-				rect(width/2-width/16,height/32*26+8,width/8,height/32);
-				rect(width/2-width/8,height/32*23,width/4,height/16);
+				box(width/2-width/16,height/32*26+8,width/8,height/32);
+				box(width/2-width/8,height/32*23,width/4,height/16);
 				fill(255,0,0);
 				textSize(height/tabText);
 				text("Start Game",width/2,height/32*24);
@@ -588,7 +555,7 @@
 				text("Save 3",width/4*3,height/32*12);
 				textSize(height/(tabText*2));
 				text("Back",width/2,height/32*27);
-				document.getElementById('inputsave').addEventListener('change', function() {
+				document.getElementById("inputsave").addEventListener('change', function() {
 					mouseIsPressed = false;
 					var reader = new FileReader();
 					reader.onload = function(){ 
@@ -601,6 +568,11 @@
 				});
 				for(var i=0; i<planet.max; i++){
 					planet.status[i] = 2;
+				}
+				if(save.str == null){
+					save.valid = false;
+					save.str = "";
+					alert("There's nothing in that save! Pick a different one or go back!");
 				}
 				if(mouseX < width/4*1+width/12 && mouseX > width/4*1-width/12 && mouseY < height/64*19+height/6 && mouseY > height/64*19 && mouseIsPressed){
 					save.valid = true;
@@ -628,12 +600,12 @@
 					ship = JSON.parse(save.json.ship);
 					tech = JSON.parse(save.json.tech);
 					tax = JSON.parse(save.json.tax);
-					removeElement("inputsave");
+					element.hide("inputsave");
 					scene = 3;
 					sub = 0;
 				}
 				if(mouseX < width/2+width/16 && mouseX > width/2-width/16 && mouseY < height/32*28 && mouseY > height/32*27 && mouseIsPressed) {
-					removeElement("inputsave");
+					element.hide("inputsave");
 					scene = 0;
 					sub = 0;
 				}
@@ -645,10 +617,10 @@
 					textAlign(CENTER,CENTER);
 					noStroke();
 					fill(64,64,64);
-					rect(width/32*3,height/32*8,width/32*12,height/32*8);
-					rect(width/32*3,height/32*20,width/32*12,height/32*8);
-					rect(width/32*17,height/32*8,width/32*12,height/32*8);
-					rect(width/32*17,height/32*20,width/32*12,height/32*8);
+					box(width/32*3,height/32*8,width/32*12,height/32*8);
+					box(width/32*3,height/32*20,width/32*12,height/32*8);
+					box(width/32*17,height/32*8,width/32*12,height/32*8);
+					box(width/32*17,height/32*20,width/32*12,height/32*8);
 					stroke(255,0,0);
 					fill(255,0,0);
 					textSize(height/16);
@@ -682,7 +654,7 @@
 					textAlign(CENTER,CENTER);
 					stroke(255,0,0);
 					fill(64,64,64);
-					rect(width/16*8,height/16*11,width/8,height/16);
+					box(width/16*8,height/16*11,width/8,height/16);
 					noStroke();
 					textSize(height/32);
 					text("Back",width/16*9,height/32*23);
@@ -714,7 +686,7 @@
 					text("But you have a fleet and troops. You're new goal: Get back home, at whatever costs.",width/2,height/32*19);
 					stroke(255,0,0);
 					fill(64,64,64);
-					rect(width/32*14,height/32*26,width/32*4,height/32*2);
+					box(width/32*14,height/32*26,width/32*4,height/32*2);
 					fill(255,0,0);
 					noStroke();
 					textAlign(CENTER,CENTER);
@@ -732,12 +704,12 @@
 					textAlign(CENTER,CENTER);
 					stroke(255,0,0);
 					fill(64,64,64);
-					rect(width/16*1,height/16*8-height/32,width/16*6,height/16);
-					rect(width/16*1,height/16*10-height/32,width/16*6,height/16);
-					rect(width/16*1,height/16*12-height/32,width/16*6,height/16);
-					rect(width/16*9,height/16*8-height/32,width/16*6,height/16);
-					rect(width/16*9,height/16*10-height/32,width/16*6,height/16);
-					rect(width/16*9,height/16*12-height/32,width/16*6,height/16);
+					box(width/16*1,height/16*8-height/32,width/16*6,height/16);
+					box(width/16*1,height/16*10-height/32,width/16*6,height/16);
+					box(width/16*1,height/16*12-height/32,width/16*6,height/16);
+					box(width/16*9,height/16*8-height/32,width/16*6,height/16);
+					box(width/16*9,height/16*10-height/32,width/16*6,height/16);
+					box(width/16*9,height/16*12-height/32,width/16*6,height/16);
 					fill(255,0,0);
 					noStroke();
 					textAlign(CENTER,CENTER);
@@ -787,7 +759,7 @@
 					text("Everything is easy to figure out.",width/2,height/32*18);
 					stroke(255,0,0);
 					fill(64,64,64);
-					rect(width/32*14,height/32*26,width/32*4,height/32*2);
+					box(width/32*14,height/32*26,width/32*4,height/32*2);
 					fill(255,0,0);
 					noStroke();
 					textAlign(CENTER,CENTER);
@@ -819,7 +791,7 @@
 					text("tech all 100",width/2,height/32*24);
 					stroke(255,0,0);
 					fill(64,64,64);
-					rect(width/32*14,height/32*26,width/32*4,height/32*2);
+					box(width/32*14,height/32*26,width/32*4,height/32*2);
 					fill(255,0,0);
 					noStroke();
 					textAlign(CENTER,CENTER);
@@ -837,7 +809,7 @@
 				noStroke();
 				starscape(0);
 				fill(128,128,128);
-				rect(width/2-width/8,height/2+height/16,width/4,height/16);
+				box(width/2-width/8,height/2+height/16,width/4,height/16);
 				fill(255,0,0);
 				textSize(height/18);
 				text("Tips",width/2,height/36*9);
@@ -882,13 +854,13 @@
 				if(sub < 7){
 					textSize(height/32);
 					fill(128,128,128);
-					rect(width/16*15,height/16*14,width/16,height/12);
+					box(width/16*15,height/16*14,width/16,height/12);
 					fill(255,0,0);
 					text(">",width/32*31,height/32*29);
 				}
 				if(sub > 0){
 					fill(128,128,128);
-					rect(0,height/16*14,width/16,height/12);
+					box(0,height/16*14,width/16,height/12);
 					fill(255,0,0);
 					textSize(height/32);
 					text("<",width/32*1,height/32*29);
@@ -943,59 +915,59 @@
 				drawUI(1);
 				textAlign(CENTER,CENTER);
 				fill(64,64,64);
-				rect(width/4*1-width/10,height/4,width/5,height/24);
-				rect(width/4*2-width/10,height/4,width/5,height/24);
-				rect(width/4*2-width/9,height/24*8,width/4.5,height/24);
-				rect(width/4*3-width/10,height/4,width/5,height/24);
+				box(width/4*1-width/10,height/4,width/5,height/24);
+				box(width/4*2-width/10,height/4,width/5,height/24);
+				box(width/4*2-width/9,height/24*8,width/4.5,height/24);
+				box(width/4*3-width/10,height/4,width/5,height/24);
 				if(metal >= ship.cost.metal[0] && minerals >= ship.cost.minerals[0] && fuel >= ship.cost.fuel[0]){
 					stroke(0,255,0);
 				}
 				else{
 					stroke(255,0,0);
 				}
-				rect(width/16*1,height/16*8-height/32,width/16*5,height/16);
+				box(width/16*1,height/16*8-height/32,width/16*5,height/16);
 				if(metal >= ship.cost.metal[1] && minerals >= ship.cost.minerals[1] && fuel >= ship.cost.fuel[1]){
 					stroke(0,255,0);
 				}
 				else {
 					stroke(255,0,0);
 				}
-				rect(width/16*1,height/16*10-height/32,width/16*5,height/16);
+				box(width/16*1,height/16*10-height/32,width/16*5,height/16);
 				if(metal >= ship.cost.metal[2] && minerals >= ship.cost.minerals[2] && fuel >= ship.cost.fuel[2]){
 					stroke(0,255,0);
 				}
 				else {
 					stroke(255,0,0);
 				}
-				rect(width/16*1,height/16*12-height/32,width/16*5,height/16);
+				box(width/16*1,height/16*12-height/32,width/16*5,height/16);
 				if(metal >= ship.cost.metal[3] && minerals >= ship.cost.minerals[3] && fuel >= ship.cost.fuel[3]){
 					stroke(0,255,0);
 				}
 				else {
 					stroke(255,0,0);
 				}
-				rect(width/16*9,height/16*8-height/32,width/16*5,height/16);
+				box(width/16*9,height/16*8-height/32,width/16*5,height/16);
 				if(metal >= ship.cost.metal[4] && minerals >= ship.cost.minerals[4] && fuel >= ship.cost.fuel[4]){
 					stroke(0,255,0);
 				}
 				else {
 					stroke(255,0,0);
 				}
-				rect(width/16*9,height/16*10-height/32,width/16*5,height/16);
+				box(width/16*9,height/16*10-height/32,width/16*5,height/16);
 				if(metal >= ship.cost.metal[5] && minerals >= ship.cost.minerals[5] && fuel >= ship.cost.fuel[5]){
 					stroke(0,255,0);
 				}
 				else {
 					stroke(255,0,0);
 				}
-				rect(width/16*9,height/16*12-height/32,width/16*5,height/16);
+				box(width/16*9,height/16*12-height/32,width/16*5,height/16);
 				stroke(255,0,0);
-				rect(width/16*6,height/16*8-height/32,width/16,height/16);
-				rect(width/16*6,height/16*10-height/32,width/16,height/16);
-				rect(width/16*6,height/16*12-height/32,width/16,height/16);
-				rect(width/16*14,height/16*8-height/32,width/16,height/16);
-				rect(width/16*14,height/16*10-height/32,width/16,height/16);
-				rect(width/16*14,height/16*12-height/32,width/16,height/16);
+				box(width/16*6,height/16*8-height/32,width/16,height/16);
+				box(width/16*6,height/16*10-height/32,width/16,height/16);
+				box(width/16*6,height/16*12-height/32,width/16,height/16);
+				box(width/16*14,height/16*8-height/32,width/16,height/16);
+				box(width/16*14,height/16*10-height/32,width/16,height/16);
+				box(width/16*14,height/16*12-height/32,width/16,height/16);
 				fill(255,0,0);
 				noStroke();
 				textSize(height/24);
@@ -1164,10 +1136,10 @@
 				var finished = 0;
 				noStroke();
 				fill(64,64,64);
-				rect(width/2-width/8,height/32*15,width/4,height/16);
-				rect(width/2-width/8,height/32*18,width/4,height/16);
-				rect(width/2-width/8,height/32*21,width/4,height/16);
-				rect(width/2-width/8,height/32*24,width/4,height/16);
+				box(width/2-width/8,height/32*15,width/4,height/16);
+				box(width/2-width/8,height/32*18,width/4,height/16);
+				box(width/2-width/8,height/32*21,width/4,height/16);
+				box(width/2-width/8,height/32*24,width/4,height/16);
 				textSize(height/tabText);
 				noStroke();
 				fill(255,0,0);
@@ -1177,71 +1149,23 @@
 				text("Main Menu",width/2,height/32*22);
 				text("Save Game",width/2,height/32*25);
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/32*17 && mouseY > height/32*15 && mouseIsPressed) {
-					if(download === true){
-						removeElement("useless");
-						removeElement("useless1");
-						removeElement("useless2");
-						removeElement("useless3");
-						removeElement("useless4");
-						removeElement("useless5");
-						removeElement("useless6");
-						removeElement("useless7");
-						removeElement("useless8");
-						removeElement("download_link");
-						download = false;
-					}
 					skip = 1;
 					scene = 2;
-					
+					element.hide("download_link");
 				}
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/32*20 && mouseY > height/32*18 && mouseIsPressed) {
-					if(download === true){
-						removeElement("useless");
-						removeElement("useless1");
-						removeElement("useless2");
-						removeElement("useless3");
-						removeElement("useless4");
-						removeElement("useless5");
-						removeElement("useless6");
-						removeElement("useless7");
-						removeElement("useless8");
-						removeElement("download_link");
-						download = false;
-					}
 					skip = 1;
 					scene = 1;
 					sub = 0;
+					element.hide("download_link");
 				}
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/32*23 && mouseY > height/32*21 && mouseIsPressed) {
-					if(download === true){
-						removeElement("useless");
-						removeElement("useless1");
-						removeElement("useless2");
-						removeElement("useless3");
-						removeElement("useless4");
-						removeElement("useless5");
-						removeElement("useless6");
-						removeElement("useless7");
-						removeElement("useless8");
-						removeElement("download_link");
-						download = false;
-					}
 					skip = 2;
 					scene = 0;
 					sub = 0;
+					element.hide("download_link");
 				}
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/32*26 && mouseY > height/32*24 && mouseIsPressed) {
-						download = true;
-						addElement("loadgame","br","useless");
-						addElement("loadgame","br","useless1");
-						addElement("loadgame","br","useless2");
-						addElement("loadgame","br","useless3");
-						addElement("loadgame","br","useless4");
-						addElement("loadgame","br","useless5");
-						addElement("loadgame","br","useless6");
-						addElement("loadgame","br","useless7");
-						addElement("loadgame","br","useless8");
-						addElement("loadgame","a","download_link");
 						document.getElementById("download_link").innerHTML="download save";
 						document.getElementById("download_link").download="save.json";
 						save.content = metal+"\n!sep!\n"+minerals+"\n!sep!\n"+fuel+"\n!sep!\n"+JSON.stringify(planet)+"\n!sep!\n"+JSON.stringify(star)+"\n!sep!\n"+JSON.stringify(ship)+"\n!sep!\n"+JSON.stringify(tech)+"\n!sep!\n"+JSON.stringify(tax);
@@ -1266,6 +1190,7 @@
 						}
 						if(finished === 4){
 							window.alert("game saved!");
+							element.show("download_link");
 							mouseIsPressed = false;
 						}
 				}
@@ -1279,11 +1204,11 @@
 				if (sub > 0){o=0.01;}
 				stroke(255,0,0);
 				fill(64,64,64);
-				rect(width/16*8,height/16*11,width/8,height/16);
+				box(width/16*8,height/16*11,width/8,height/16);
 				if(sub !== 0 && planet.status[sub-1] === 2 && planet.status[sub] === 1){
 					if(ship.strength < planet.recommended[sub]){stroke(255,0,0);}
 					if(ship.strength >= planet.recommended[sub]){stroke(0,255,0);} 
-					rect(width/16*11,height/16*11,width/8,height/16);
+					box(width/16*11,height/16*11,width/8,height/16);
 				}
 				noStroke();
 				fill(255,0,0);
@@ -1323,9 +1248,9 @@
 				stroke(255,0,0);
 				fill(128,128,128);
 				noStroke();
-				rect(width/64*1,height/64*1,width/64*8,height/64*4);
+				box(width/64*1,height/64*1,width/64*8,height/64*4);
 				stroke(255,0,0);
-				rect(width/64*1,height/64*6,width/64*8,height/64*4);
+				box(width/64*1,height/64*6,width/64*8,height/64*4);
 				fill(255,0,0);
 				textSize(height/48);
 				textAlign(CENTER,CENTER);
@@ -1510,19 +1435,19 @@
 				textAlign(CENTER,CENTER);
 				fill(128,128,128);
 				noStroke();
-				rect(width*0.05,height/8+25,width*0.9,height/4*3);
+				box(width*0.05,height/8+25,width*0.9,height/4*3);
 				stroke(64,64,64);
 				fill(128,128,128);
-				rect(width/4*0,0,width/4,height/8);
-				rect(width/4*1,0,width/4,height/8);
-				rect(width/4*2,0,width/4,height/8);
-				rect(width/4*3,0,width/4,height/8);
+				box(width/4*0,0,width/4,height/8);
+				box(width/4*1,0,width/4,height/8);
+				box(width/4*2,0,width/4,height/8);
+				box(width/4*3,0,width/4,height/8);
 				stroke(255,0,0);
 				fill(64,64,64);
 				if(battleWon === false){
-				rect(width/16*8,height/16*11,width/8,height/16);
+				box(width/16*8,height/16*11,width/8,height/16);
 				}
-				rect(width/16*11,height/16*11,width/8,height/16);
+				box(width/16*11,height/16*11,width/8,height/16);
 				noStroke();
 				fill(255,0,0);
 				textSize(height/16);
