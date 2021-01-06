@@ -13,6 +13,9 @@ h1{
 	padding: 25px;
 	font-size: 50px;
 }
+a{
+	font-family: Play, Arial, Sans-Serif;
+}
 p{
 	color: rgb(255,255,255);
 	text-shadow:0 0 7px hsla(200,80%,80%,1);
