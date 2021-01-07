@@ -5,6 +5,12 @@
  
 # Changelog
 
+### v0.2.0
+##### Released: 2021/1/7
+
+###### Campain
+Added saves, completely revamped all UI's to have new textures and changed shield meters to bars!
+
 ### v0.1.3
 ##### Released: 2020/12/8
 
