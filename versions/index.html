@@ -14,6 +14,8 @@
 		<button class="accordion" id="button-main">Indev (0.x.x)</button>
 		<br>
 		<div class="accordion hidden" id="content-main">
+			<button id="0.2.0">v0.2.0</button>
+			<br>
 			<button id="0.1.3">v0.1.3</button>
 			<button id="0.1.2">v0.1.2</button>
 			<button id="0.1.1">v0.1.1</button>
@@ -40,6 +42,9 @@
 			}, false);
 			document.getElementById("beta").addEventListener("click", function(){
 				window.open(ip+"/annihilation/versions/beta.html", "newwindow", "width=1280,height=720");
+			}, false);
+			document.getElementById("0.2.0").addEventListener("click", function(){
+				window.open(ip+"/annihilation/versions/0.2.0.html", "newwindow", "width=1024,height=576");
 			}, false);
 			document.getElementById("0.1.3").addEventListener("click", function(){
 				window.open(ip+"/annihilation/versions/0.1.3.html", "newwindow", "width=1024,height=576");
