@@ -16,7 +16,7 @@ h1{
 a{
 	font-family: Play, Arial, Sans-Serif;
 }
-p{
+p,label{
 	color: rgb(255,255,255);
 	text-shadow:0 0 7px hsla(200,80%,80%,1);
 }
