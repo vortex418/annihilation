@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html> 
+	<head>
+		<title>Annihilation - Dev Home</title> 
+		<link rel="icon" type="image/png" id = "favicon">
+		<link id="stylesheet" rel="stylesheet">
+	</head>
+	<body id="body">
+		<center/>	
+		<h1>Developer Home</h1>
+		<button id="indev">Text Indev</button>
+		<button id="beta">Test Beta</button>
+		<button id="log">Builds Changelog</button><br>
+		<label for="query">open a specific build:</label>
+		<input type="text" id="query">
+		<button id="open">Open Build</button><br>
+		
+		<script>
+			var ip = "http://127.0.0.1:1123";
+			document.getElementById("stylesheet").href=ip+"/annihilation/styles.css";
+			document.getElementById("indev").addEventListener("click", function(){
+				window.open(ip+"/annihilation/dev/indev.html", "newwindow", "width=1024,height=576");
+			}, false);
+			document.getElementById("beta").addEventListener("click", function(){
+				window.open(ip+"/annihilation/versions/beta.html", "newwindow", "width=1024,height=576");
+			}, false);
+			document.getElementById("open").addEventListener("click", function(){
+				window.open(ip+"/annihilation/dev/builds/"+document.getElementById("query").value+".html", "newwindow", "width=1280,height=720");
+			}, false);
+			document.getElementById("log").addEventListener("click", function(){
+				window.location.assign(ip+"/annihilation/dev/changelog.html");
+			}, false);
+			document.getElementById("favicon").href=ip+"/annihilation/models/icon.png";
+		</script>
+	</body>
+</html>

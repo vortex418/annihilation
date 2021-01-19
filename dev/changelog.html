@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html> 
+	<head>
+		<title>Annihilation - Changlog</title> 
+		<link rel="icon" type="image/png" id="favicon">
+		<link id="stylesheet" rel="stylesheet">
+		<style>
+			.content{
+				font-size: 15px;
+			}
+			.title{
+				font-size: 17px;
+				vertical-align: top;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Changelog</h1>
+		<button id="back">Back</button>
+		<br>
+		<table>
+			<tbody>
+				<tr>
+					<td class= "title">build 21.04.1</td>
+					<td class="content">Finisheed ship revamp</td>
+				</tr>
+			</tbody>
+		</table>
+	</body>
+	<script>
+		var ip = "http://127.0.0.1:1123";
+		document.getElementById("stylesheet").href=ip+"/annihilation/styles.css";
+		document.getElementById("back").addEventListener("click", function(){
+			window.location.assign(ip+"/annihilation/dev/index.html");
+		}, false);
+		document.getElementById("favicon").href=ip+"/annihilation/models/icon.png";
+	</script>
+</html>
