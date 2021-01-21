@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html> 
+ <head>
+	<title>Annihilation Beta</title>
+	<link rel="icon" 
+      type="image/png" 
+      id="favicon">
+	 <style>
+		 body{
+		 	background-color: black;
+		 }
+		 canvas{
+		 	outline: 1px solid gray;
+		 }
+		 .hidden{
+			display: none;
+		 }
+	</style>
+	 <script id=game></script>
+</head>
+<body>
+	<center/>
+	<canvas id="mycanvas"></canvas>
+</body>
+ 	<script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js"></script>
+	<script>
+		var ip = "https://vortex418.github.io";
+		var rurl = ip+"/annihilation/v/beta.html";
+		document.getElementById("favicon").href=ip+"/annihilation/models/icon.png";
+		document.getElementById("game").src = ip+"/annihilation/versions/"+window.location.search.substring(3)+".js";
+	</script>
+</html>
