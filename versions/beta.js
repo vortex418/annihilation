@@ -1,5 +1,3 @@
-	document.getElementById("audio").src=ip+"/annihilation/sound/error.mp3";
-	document.getElementById("favicon").href=ip+"/annihilation/models/icon.png";
     	var sketchProc = function(processingInstance) {
 	   var mouseIsPressed = false;
         processingInstance.mousePressed = function () { mouseIsPressed = true; };
@@ -87,9 +85,48 @@
 			},
 		};
 		//resources
-		var metal = 10000;
-		var minerals = 5000;
-		var fuel = 2500;
+		var resource = {
+			metal: 10000,
+			minerals: 5000,
+			fuel: 250,
+			anicent_tech: 0,
+			code_snippets: 0,
+			display: {
+				metal:function(){
+					if(resource.metal < 1000){
+					   return resource.metal;
+					}
+					if(resource.metal > 999){
+						return resource.metal/1000+"K";
+					}
+					if(resource.metal > 999999){
+						return resource.metal/1000000+"M";
+					}
+				},
+				minerals:function(){
+					if(resource.minerals < 1000){
+					   return resource.minerals;
+					}
+					if(resource.minerals > 999){
+						return resource.minerals/1000+"K";
+					}
+					if(resource.minerals > 999999){
+						return resource.minerals/1000000+"M";
+					}
+				},
+				fuel:function(){
+					if(resource.fuel < 1000){
+					   return resource.fuel;
+					}
+					if(resource.fuel > 999){
+						return resource.fuel/1000+"K";
+					}
+					if(resource.fuel > 999999){
+						return resource.fuel/1000000+"M";
+					}
+				}
+			}
+		};
 		var tax = {
 			claimed: 0,
 			max: 10,
@@ -113,7 +150,15 @@
 			cost: {
 				metal: [1000,2000,4000,10000,25000,100000],
 				minerals: [500,2000,1000,4000,10000,50000],
-				fuel: [250,500,1000,2500,5000,25000]
+				fuel: [250,500,1000,2500,5000,25000],
+				upgrade: [
+					[1,2,4,8,16],
+					[],
+					[],
+					[],
+					[],
+					[]
+				]
 			},
 			fleet: {
 				type: [],
@@ -136,7 +181,7 @@
 				if(type == "destroyer"){typeNum = 3;}
 				if(type == "battleship"){typeNum = 4;}
 				if(type == "dreadnought"){typeNum = 5;}
-				image(getImage(ip+"/annihilation/models/ships/"+type+".png"),x-20,y-20,ship.generic.width[typeNum],ship.generic.height[typeNum]);
+				image(getImage("/annihilation/models/ships/"+type+".png"),x-20,y-20,ship.generic.width[typeNum],ship.generic.height[typeNum]);
 			},
 			num: function(filter){
 				var count = 0;
@@ -261,7 +306,7 @@
 				if(type == "destroyer"){typeNum = 3;}
 				if(type == "battleship"){typeNum = 4;}
 				if(type == "dreadnought"){typeNum = 5;}
-				image(getImage(ip+"/annihilation/models/ships/enemy-"+type+".png"),x-20,y-20,ship.generic.width[typeNum],ship.generic.height[typeNum]);
+				image(getImage("/annihilation/models/ships/enemy-"+type+".png"),x-20,y-20,ship.generic.width[typeNum],ship.generic.height[typeNum]);
 			},
 			total: {
 				health: 0,
@@ -287,7 +332,7 @@
 		var InBattle = false;
 		var battleWon = false;
 		var playSound = function(src) {
-			document.getElementById("audio").src=ip+"/annihilation/sound/"+src;
+			document.getElementById("audio").src="/annihilation/sound/"+src;
 			var sound = document.getElementById("audio");
   			sound.play();
 		};
@@ -300,18 +345,33 @@
 		var save = {
 			fromUpload: null,
 			selected: 0,
-			content: "",
 			url: null,
 			str: "",
 			valid: false,
 			new: 0,
-			json: {
-				planet: "",
-				star: "",
-				ship: "",
-				tech: "",
-				tax: ""
-			}
+			data: {
+				anicent_tech: 0,
+				code_snippets: 0,
+				metal: 0,
+				minerals: 0,
+				fuel: 0,
+				planet: {},
+				star: {},
+				ship: {},
+				tech: {},
+				tax: {}
+			},
+			length: 1,
+			date: new Date(),
+			draw: function(name, date, type, y){
+				textAlign(LEFT,CENTER);
+				textSize(height/32);
+				box(width*0.11,height*0.15+(y*0.11),width*0.78,height*0.065,"foreground");
+				text(name,width*0.12,height*0.17+(y*0.14));
+				text("Last Saved on: "+date,width*0.3,height*0.17+(y*0.14));
+				text(type,width*0.6,height*0.17+(y*0.14));
+			},
+			name: ["Test","Trash","WHYYY"]
 		};
 		var command = {
 			str: "",
@@ -323,13 +383,11 @@
 			show: function(id){
 					if(document.getElementById(id).classList.contains("hidden") == true){
 					document.getElementById(id).classList.remove("hidden");
-					console.log('"'+id+'" shown');
 				}
 			},
 			hide: function(id){
 				if(document.getElementById(id).classList.contains("hidden") == false){
 					document.getElementById(id).classList.add("hidden");
-					console.log('"'+id+ '" hidden');
 				}
 			},
 			toggle: function(id, classTotoggle){
@@ -342,10 +400,10 @@
 			}
 		};
 		var box = function(x,y,width,height,layer){
-			image(getImage(ip+"/annihilation/models/box-"+layer+".png"),x,y,width,height);
+			image(getImage("/annihilation/models/UI/box-"+layer+".png"),x,y,width,height);
 		};
 		var button = function(x,y,width,height){
-			image(getImage(ip+"/annihilation/models/button.png"),x,y,width,height);
+			image(getImage("/annihilation/models/UI/button.png"),x,y,width,height);
 			if(mouseX > x && mouseY > y && mouseX < x+width && mouseY < y+height){
 				 document.body.style.cursor = "pointer";
 			}
@@ -403,22 +461,25 @@
 				element.hide("download_link");
 			}
 		};
-		var request = {
-			userInfo: new XMLHttpRequest()
-		};
-		var users;
-		var session = {
-			valid: false,
-			name: ""
-		};
-		request.userInfo.onreadystatechange = function() {
+		var requestUserInfo = new XMLHttpRequest();
+		requestUserInfo.onreadystatechange = function() {
     			if (this.readyState == 4 && this.status == 200) {
-				users = JSON.parse(request.userInfo.responseText);
+				user = JSON.parse(requestUserInfo.responseText);
     			}
 		};
-		request.userInfo.open("GET", "/annihilation/userData.txt", true);
-		request.userInfo.send();
-		draw = function(){	
+		requestUserInfo.open("GET", "/annihilation/userdata.json", true);
+		requestUserInfo.send();
+		draw = function(){
+			save.data.metal = resource.metal;
+			save.data.minerals = resource.minerals;
+			save.data.fuel = resource.fuel;
+			save.data.ancient_tech = resource.ancient_tech;
+			save.data.code_snippets = resource.code_snippets;
+			save.data.planet = JSON.stringify(planet);
+			save.data.star = JSON.stringify(star);
+			save.data.ship = JSON.stringify(ship.fleet);
+			save.data.tech = JSON.stringify(tech);
+			save.data.tax = JSON.stringify(tax);
 			document.body.style.cursor = "default";
 			if(scene != 0 && sub != 4){
 				element.hide("inputsave");
@@ -470,9 +531,11 @@
 				}
 			}
 			tech.points = parseFloat(tech.points);
-			metal = parseFloat(metal);
-			minerals = parseFloat(minerals);
-			fuel = parseFloat(fuel);
+			resource.metal = parseFloat(resource.metal);
+			resource.minerals = parseFloat(resource.minerals);
+			resource.fuel = parseFloat(resource.fuel);
+			resource.anicent_tech = parseFloat(resource.anicent_tech);
+			resource.code_snippets = parseFloat(resource.code_shippets);
 			planet.max = parseFloat(planet.max);
 			for(var i=0;i<64;i++){
 				planet.color.r[i] = parseFloat(planet.color.r[i]);
@@ -482,7 +545,7 @@
 			tech.price = [Number(tech.level.armor)+5,Number(tech.level.shield)+10,Number(tech.level.laser)+5,parseFloat(tech.level.missle)+10,Number(tech.level.reload)+5,parseFloat(tech.level.recharge)+10];
 			if(scene === 0 && sub === 0){
 				background(0,0,0);
-				image(getImage(ip+"/annihilation/models/menu.png"),0,0,width,height);
+				image(getImage("/annihilation/models/menu.png"),0,0,width,height);
 				fill(128,128,128);
 				noStroke();
 				button(width/2-width/8,height/2-height/32*1,width/4,height/16);
@@ -569,35 +632,20 @@
 				}
 			}
 			if(scene === 0 && sub===4){
-				background(128,128,128);			
-				fill(64,64,64);
+				background(0,0,0);
+				image(getImage("/annihilation/models/menu.png"),0,0,width,height);	
+				box(width/10,height/10,width/10*8,height/10*8,"background");
+				for(var i=-1;i<save.name.length;i++){
+					save.draw(save.name[i],save.date.getFullYear()+"/"+parseFloat(save.date.getMonth())+1+"/"+save.date.getDate(),"online",i);
+				}
 				textAlign(CENTER,CENTER);
-				stroke(255,0,0);
-				/*button(width/4*1-width/9,height/64*5,width/4.5,height/6);
-				button(width/4*2-width/9,height/64*5,width/4.5,height/6);
-				button(width/4*3-width/9,height/64*5,width/4.5,height/6);*/
-				button(width/4*1-width/9,height/64*19,width/4.5,height/6);
-				button(width/4*2-width/9,height/64*19,width/4.5,height/6);
-				button(width/4*3-width/9,height/64*19,width/4.5,height/6);
-				noStroke();
-				button(width/2-width/16,height/32*26+8,width/8,height/32);
-				button(width/2-width/8,height/32*23,width/4,height/16);
-				fill(200,200,214);
-				textSize(height/tabText);
-				text("Start Game",width/2,height/32*24);
-				/*text("Online Save 1",width/4*1,height/32*5);
-				text("Online Save 2",width/4*2,height/32*5);
-				text("Online Save 3",width/4*3,height/32*5);*/
-				text("Local Save 1",width/4*1,height/32*12);
-				text("Local Save 2",width/4*2,height/32*12);
-				text("Local Save 3",width/4*3,height/32*12);
+				//button(width/2-width/16,height/32*26+8,width/8,height/32);
 				textSize(height/(tabText*2));
-				text("Back",width/2,height/32*27);
+				//text("Back",width/2,height/32*27);
 				document.getElementById("inputsave").addEventListener('change', function() {
 					mouseIsPressed = false;
 					var reader = new FileReader();
 					reader.onload = function(){ 
-						save.valid = true;
 						save.selected = 0;
 						save.str = reader.result;
 					};
@@ -606,46 +654,10 @@
 				for(var i=0; i<planet.max; i++){
 					planet.status[i] = 2;
 				}
-				if(save.str == null){
-					save.valid = false;
-					save.str = "";
-					alert("There's nothing in that save! Pick a different one or go back!");
-				}
-				/*if(session.valid == true){
-					if(mouseX < width/4*1+width/12 && mouseX > width/4*1-width/12 && mouseY < height/64*5+height/6 && mouseY > height/64*5 && mouseIsPressed){
-						save.valid = true;
-						save.selected = 4;
-						save.str = users[username].save1;
-					}
-					if(mouseX < width/4*2+width/12 && mouseX > width/4*2-width/12 && mouseY < height/64*5+height/6 && mouseY > height/64*5 && mouseIsPressed){
-						save.valid = true;
-						save.selected = 5;
-						save.str = users[username].save2;
-					}
-					if(mouseX < width/4*3+width/12 && mouseX > width/4*3-width/12 && mouseY < height/64*5+height/6 && mouseY > height/64*5 && mouseIsPressed){
-						save.valid = true;
-						save.selected = 6;
-						save.str = users[username].save3;
-					}
-				}*/
-				if(mouseX < width/4*1+width/12 && mouseX > width/4*1-width/12 && mouseY < height/64*19+height/6 && mouseY > height/64*19 && mouseIsPressed){
-					save.valid = true;
-					save.selected = 1;
-					save.str = localStorage.getItem("localSave1");
-				}
-				if(mouseX < width/4*2+width/12 && mouseX > width/4*2-width/12 && mouseY < height/64*19+height/6 && mouseY > height/64*19 && mouseIsPressed){
-					save.valid = true;
-					save.selected = 2;
-				  	save.str = localStorage.getItem("localSave2");
-				}
-				if(mouseX < width/4*3+width/12 && mouseX > width/4*3-width/12 && mouseY < height/64*19+height/6 && mouseY > height/64*19 && mouseIsPressed){
-					save.valid = true;
-					save.selected = 3;
-				   	save.str = localStorage.getItem("localSave3");
-				}
-				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/32*25 && mouseY > height/32*23 && save.valid !== true){document.body.style.cursor = "not-allowed";} else {document.body.style.cursor = "default";}
-				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/32*25 && mouseY > height/32*23 && mouseIsPressed && save.valid === true) {
-[metal,minerals,fuel,save.json.planet,save.json.star,save.json.ship,save.json.tech,save.json.tax] = save.str.split("\n/sep/\n");
+				
+				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/32*25 && mouseY > height/32*23 && mouseIsPressed && save.filled == true) {
+[save.json.resource,save.json.planet,save.json.star,save.json.ship,save.json.tech,save.json.tax] = save.str.split("\n/sep/\n");
+					resource = JSON.parse(save.json.resource);
 					planet = JSON.parse(save.json.planet);
 					star = JSON.parse(save.json.star);
 					ship.fleet = JSON.parse(save.json.ship);
@@ -655,11 +667,11 @@
 					scene = 3;
 					sub = 0;
 				}
-				if(mouseX < width/2+width/16 && mouseX > width/2-width/16 && mouseY < height/32*28 && mouseY > height/32*27 && mouseIsPressed) {
+				/*if(mouseX < width/2+width/16 && mouseX > width/2-width/16 && mouseY < height/32*28 && mouseY > height/32*27 && mouseIsPressed) {
 					element.hide("inputsave");
 					scene = 0;
 					sub = 0;
-				}
+				}*/
 			}
 			if(scene === 1){
 				if(sub===0){
@@ -982,13 +994,13 @@
 				noStroke();
 				textSize(height/24);
 				textAlign(CENTER,TOP);
-				text("Metal: "+metal,width/4*1,height/4*1);
-				text("Minerals: "+minerals,width/4*2,height/4*1);
-				text("Fuel: "+fuel,width/4*3,height/4*1);
-				if (tax.max < 1000000000){
+				text("Metal: "+resource.display.metal(),width/4*1,height/4*1);
+				text("Minerals: "+resource.display.minerals(),width/4*2,height/4*1);
+				text("Fuel: "+resource.display.fuel(),width/4*3,height/4*1);
+				if (tax.max < 10000){
 					text("Collect Taxes ("+tax.claimed+"/"+tax.max+")",width/4*2,height/24*8);
 				}
-				if (tax.max > 999999999){
+				if (tax.max > 9999){
 					text("Collect Taxes ("+tax.claimed+")",width/4*2,height/24*8);
 				}
 				textAlign(CENTER,CENTER);
@@ -1012,46 +1024,47 @@
 				text("Battleship"+ship.display.level[4]+" ["+ship.num("battleship")+"]",width/8*6,height/16*10);
 				text("Dreadnought"+ship.display.level[5]+" ["+ship.num("dreadnought")+"]",width/8*6,height/16*12);
 				if(mouseX < width/2+width/10 && mouseX > width/2-width/10 && mouseY < height/24*9 && mouseY > height/24*8 && mouseIsPressed && tax.claimed < tax.max){
-					metal += planet.max*1000;
-					minerals += planet.max*500;
-					fuel += planet.max*250;
+					console.log("Here!");
+					resource.metal += planet.max*1000*resource.multiplyer;
+					resource.minerals += planet.max*500*resource.multiplyer;
+					resource.fuel += planet.max*250*resource.multiplyer;
 					tech.points += planet.max*10;
 					tax.claimed++;
 				}
-				if(mouseX < width/16*5 && mouseX > width/16*2 && mouseY < height/16*9-height/32 && mouseY > height/16*8-height/32 && mouseIsPressed && metal >= ship.cost.metal[0] && minerals >= ship.cost.minerals[0] && fuel >= ship.cost.fuel[0]){
-					metal -= ship.cost.metal[0];
-					minerals -= ship.cost.minerals[0];
-					fuel -= ship.cost.fuel[0];
+				if(mouseX < width/16*5 && mouseX > width/16*2 && mouseY < height/16*9-height/32 && mouseY > height/16*8-height/32 && mouseIsPressed && resource.metal >= ship.cost.metal[0] && resource.minerals >= ship.cost.minerals[0] && resource.fuel >= ship.cost.fuel[0]){
+					resource.metal -= ship.cost.metal[0];
+					resource.minerals -= ship.cost.minerals[0];
+					resource.fuel -= ship.cost.fuel[0];
 					ship.add("corvette");
 				}
-				if(mouseX < width/16*5 && mouseX > width/16*2 && mouseY < height/16*11-height/32 && mouseY > height/16*10-height/32 && mouseIsPressed && metal >= ship.cost.metal[1] && minerals >= ship.cost.minerals[1] && fuel >= ship.cost.fuel[1]){
-					metal -= ship.cost.metal[1];
-					minerals -= ship.cost.minerals[1];
-					fuel -= ship.cost.fuel[1];
+				if(mouseX < width/16*5 && mouseX > width/16*2 && mouseY < height/16*11-height/32 && mouseY > height/16*10-height/32 && mouseIsPressed && resource.metal >= ship.cost.metal[1] && resource.minerals >= ship.cost.minerals[1] && resource.fuel >= ship.cost.fuel[1]){
+					resource.metal -= ship.cost.metal[1];
+					resource.minerals -= ship.cost.minerals[1];
+					resource.fuel -= ship.cost.fuel[1];
 					ship.add("frigate");
 				}
-				if(mouseX < width/16*5 && mouseX > width/16*2 && mouseY < height/16*13-height/32 && mouseY > height/16*12-height/32 && mouseIsPressed && metal >= ship.cost.metal[2] && minerals >= ship.cost.minerals[2] && fuel >= ship.cost.fuel[2]){
-					metal -= ship.cost.metal[2];
-					minerals -= ship.cost.minerals[2];
-					fuel -= ship.cost.fuel[2];
+				if(mouseX < width/16*5 && mouseX > width/16*2 && mouseY < height/16*13-height/32 && mouseY > height/16*12-height/32 && mouseIsPressed && resource.metal >= ship.cost.metal[2] && resource.minerals >= ship.cost.minerals[2] && resource.fuel >= ship.cost.fuel[2]){
+					resource.metal -= ship.cost.metal[2];
+					resource.minerals -= ship.cost.minerals[2];
+					resource.fuel -= ship.cost.fuel[2];
 					ship.add("crusier");
 				}
-				if(mouseX < width/16*13 && mouseX > width/16*10 && mouseY < height/16*9-height/32 && mouseY > height/16*8-height/32 && mouseIsPressed && metal >= ship.cost.metal[3] && minerals >= ship.cost.minerals[3] && fuel >= ship.cost.fuel[3]){
-					metal -= ship.cost.metal[3];
-					minerals -= ship.cost.minerals[3];
-					fuel -= ship.cost.fuel[3];
+				if(mouseX < width/16*13 && mouseX > width/16*10 && mouseY < height/16*9-height/32 && mouseY > height/16*8-height/32 && mouseIsPressed && resource.metal >= ship.cost.metal[3] && resource.minerals >= ship.cost.minerals[3] && resource.fuel >= ship.cost.fuel[3]){
+					resource.metal -= ship.cost.metal[3];
+					resource.minerals -= ship.cost.minerals[3];
+					resource.fuel -= ship.cost.fuel[3];
 					ship.add("destroyer");
 				}
-				if(mouseX < width/16*13 && mouseX > width/16*10 && mouseY < height/16*11-height/32 && mouseY > height/16*10-height/32 && mouseIsPressed && metal >= ship.cost.metal[4] && minerals >= ship.cost.minerals[4] && fuel >= ship.cost.fuel[4]){
-					metal -= ship.cost.metal[4];
-					minerals -= ship.cost.minerals[4];
-					fuel -= ship.cost.fuel[4];
+				if(mouseX < width/16*13 && mouseX > width/16*10 && mouseY < height/16*11-height/32 && mouseY > height/16*10-height/32 && mouseIsPressed && resource.metal >= ship.cost.metal[4] && resource.minerals >= ship.cost.minerals[4] && resource.fuel >= ship.cost.fuel[4]){
+					resource.metal -= ship.cost.metal[4];
+					resource.minerals -= ship.cost.minerals[4];
+					resource.fuel -= ship.cost.fuel[4];
 					ship.add("battleship");
 				}
-				if(mouseX < width/16*13 && mouseX > width/16*10 && mouseY < height/16*13-height/32 && mouseY > height/16*12-height/32 && mouseIsPressed && metal >= ship.cost.metal[5] && minerals >= ship.cost.minerals[5] && fuel >= ship.cost.fuel[5]){
-					metal -= ship.cost.metal[5];
-					minerals -= ship.cost.minerals[5];
-					fuel -= ship.cost.fuel[5];
+				if(mouseX < width/16*13 && mouseX > width/16*10 && mouseY < height/16*13-height/32 && mouseY > height/16*12-height/32 && mouseIsPressed && resource.metal >= ship.cost.metal[5] && resource.minerals >= ship.cost.minerals[5] && resource.fuel >= ship.cost.fuel[5]){
+					resource.metal -= ship.cost.metal[5];
+					resource.minerals -= ship.cost.minerals[5];
+					resource.fuel -= ship.cost.fuel[5];
 					ship.add("dreadnought");
 				}
 				if(mouseX < width/16*7 && mouseX > width/16*6 && mouseY < height/16*9-height/32 && mouseY > height/16*8-height/32 && mouseIsPressed){
@@ -1102,6 +1115,25 @@
 				if(mouseX < width/16*10 && mouseX > width/16*9 && mouseY < height/16*13-height/32 && mouseY > height/16*12-height/32 && mouseIsPressed && ship.fleet.level[5] < 5){
 					ship.fleet.level[5]++;
 					ship.display.level[5] += "*";
+				}
+				if(mouseX < width/16*2 && mouseX > width/16*1 && mouseY < height/16*9-height/32 && mouseY > height/16*8-height/32){
+					box(width/16*1,height/16*6,width/8,height/12,"foreground");
+					text("Cost to upgrade: "+ship.cost.upgrade[0][ship.fleet.level],width/16*2,height/16*7);
+				}
+				if(mouseX < width/16*2 && mouseX > width/16*1 && mouseY < height/16*11-height/32 && mouseY > height/16*10-height/32){
+					box(width/16*1,height/16*8,width/8,height/12,"foreground");
+				}
+				if(mouseX < width/16*2 && mouseX > width/16*1 && mouseY < height/16*13-height/32 && mouseY > height/16*12-height/32){
+					box(width/16*1,height/16*10,width/8,height/12,"foreground");
+				}
+				if(mouseX < width/16*10 && mouseX > width/16*9 && mouseY < height/16*9-height/32 && mouseY > height/16*8-height/32){
+					box(width/16*9,height/16*6,width/8,height/12,"foreground");
+				}
+				if(mouseX < width/16*10 && mouseX > width/16*9 && mouseY < height/16*11-height/32 && mouseY > height/16*10-height/32){
+					box(width/16*9,height/16*8,width/8,height/12,"foreground");
+				}
+				if(mouseX < width/16*10 && mouseX > width/16*9 && mouseY < height/16*13-height/32 && mouseY > height/16*12-height/32){
+					box(width/16*9,height/16*10,width/8,height/12,"foreground");
 				}
 			}
 			if(scene === 5){
@@ -1209,23 +1241,15 @@
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/32*26 && mouseY > height/32*24 && mouseIsPressed) {
 						document.getElementById("download_link").innerHTML="download save";
 						document.getElementById("download_link").download="save.ajson";
-						save.content = metal+"\n/sep/\n"+minerals+"\n/sep/\n"+fuel+"\n/sep/\n"+JSON.stringify(planet)+"\n/sep/\n"+JSON.stringify(star)+"\n/sep/\n"+JSON.stringify(ship.fleet)+"\n/sep/\n"+JSON.stringify(tech)+"\n/sep/\n"+JSON.stringify(tax);
 						finished = 3;
 						if(finished === 3){
-							save.new = prompt("Which save slot do you want to save to (0-3, 0 will not save locally)",0);
-							save.url = window.URL.createObjectURL(new Blob([save.content], {type: "text/plain"}));
+							save.url = window.URL.createObjectURL(new Blob([save.data], {type: "text/plain"}));
 							document.getElementById("download_link").href = save.url;
-							if(save.new === "1"){
-								localStorage.setItem("localSave1",save.content);
-								console.log("saved to slot 1: "+save.content);
+							if(save.type == offline){
+								localStorage.setItem("localSave"+save.selected,save.data);
 							}
-							if(save.new === "2"){
-								localStorage.setItem("localSave2",save.content);
-								console.log("saved to slot 2: "+save.content);
-							}
-							if(save.new === "3"){
-								localStorage.setItem("localSave3",save.content);
-								console.log("saved to slot 3: "+save.content);
+							if(save.type == online){
+								
 							}
 							finished = 4;
 						}
@@ -1323,16 +1347,23 @@
 						ship.fleet.reload[i]--;
 						ship.draw(ship.fleet.type[i],ship.generic.x[i],ship.generic.y[i]);
 						if(ship.fleet.reload[i] <= 0){
+							var typeNum;
+							if(ship.fleet.type[i] == "corvette"){typeNum = 0;}
+							if(ship.fleet.type[i] == "frigate"){typeNum = 1;}
+							if(ship.fleet.type[i] == "crusier"){typeNum = 2;}
+							if(ship.fleet.type[i] == "destroyer"){typeNum = 3;}
+							if(ship.fleet.type[i] == "battleship"){typeNum = 4;}
+							if(ship.fleet.type[i] == "dreadnought"){typeNum = 5;}
 							var destinationX = floor(random(0,enemy.fleet.type[sub].length));
 							var destinationY = floor(random(0,enemy.fleet.type[sub].length));
 							stroke(0,255,255);
-							line(ship.generic.x[i],ship.generic.y[i],enemy.generic.x[destinationX],enemy.generic.y[destinationY]);
+						line(ship.generic.x[i],ship.generic.y[i],enemy.generic.x[destinationX],enemy.generic.y[destinationY]);
 							ship.fleet.reload[i] = ship.generic.reload[typeNum];
 							playSound("laser.wav");
 							if(enemy.fleet.shields[sub][target] < 1){
-								enemy.fleet.health[sub][target]-=ship.fleet.damage[i]/20;
+								enemy.fleet.health[sub][target]-=(ship.fleet.damage[i]/20)*ship.fleet.level[typeNum];
 							} else if (enemy.fleet.shields[sub][target] > 0){
-								enemy.fleet.shields[sub][target]-=ship.fleet.damage[i]/20;
+								enemy.fleet.shields[sub][target]-=(ship.fleet.damage[i]/20)*ship.fleet.level[typeNum];
 							}
 						}
 					}
@@ -1368,9 +1399,12 @@
 				if(enemy.total.health[sub] <= 0){
 					planet.status[sub] = 2;
 					InBattle = false;
-					metal+= 5000*sub;
-					minerals+= 2500*sub;
-					fuel+= 2000* sub;
+					resource.metal+= 5000*sub*resource.multiplyer;
+					resource.minerals+= 2500*sub*resource.multiplyer;
+					resource.fuel+= 2000*sub*resource.multiplyer;
+					var r = random(0,100);
+					if(r < 5){resource.ancient_tech+=sub}
+					if(r > 95){resource.code_snippets+=sub}
 					tech.points+= 5*sub;
 					battleWon=true;
 					planet.max++;
@@ -1416,6 +1450,10 @@
 				fill(255,255,255);
 				if(battleWon===true){
 					text("You Won!",width/4*3,height/4*2);
+					textSize(height/32);
+					if(r < 5){text("You got "+sub+" anicent tech!",width/4*3,height/16*11);}
+					if(r > 95){text("You got "+sub+" code snippets!",width/4*3,height/16*11);}
+					textSize(height/16);
 				}
 				if(battleWon===false){
 					text("You Lost!",width/4*3,height/4*2);

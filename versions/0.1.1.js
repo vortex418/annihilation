@@ -112,7 +112,18 @@
 		// function to draw ships, I figured to put it here since it makes more sense next to the ship var than the other functions
 		// type: which type(0-4 yours,5-10 enemy) ,shields: % shields are at
 		var shipDraw = function(type,x,y,z){
-			image(getImage(ip+"/annihilation/models/"+type+".png"),x,y,shipSize[0][type]*z,shipSize[1][type]*z);
+			var imgName;
+			if(type == 1){imgName = "corvette"}
+			if(type == 2){imgName = "frigate"}
+			if(type == 3){imgName = "crusier"}
+			if(type == 4){imgName = "destroyer"}
+			if(type == 5){imgName = "battleship"}
+			if(type == 11){imgName = "enemy-corvette"}
+			if(type == 12){imgName = "enemy-frigate"}
+			if(type == 13){imgName = "enemy-crusier"}
+			if(type == 14){imgName = "enemy-destroyer"}
+			if(type == 15){imgName = "enemy-battleship"}
+			image(getImage("/annihilation/models/ships/"+imgName+".png"),x,y,shipSize[0][type]*z,shipSize[1][type]*z);
 		};
 		/**var savetext;
 		var savedata;
@@ -233,7 +244,7 @@
 			}
 			if(scene === 0){
 				background(0,0,0);
-				image(getImage(ip+"/annihilation/models/menu.png"),0,0,width,height);
+				image(getImage("/annihilation/models/menu.png"),0,0,width,height);
 				fill(128,128,128);
 				noStroke();
 				rect(width/2-width/8,height/2-height/32*1,width/4,height/16);

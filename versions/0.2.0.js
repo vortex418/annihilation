@@ -141,10 +141,23 @@ var sketchProc = function(processingInstance) {
 		// function to draw ships, I figured to put it here since it makes more sense next to the ship var than the other functions
 		// type: which type(0-4 yours,5-10 enemy) ,shields: % shields are at
 		var shipDraw = function(type,x,y,z){
-			image(getImage(ip+"/annihilation/models/"+type+".png"),x-20,y-20,ship.width[type]*z,ship.height[type]*z);
+			var imgName;
+			if(type == 1){imgName = "corvette"}
+			if(type == 2){imgName = "frigate"}
+			if(type == 3){imgName = "crusier"}
+			if(type == 4){imgName = "destroyer"}
+			if(type == 5){imgName = "battleship"}
+			if(type == 6){imgName = "dreadnought"}
+			if(type == 11){imgName = "enemy-corvette"}
+			if(type == 12){imgName = "enemy-frigate"}
+			if(type == 13){imgName = "enemy-crusier"}
+			if(type == 14){imgName = "enemy-destroyer"}
+			if(type == 15){imgName = "enemy-battleship"}
+			if(type == 16){imgName = "enemy-dreadnought"}
+			image(getImage("/annihilation/models/ships/"+imgName+".png"),x-20,y-20,ship.width[type]*z,ship.height[type]*z);
 		};
 		var playSound = function(src) {
-			document.getElementById("audio").src=ip+"/annihilation/sound/"+src;
+			document.getElementById("audio").src="/annihilation/sound/"+src;
 			var sound = document.getElementById("audio");
   			sound.play();
 		};
@@ -199,10 +212,10 @@ var sketchProc = function(processingInstance) {
 			}
 		};
 		var box = function(x,y,width,height,layer){
-			image(getImage(ip+"/annihilation/models/box-"+layer+".png"),x,y,width,height);
+			image(getImage("/annihilation/models/UI/box-"+layer+".png"),x,y,width,height);
 		};
 		var button = function(x,y,width,height){
-			image(getImage(ip+"/annihilation/models/button.png"),x,y,width,height);
+			image(getImage("/annihilation/models/UI/button.png"),x,y,width,height);
 		}; 
 		var starscape = function(num){
 			fill(255,255,255);
@@ -305,7 +318,7 @@ var sketchProc = function(processingInstance) {
 				parseFloat(command.value);
 				if(command.type === "system"){
 					if(command.subtype === "restart"){
-						window.location.assign(ip+"/annihilation/play.html?v=0.2.0");
+						window.location.assign("/annihilation/play.html?v=0.2.0");
 					}
 					if(command.subtype === "reset"){
 						localStorage.removeItem("localSave1");
@@ -403,7 +416,7 @@ var sketchProc = function(processingInstance) {
 			}
 			if(scene === 0 && sub === 0){
 				background(0,0,0);
-				image(getImage(ip+"/annihilation/models/menu.png"),0,0,width,height);
+				image(getImage("/annihilation/models/menu.png"),0,0,width,height);
 				fill(128,128,128);
 				noStroke();
 				button(width/2-width/8,height/2-height/32*1,width/4,height/16);
@@ -487,7 +500,7 @@ var sketchProc = function(processingInstance) {
 				textSize(height/32*1.5);
 				text("Restart",width/2,height/2*1.375);
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/2+height/8+height/16+height/32 && mouseY > height/2+height/8+height/32 && mouseIsPressed) {
-					window.location.assign(ip+"/annihilation/play.html?v=0.2.0");
+					window.location.assign("/annihilation/play.html?v=0.2.0");
 				}
 			}
 			if(scene === 0 && sub===3){

@@ -1,4 +1,3 @@
-	document.getElementById("favicon").href=ip+"/annihilation/models/icon.png";
     	var sketchProc = function(processingInstance) {
 	   var mouseIsPressed = false;
         processingInstance.mousePressed = function () { mouseIsPressed = true; };
@@ -127,10 +126,23 @@
 		// function to draw ships, I figured to put it here since it makes more sense next to the ship var than the other functions
 		// type: which type(0-4 yours,5-10 enemy) ,shields: % shields are at
 		var shipDraw = function(type,x,y,z){
-			image(getImage(ip+"/annihilation/models/"+type+".png"),x-20,y-20,ship.width[type]*z,ship.height[type]*z);
+			var imgName;
+			if(type == 1){imgName = "corvette"}
+			if(type == 2){imgName = "frigate"}
+			if(type == 3){imgName = "crusier"}
+			if(type == 4){imgName = "destroyer"}
+			if(type == 5){imgName = "battleship"}
+			if(type == 6){imgName = "dreadnought"}
+			if(type == 11){imgName = "enemy-corvette"}
+			if(type == 12){imgName = "enemy-frigate"}
+			if(type == 13){imgName = "enemy-crusier"}
+			if(type == 14){imgName = "enemy-destroyer"}
+			if(type == 15){imgName = "enemy-battleship"}
+			if(type == 16){imgName = "enemy-dreadnought"}
+			image(getImage("/annihilation/models/ships/"+imgName+".png"),x-20,y-20,ship.width[type]*z,ship.height[type]*z);
 		};
 		var playSound = function(src) {
-			document.getElementById("audio").src=ip+"/annihilation/sound/"+src;
+			document.getElementById("audio").src="/annihilation/sound/"+src;
 			var sound = document.getElementById("audio");
   			sound.play();
 		}
@@ -265,7 +277,7 @@
 			}
 			if(scene === 0 && sub === 0){
 				background(0,0,0);
-				image(getImage(ip+"/annihilation/models/menu.png"),0,0,width,height);
+				image(getImage("/annihilation/models/menu.png"),0,0,width,height);
 				fill(128,128,128);
 				noStroke();
 				rect(width/2-width/8,height/2-height/32*1,width/4,height/16);
@@ -345,7 +357,7 @@
 				textSize(height/32*1.5);
 				text("Restart",width/2,height/2*1.375);
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/2+height/8+height/16+height/32 && mouseY > height/2+height/8+height/32 && mouseIsPressed) {
-					window.location.assign(ip+"/annihilation/play.html?v=0.1.2");
+					window.location.assign("/annihilation/play.html?v=0.1.2");
 				}
 			}
 			if(scene === 0 && sub===3){
