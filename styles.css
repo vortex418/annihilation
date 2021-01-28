@@ -9,10 +9,6 @@ h1,h2,h3,h4,h5,h6{
 	color: rgb(255,0,0);
 	text-shadow:0 0 7px hsla(360,80%,50%,1)
 }
-h1{
-	padding: 25px;
-	font-size: 50px;
-}
 a{
 	font-family: Play, Arial, Sans-Serif;
 }
@@ -34,6 +30,7 @@ table{
 	max-width:100%;
 	color: rgba(255, 255, 255, 0.9); 
 	border-collapse: collapse;
+	margin: 24px;
 }
 td{
 	padding: 3px;
@@ -79,4 +76,21 @@ div{
 }
 .accordion{
 	width: 500px;	
+}
+.title{
+	padding: 25px;
+	font-size: 50px;
+	text-align: center;
+}
+.table-content{
+	font-size: 15px;
+	padding: 10px;
+}
+.table-title{
+	font-size: 17px;
+	vertical-align: top;
+	padding: 5px;
+}
+.overlay{
+	background: hsla(200,50%,25%,1);
 }
