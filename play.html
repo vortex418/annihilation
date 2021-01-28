@@ -2,9 +2,8 @@
 <html> 
  <head>
 	<title>Annihilation Beta</title>
-	<link rel="icon" 
-      type="image/png" 
-      id="favicon">
+	<link rel="icon" type="image/png" id="favicon">
+	 <link id="stylesheet" rel="stylesheet">
 	 <style>
 		 body{
 		 	background-color: black;
@@ -12,26 +11,25 @@
 		 canvas{
 		 	outline: 1px solid gray;
 		 }
-		 .hidden{
-			display: none;
-		 }
 	</style>
 	 <script id=game></script>
 </head>
 <body>
 	<center/>
-	<canvas id="mycanvas"></canvas>
+	<canvas id="mycanvas" style="width:100%;height:100%;"></canvas>
 	<a id="download_link" class="hidden" style="position:absolute;left:60%;top:480px;"></a>
-	<input id="inputsave" class="hidden" type="file"  style="position:absolute;left:60%;top:360px">
-	<input id="username" class="hidden" type="text" style="position:absolute;left:40%;top:200px;">
-	<input id="password" class="hidden" type="password" style="position:absolute;left:40%;top:250px;">
+	<input id="inputsave" class="hidden" type="file"  style="position:absolute;left:40%;top:360px;width:20%;">
+	<unput id="namesave" class="hidden" type="text" style="position:absolute;left:40%;top:47.5%;width:20%;height:5%;">
 	<audio id = "audio"><source src="" type="audio/mp3"></audio>
 </body>
  	<script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js"></script>
 	<script>
-		var ip = "https://vortex418.github.io";
-		var rurl = ip+"/annihilation/v/beta.html";
-		document.getElementById("favicon").href=ip+"/annihilation/models/icon.png";
-		document.getElementById("game").src = ip+"/annihilation/versions/"+window.location.search.substring(3)+".js";
+		document.getElementById("stylesheet").href="/annihilation/styles.css";
+		document.getElementById("favicon").href="/annihilation/models/icon.png";
+		var user = {};
+		var [windowData1,windowData2] = window.location.search.substring(1).split("&");
+		var v = windowData1;
+		user.name = windowData2;
+		document.getElementById("game").src = "/annihilation/versions/"+v+".js";
 	</script>
 </html>

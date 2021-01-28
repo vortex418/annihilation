@@ -13,30 +13,161 @@
 	</head>
 	<body id="body">
 		<center/>	
-		<h1>Annihilation</h1>
+		<h1 class="title">Annihilation</h1>
 		<button id="latest">PLAY NOW</button><br>
 		<button id="beta">Play the Beta</button>
 		<button id="list">Version List</button>
+		<button id="signin-button-main" style="position:absolute;left:90%;top:0%;width:10%;height:5%;">Sign In</button>
+		<div id="settings-container" style="position:absolute;left:90%;top:5%;width:10%;height:10%" class="hidden overlay" >
+			<button id="settings-change" style="position:absolute;left:5%;top:15%;width:90%;height:35%">Change</button>
+			<button id="settings-logout" style="position:absolute;left:5%;top:65%;width:90%;height:35%">Logout</button>
+		</div>
+		<div id="signin-container" style="position:absolute;left:35%;top:20%;width:30%;height:60%" class="hidden overlay" >
+			<h3 style="position:absolute;left:25%;top:0%;width:50%;">Sign In</h3>
+			<input id="username" type="text" style="position:absolute;left:10%;top:40%;width:80%;height:10%;">
+			<input id="password" type="password" style="position:absolute;left:10%;top:60%;width:80%;height:10%">
+			<button id="signin-submit" style="position:absolute;left:25%;top:80%;width:50%;height:8%">Sign In</button>
+			<button id="signin-button" style="position:absolute;left:30%;top:90%;width:40%;height:6%">Sign Up</button>
+		</div>
+		<div id="signup-container" style="position:absolute;left:35%;top:20%;width:30%;height:60%" class="hidden overlay" >
+			<h3 style="position:absolute;left:25%;top:0%;width:50%;">Sign Up</h3>
+			<input id="signup-username" type="text" style="position:absolute;left:10%;top:40%;width:80%;height:10%;">
+			<input id="signup-password" type="password" style="position:absolute;left:10%;top:60%;width:80%;height:10%">
+			<button id="signup-submit" style="position:absolute;left:22.5%;top:80%;width:55%;height:8%">Create Account</button>
+			<button id="signup-button" style="position:absolute;left:30%;top:90%;width:40%;height:6%">Sign In</button>
+		</div>
 		<h3>About</h3>
-		<p>Annhilation is a online space battle simultor. <br> It is the theme and content of xcraft, <br> but in the liniear form and progression of island clash.<br>Website version 3b</p>
+		<p>Annhilation is a online space battle simultor. <br> It is the theme and content of xcraft, <br> but in the liniear form and progression of island clash.<br>Website version 4a-pre1</p>
 		<button id="log">Changelog</button>
 		<script>
-			var ip = "https://vortex418.github.io";
-			document.getElementById("stylesheet").href=ip+"/annihilation/styles.css";
+			var username;
+			var password;
+			var signupUsername;
+			var signupPassword;
+			document.getElementById("username").addEventListener("change", function(){
+				username = document.getElementById("username").value;
+			}, false);
+			document.getElementById("password").addEventListener("change", function(){
+				password = document.getElementById("password").value;
+			}, false);
+			document.getElementById("signup-username").addEventListener("change", function(){
+				signupUsername = document.getElementById("signup-username").value;
+			}, false);
+			document.getElementById("signup-password").addEventListener("change", function(){
+				signupPassword = document.getElementById("signup-password").value;
+			}, false);
+			var userData;
+			var tempData;
+			var session = {
+				name: "",
+				active: false
+			};
+			document.getElementById("stylesheet").href="/annihilation/styles.css";
+			document.getElementById("favicon").href="/annihilation/models/icon.png";
 			document.getElementById("latest").addEventListener("click", function(){
-				window.open(ip+"/annihilation/play.html?v=0.2.0", "newwindow", "width=1024,height=576");
+				window.open("/annihilation/play.html?0.2.0", "newwindow", "width=1024,height=576");
 			}, false);
 			document.getElementById("beta").addEventListener("click", function(){
-				window.open(ip+"/annihilation/play.html?v=beta", "newwindow", "width=1024,height=576");
+				window.open("/annihilation/play.html?beta", "newwindow", "width=1024,height=576");
 			}, false);
 			document.getElementById("list").addEventListener("click", function(){
-				window.location.assign(ip+"/annihilation/versions");
+				window.location.assign("/annihilation/versions");
 			}, false);
 			document.getElementById("log").addEventListener("click", function(){
-				window.location.assign(ip+"/annihilation/changelog.html");
+				window.location.assign("/annihilation/changelog.html");
 			}, false);
-			document.getElementById("favicon").href=ip+"/annihilation/models/icon.png";
-			
+			document.getElementById("signin-button-main").addEventListener("click", function(){
+				if(document.getElementById("signin-container").classList.contains("hidden") == true && session.active == false){
+					document.getElementById("signin-container").classList.remove("hidden");
+					document.getElementById("signin-button-main").innerHTML = "X";
+				}
+				else if(document.getElementById("signup-container").classList.contains("hidden") == false && session.active ==false){
+					document.getElementById("signin-container").classList.add("hidden");
+					document.getElementById("signup-container").classList.add("hidden");
+					document.getElementById("signin-button-main").innerHTML = "Sign In";
+				}
+				else if(document.getElementById("signin-container").classList.contains("hidden") == false && session.active ==false){
+					document.getElementById("signin-container").classList.add("hidden");
+					document.getElementById("signin-button-main").innerHTML = "Sign In";
+				}
+				else if(document.getElementById("settings-container").classList.contains("hidden") == true && session.active ==true){
+					document.getElementById("settings-container").classList.remove("hidden");
+					document.getElementById("signin-button-main").innerHTML = "X";
+				}
+				else if(document.getElementById("settings-container").classList.contains("hidden") == false && session.active==true){
+					document.getElementById("settings-container").classList.add("hidden");
+					document.getElementById("signin-button-main").innerHTML = session.name;
+				}
+				
+			}, false);
+			document.getElementById("signin-button").addEventListener("click", function(){
+					document.getElementById("signup-container").classList.remove("hidden");
+			}, false);
+			document.getElementById("signup-button").addEventListener("click", function(){
+					document.getElementById("signup-container").classList.add("hidden");
+			}, false);
+			document.getElementById("settings-change").addEventListener("click", function(){
+					alert("No settings to change yet!");
+			}, false);
+			document.getElementById("settings-logout").addEventListener("click", function(){
+				document.getElementById("settings-container").classList.add("hidden");
+				document.getElementById("signin-button-main").innerHTML = "Sign In";
+				document.getElementById("username").value = null;
+				document.getElementById("password").value = null;
+				document.getElementById("signup-username").value = null;
+				document.getElementById("signup-password").value = null;
+				session.name = null;
+				session.active = false;
+			}, false);
+			var requestUserInfo = new XMLHttpRequest();
+			requestUserInfo.onreadystatechange = function() {
+    				if (this.readyState == 4 && this.status == 200) {
+					tempData = requestUserInfo.responseText;
+    				}
+			};
+			requestUserInfo.open("GET","/annihilation/userdata.json", false);
+			requestUserInfo.send();
+			userData = JSON.parse(tempData);
+			var postUserInfo = new XMLHttpRequest();
+			document.getElementById("signin-submit").addEventListener("click", function(){
+					if(userData.keys[username] == password){
+						session.name = username;
+						session.active = true;
+						document.getElementById("signin-container").classList.add("hidden");
+						document.getElementById("signin-button-main").innerHTML = session.name;
+					} else if(userData.keys[username] != password){
+						alert("You entered the wrong password!");
+					} else{
+						alert("An unexpected error occured.");
+					}
+			}, false);
+			document.getElementById("signup-submit").addEventListener("click", function(){
+				/*if(userData.keys[signupUsername] == null){
+					userData.keys[signupUsername] = signupPassword;
+				if(userData.keys[signupUsername] != null && signupUsername != null){
+					userData.Save1[signupUsername] = {};
+					userData.Save2[signupUsername] = {};
+					userData.Save3[signupUsername] = {};
+					session.name = signupUsername;
+					var body = JSON.stringify(userData);
+					console.log(body);
+					postUserInfo.open("POST","/annihilation/userdata.json");
+					postUserInfo.setRequestHeader("Content-Type", "text/json"); 
+					postUserInfo.send(body);
+					document.getElementById("signin-container").classList.add("hidden");
+					document.getElementById("signup-container").classList.add("hidden");
+					document.getElementById("signin-button-main").innerHTML = session.name;
+					session.active = true;
+				} else if (userData.keys[signupUsername] == null || signupUsername == null){
+					alert("A username and password are required.");
+				} else {
+					alert("An unexpected error occured.");
+				}
+				} else {
+					alert("An account with that username already exisits!");
+				}*/
+				alert("Currently accounts can't be made automatically! Go to #new-account in https://discord.gg/7mQsXb3EdY to make one.");
+			}, false);
 		</script>
 	</body>
 </html>
