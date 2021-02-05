@@ -1,18 +1,20 @@
 {
 	"keys":{
 		"defaultuser0":"null",
-		"Vortex":"vtx"
+		"vortex":"vtx"
 	},
-	"Save1":{
-		"defaultuser0":"null",
-		"Vortex":"null"
+	"meta":{
+		"dates":{
+			"defaultuser0":[],
+			"vortex":["2021/2/1","2021/2/3"]
+		},
+		"names":{
+			"defaultuser0":[],
+			"vortex":["test save","test save II"]
+		}
 	},
-	"Save2":{
-		"defaultuser0":"null",
-		"Vortex":"null"
-	},
-	"Save3":{
-		"defaultuser0":"null",
-		"Vortex":"null"
+	"saves":{
+		"defaultuser0":[],
+		"vortex":["{}","{}"]
 	}
 }
