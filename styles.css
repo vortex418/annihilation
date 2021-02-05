@@ -1,7 +1,7 @@
 body{
 	font-family: Play, Arial, Sans-Serif;
 	background: rgb(0,0,0);
-	background-image: url("https://vortex418.github.io/annihilation/models/background.jpg");
+	background-image: url("/annihilation/models/background.jpg");
 	background-size: cover;
 	background-position: absolute;
 }
