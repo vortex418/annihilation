@@ -49,7 +49,6 @@
 		<button id="download-button-open">Download the app</button>
 		<h3>About</h3>
 		<p>Annhilation is a online space battle simultor. <br> It is the theme and content of xcraft, <br> but in the liniear form and progression of island clash. <br><br>The Annihilation website was first released on Novermber 23, 2020<br>Website version 4a-pre2.</p>
-		<button id="log">Changelog</button>
 		<script>
 			var username;
 			var password;
@@ -81,9 +80,6 @@
 			}, false);
 			document.getElementById("list").addEventListener("click", function(){
 				window.location.assign("/annihilation/version-list.html");
-			}, false);
-			document.getElementById("log").addEventListener("click", function(){
-				window.location.assign("/annihilation/changelog.html");
 			}, false);
 			document.getElementById("signin-button-main").addEventListener("click", function(){
 				if(document.getElementById("signin-container").classList.contains("hidden") == true && session.active == false){
