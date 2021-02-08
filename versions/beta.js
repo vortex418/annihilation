@@ -14,7 +14,7 @@
      with (processingInstance) {
 		resizeTo(1024, 576);
 		size(1024,576);
-        frameRate(10);
+        	frameRate(10);
 		window.scrollTo(10,8);
         // ProgramCode V V V
 		/**
@@ -36,13 +36,39 @@
 		8/x = planet battle (1-8)
 		9/x = victory/defeat (1-8)
 		**/
-		//basic vars
 		var scene = 0;
 		var sub = 0;
 		var overlay = 0;
 		var skip = 0;
-		var tabText = 16;
-		var log = [0,1];
+		var date = new Date();
+		var user = {
+			loaded: false,
+			name: "",
+			keys: {},
+			meta: {},
+			saves: {}
+		};
+		var v;
+		[v,user.name] = window.location.search.substring(1).split("&");
+		var playSound = function(src) {
+			document.getElementById("audio").src="/annihilation/sound/"+src;
+			var sound = document.getElementById("audio");
+  			sound.play();
+		};
+		var requestUserInfo = new XMLHttpRequest();
+		requestUserInfo.onreadystatechange = function() {
+    			if (this.readyState == 4 && this.status == 200) {
+				user.tempData = JSON.parse(requestUserInfo.responseText);
+				for(var i in user.tempData){
+					if(i != "name"){
+						user[i] = user.tempData[i];
+					}
+				}
+				user.loaded = true;
+    			}
+		};
+		requestUserInfo.open("GET", "/annihilation/userdata.json", true);
+		requestUserInfo.send();
 		var star = {
 			x: [
 [round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width)),round(random(0,width))],
@@ -57,7 +83,6 @@
 			max: 5,
 		};
 		star.size = [round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max)),round(random(0,star.max))];
-		//planets
 		var planet = {
 			max: 0,
 			name: ["crash site","[1] Abrigato","[2] Beta-Keralis","[3] Suzum","[4] Vespa","[5] Coruscare","[6] Vulca","[7] Jaeger","[8] Kashyyyk","[9] Outpost-42","[10] Victoria Alpha","[11] Victoria Bravo","[12] Gesht","[13] Sanctuary","[14] Snowmass","[15] Ja","[16] Keeg","[17]Haemeiguli","[18]Borebalae","[19]Albataetarius","[20]Hataerius","[21]Achernaiphoros","[22]Antadrophei","[23]Hoemeirai","[24]Antabalis","[25]Hoereo","[26]Pazadam","[27]Equidor","[28]Pax","[29]Xena","[30]Titan","[31]Oturn","[32]Thuamia","[33]Heuthea","[34]Ditharus","[35]Muxater","[36]Trukovis","[37]Bichotune","[38]Etis","[39]Leorus","[40]Aphus","[41]Harophos","[42]","[43]","[44]","[45]","[46]","[47]","[48]","[49]","[50]","[51]","[52]","[53]","[54]","[55]","[56]","[57]","[58]","[59]","[60]","[61]","[62]","[63]","[64] Home!"],
@@ -69,8 +94,83 @@
 			},
 			recommended: ["n/a",25,50,100,175,275,400,550,675,5000,2500,5000,10000,15000,25000,35000,50000,70000,95000,130000,170000,215000,270000,340000,420690,510000,610000,720000,830000,940000,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999,999999],
 			difficulty: ["very easy","easy","easy-medium","medium","medium-hard","hard","very hard","extremly hard","hard-insane","insane"]
+		};	
+		var element = {
+			show: function(id){
+					if(document.getElementById(id).classList.contains("hidden") == true){
+					document.getElementById(id).classList.remove("hidden");
+				}
+			},
+			hide: function(id){
+				if(document.getElementById(id).classList.contains("hidden") == false){
+					document.getElementById(id).classList.add("hidden");
+				}
+			},
+			toggle: function(id, classTotoggle){
+				if(document.getelementById(id).classList.contains(classTotoggle) == true){
+					document.getElementById(id).classList.remove(classTotoggle);
+				}
+				if(document.getelementById(id).classList.contains(classTotoggle) == false){
+					document.getElementById(id).classList.add(classTotoggle);
+				}
+			}
 		};
-		//vars for research
+		var box = function(x,y,width,height,layer){
+			image(getImage("/annihilation/models/UI/box-"+layer+".png"),x,y,width,height);
+		};
+		var button = function(x,y,width,height){
+			image(getImage("/annihilation/models/UI/button.png"),x,y,width,height);
+			if(mouseX > x && mouseY > y && mouseX < x+width && mouseY < y+height){
+				document.body.style.cursor = "pointer";
+			}
+		};
+		var textBox = {
+			cursor: {
+				time: [10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10],
+				interval: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+			},
+			selected: 0,
+			content: ["","","","","","","","","","","","","","","",""],
+			characters: ["!","\"","#","$","%","&","'","()","*","+",",","-",".","/","0","1","2","3","4","5","6","7","8","9",":",";","<","=",">","?","@","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","[","]","^","_","`","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","{","|","}","~","€","‚","ƒ","„","…","†","‡","ˆ","‰","Š","‹","Œ","Ž","‘","’","“","”","•","–","—","˜","™","š","›","œ","ž","Ÿ","¡","¢","£","¤","¥","¦","§","¨","©","ª","«","¬","®","¯","°","±","²","³","´","µ","¶","·","¸","¹","º","»","¼","½","¾","¿","À","Á","Â","Ã","Ä","Å","Æ","Ç","È","É","Ê","Ë","Ì","Í","Î","Ï","Ð","Ñ","Ò","Ó","Ô","Õ","Ö","×","Ø","Ù","Ú","Û","Ü","Ý","Þ","ß","à","á","â","ã","ä","å","æ","ç","è","é","ê","ë","ì","í","î","ï","ð","ñ","ò","ó","ô","õ","ö","÷","ø","ù","ú","û","ü","ý","þ","ÿ","Ā","ā","Ă","ă","Ą"],
+			draw: function(x,y,w,h,id){
+				box(x,y,w,h,"foreground");
+				text(this.content[id],x+(w/2),y+(h/2));
+				if(mouseX > x && mouseY > y && mouseX < x+w && mouseY < y+h && mouseIsPressed){
+					this.selected = id;
+					if(this.cursor.time > 5){
+						stroke(200,200,214);
+						line(x+(this.cursor.interval*16),y,x+(this.cursor.interval*16),y+h);
+					} else if (this.cursor.time <= 0){
+						this.cursor.time = 10;
+					}	
+				}
+				if(keyIsPressed && key.code == 8){
+						this.content[id] = this.content[id].slice(0,-1);
+				}
+				for(var i = 0;i<this.characters.length;i++){
+					if(keyIsPressed && key.toString() == this.characters[i]){
+						this.last = this.characters[i];
+						this.content[id] += this.characters[i];
+					}
+				}
+			}
+		};
+		var starscape = function(num){
+			fill(255,255,255);
+			noStroke();
+			for(var i = 0; i < 25; i++){
+				ellipse(star.x[num][i],star.y[num][i],star.size[i],star.size[i]);
+			}
+		};
+		var object = function(name,alligence,x,y,z,a,b,c){
+			fill(255,255,255);
+			if(alligence == 0){noStroke();}
+			if(alligence < 0){stroke(255,0,0);}
+			if(alligence > 0){stroke(0,255,0);}
+			text(name,x,y+(z*0.6));
+			fill(a,b,c);
+			ellipse(x,y,z,z);
+		};
 		var tech = {
 			points: 100,
 			color: 0,
@@ -84,47 +184,23 @@
 				recharge: 0,
 			},
 		};
-		//resources
 		var resource = {
 			metal: 10000,
 			minerals: 5000,
-			fuel: 250,
+			fuel: 2500,
 			anicent_tech: 0,
 			code_snippets: 0,
-			display: {
-				metal:function(){
-					if(resource.metal < 1000){
-					   return resource.metal;
-					}
-					if(resource.metal > 999){
-						return resource.metal/1000+"K";
-					}
-					if(resource.metal > 999999){
-						return resource.metal/1000000+"M";
-					}
-				},
-				minerals:function(){
-					if(resource.minerals < 1000){
-					   return resource.minerals;
-					}
-					if(resource.minerals > 999){
-						return resource.minerals/1000+"K";
-					}
-					if(resource.minerals > 999999){
-						return resource.minerals/1000000+"M";
-					}
-				},
-				fuel:function(){
-					if(resource.fuel < 1000){
-					   return resource.fuel;
-					}
-					if(resource.fuel > 999){
-						return resource.fuel/1000+"K";
-					}
-					if(resource.fuel > 999999){
-						return resource.fuel/1000000+"M";
-					}
-				}
+			multiplyer: 1
+		};
+		var displayResource = function(name){
+			if(resource[name] < 1000){
+			   return resource[name];
+			}
+			else if(resource[name] > 999){
+				return resource[name]/1000+"K";
+			}
+			else if(resource[name] > 999999){
+				return resource[name]/1000000+"M";
 			}
 		};
 		var tax = {
@@ -166,7 +242,12 @@
 				shields: [],
 				damage: [],
 				reload: [],
-				level: [0,0,0,0,0,0]
+				level: [0,0,0,0,0,0],
+				multiplyer: {
+					damage: [1,1,1,1,1,1],
+					shields: [1,1,1,1,1,1],
+					health: [1,1,1,1,1,1]
+				}
 			},
 			frozen: {
 				health: [0],
@@ -174,6 +255,9 @@
 				reload: [0]
 			},
 			draw: function(type,x,y){
+				if(user.name == null || user.name == undefined){
+					user.name = "defaultuser0";
+				}
 				var typeNum;
 				if(type == "corvette"){typeNum = 0;}
 				if(type == "frigate"){typeNum = 1;}
@@ -331,25 +415,15 @@
 		}
 		var InBattle = false;
 		var battleWon = false;
-		var playSound = function(src) {
-			document.getElementById("audio").src="/annihilation/sound/"+src;
-			var sound = document.getElementById("audio");
-  			sound.play();
-		};
-		var play = false;
-		var playTime = 20;
-		var onceSound = function(sound){
-			play = true;
-			playSound(sound);
-		};
 		var save = {
-			fromUpload: null,
 			selected: 0,
+			loaded: [false,false,false],
 			url: null,
 			str: "",
 			valid: false,
 			new: 0,
 			data: {
+				info: {},
 				anicent_tech: 0,
 				code_snippets: 0,
 				metal: 0,
@@ -361,70 +435,56 @@
 				tech: {},
 				tax: {}
 			},
-			length: 1,
-			date: new Date(),
-			draw: function(name, date, type, y){
+			info: {
+				name: [],
+				date: [],
+				type: [],
+			},
+			draw: function(name, d, type,y){
 				textAlign(LEFT,CENTER);
 				textSize(height/32);
-				box(width*0.11,height*0.15+(y*0.11),width*0.78,height*0.065,"foreground");
-				text(name,width*0.12,height*0.17+(y*0.14));
-				text("Last Saved on: "+date,width*0.3,height*0.17+(y*0.14));
-				text(type,width*0.6,height*0.17+(y*0.14));
-			},
-			name: ["Test","Trash","WHYYY"]
-		};
-		var command = {
-			str: "",
-			type: "",
-			subtype: "",
-			value: ""
-		};
-		var element = {
-			show: function(id){
-					if(document.getElementById(id).classList.contains("hidden") == true){
-					document.getElementById(id).classList.remove("hidden");
-				}
-			},
-			hide: function(id){
-				if(document.getElementById(id).classList.contains("hidden") == false){
-					document.getElementById(id).classList.add("hidden");
-				}
-			},
-			toggle: function(id, classTotoggle){
-				if(document.getelementById(id).classList.contains(classTotoggle) == true){
-					document.getElementById(id).classList.remove(classTotoggle);
-				}
-				if(document.getelementById(id).classList.contains(classTotoggle) == false){
-					document.getElementById(id).classList.add(classTotoggle);
-				}
+				box(width*0.11,height*0.0325+y*(height*0.078),width*0.78,height*0.065,"foreground");
+				text(name,width*0.12,height*0.065+y*(height*0.078));
+				text("Last Saved on: "+d,width*0.3,height*0.065+y*(height*0.078));
+				text(type,width*0.6,height*0.065+y*(height*0.078));
+if(mouseX > width*0.11 && mouseX < width*0.89 && mouseY > height*0.065+y*(height*0.078) && mouseY < height*0.065+y*(height*0.078) && mouseIsPressed){
+					save.selected = y;
+					if(type == "online"){
+						if(y == null || y == undefined){
+							alert("an unexpected error occured.");
+							mouseIsPressed = false;
+						}
+						else {save.str = user.saves[y];}
+					} else if(type == "offline"){
+						save.str = localStorage.getItem("save-"+name);
+					} else if(type == "uploaded"){}else{
+						alert("an unexpected error occured.");
+						mouseIsPressed = false;
+					}
+				}	
 			}
 		};
-		var box = function(x,y,width,height,layer){
-			image(getImage("/annihilation/models/UI/box-"+layer+".png"),x,y,width,height);
-		};
-		var button = function(x,y,width,height){
-			image(getImage("/annihilation/models/UI/button.png"),x,y,width,height);
-			if(mouseX > x && mouseY > y && mouseX < x+width && mouseY < y+height){
-				 document.body.style.cursor = "pointer";
+		if(user.name != undefined && user.name != null && user.name != "defaultuser0" && user.loaded == true && save.loaded[1] == false){
+			console.log(user.meta.names[user.name].length);
+			for(var i=0;i<user.meta.names[user.name].length;i++){
+				save.info.name.push(user.meta.names[user.name][i]);
+				save.info.date.push(user.meta.dates[user.name][i]);
+				save.info.type.push("online");
 			}
-		}; 
-		var starscape = function(num){
-			fill(255,255,255);
-			noStroke();
-			for(var i = 0; i < 25; i++){
-				ellipse(star.x[num][i],star.y[num][i],star.size[i],star.size[i]);
-			}
-		};
-		var object = function(name,alligence,x,y,z,a,b,c){
-			fill(255,255,255);
-			if(alligence == 0){noStroke();}
-			if(alligence < 0){stroke(255,0,0);}
-			if(alligence > 0){stroke(0,255,0);}
-			text(name,x,y+(z*0.6));
-			fill(a,b,c);
-			ellipse(x,y,z,z);
-		};
-		var drawUI = function(type){
+			save.loaded[1] = true;
+		}
+		
+		
+		
+		
+		
+		
+		
+
+		
+		
+		draw = function(){
+			var drawUI = function(type){
 			background(0,0,0);
 			starscape(1);
 			stroke(64,64,64);
@@ -438,7 +498,7 @@
 				box(width*0.05,height/8+25,width*0.9,height/4*3,"background");
 			}
 			fill(200,200,214);
-			textSize(height/tabText);
+			textSize(height/16);
 			text("Galaxy Map",width/4*0.5,height/8*0.5);
 			text("Shipyard",width/4*1.5,height/8*0.5);
 			text("Laboratory",width/4*2.5,height/8*0.5);
@@ -446,44 +506,24 @@
 			if(mouseX < width/4*1 && mouseX > width/4*0 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
 				scene = 3;
 				sub = 0;
-				element.hide("download_link");
 			}
 			if(mouseX < width/4*2 && mouseX > width/4*1 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
 				scene = 4;
-				element.hide("download_link");
 			}
 			if(mouseX < width/4*3 && mouseX > width/4*2 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
 				scene = 5;
-				element.hide("download_link");
 			}
 			if(mouseX < width/4*4 && mouseX > width/4*3 && mouseY < height/8 && mouseY > 0 && mouseIsPressed) {
 				scene = 6;
-				element.hide("download_link");
 			}
-		};
-		var requestUserInfo = new XMLHttpRequest();
-		requestUserInfo.onreadystatechange = function() {
-    			if (this.readyState == 4 && this.status == 200) {
-				user = JSON.parse(requestUserInfo.responseText);
-    			}
-		};
-		requestUserInfo.open("GET", "/annihilation/userdata.json", true);
-		requestUserInfo.send();
-		draw = function(){
-			save.data.metal = resource.metal;
-			save.data.minerals = resource.minerals;
-			save.data.fuel = resource.fuel;
-			save.data.ancient_tech = resource.ancient_tech;
-			save.data.code_snippets = resource.code_snippets;
-			save.data.planet = JSON.stringify(planet);
-			save.data.star = JSON.stringify(star);
-			save.data.ship = JSON.stringify(ship.fleet);
-			save.data.tech = JSON.stringify(tech);
-			save.data.tax = JSON.stringify(tax);
+			};
+			save.data.resource = resource;
+			save.data.planet = planet;
+			save.data.star = star;
+			save.data.ship = ship.fleet;
+			save.data.tech = tech;
+			save.data.tax = tax;
 			document.body.style.cursor = "default";
-			if(scene != 0 && sub != 4){
-				element.hide("inputsave");
-			}
 			if(planet.status[64] === 2){
 				scene = 0;
 				sub = 2;
@@ -495,11 +535,17 @@
 			enemy.total.health = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 			enemy.total.shields = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 			for(var i = 0; i<ship.fleet.type.length; i++){
+				ship.total.damage = 0;
+				ship.total.health = 0;
+				ship.total.shields = 0;
 				ship.total.damage += ship.fleet.damage[i];
 				ship.total.health += ship.fleet.health[i];
 				ship.total.shields += ship.fleet.shields[i];
 			}
 			for(var i = 1; i<64;i++){
+				enemy.total.damage[i] = 0;
+				enemy.total.health[i] = 0;
+				enemy.total.shields[i] = 0;
 				for(var j=0;j<enemy.fleet.type[i].length; j++){
 					enemy.total.damage[i] += enemy.fleet.damage[i][j];
 					enemy.total.health[i] += enemy.fleet.health[i][j];
@@ -543,6 +589,8 @@
 				planet.color.b[i] = parseFloat(planet.color.b[i]);
 			}
 			tech.price = [Number(tech.level.armor)+5,Number(tech.level.shield)+10,Number(tech.level.laser)+5,parseFloat(tech.level.missle)+10,Number(tech.level.reload)+5,parseFloat(tech.level.recharge)+10];
+			
+			
 			if(scene === 0 && sub === 0){
 				background(0,0,0);
 				image(getImage("/annihilation/models/menu.png"),0,0,width,height);
@@ -561,6 +609,10 @@
 				text("Load Game",width/2,height/32*19);
 				text("Exit Game",width/2,height/32*22);
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/2+height/32 && mouseY > height/2-height/32 && mouseIsPressed && skip === 0) {
+					if(user.name != null && user.name != undefined && user.name != "defaultuser0" && user.name != ""){
+						save.info.type.push("online");
+						save.type = "online";
+					}
 					sub = 1;
 				}
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/2+height/32 && mouseY > height/2-height/32 && mouseIsPressed && skip === 2) {
@@ -568,8 +620,7 @@
 					playSound("on.mp3");
 				}
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/2+height/32*4 && mouseY > height/2+height/32*2 && mouseIsPressed) {
-					sub = 4;
-					element.show("inputsave");
+						sub = 4;
 				}
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/2+height/32*7 && mouseY > height/2+height/32*5 && mouseIsPressed) {
 					window.close();				
@@ -577,29 +628,25 @@
 			}
 			if(scene === 0 && sub===1){
 				background(0,0,0);
-				if(log[1] > 0){
-					console.log("This is an intentional feature, not an error");
-					log[1]--;
-				}
-				playSound("sans.mp3");
 				noStroke();
 				fill(255,255,255);
 				starscape(0);
 				textAlign(CENTER,CENTER);
 				fill(200,200,214);
-				textSize(width/32);
-				text("Story",width/2,height/4);
 				textSize(height/32);
-				text("You are a conquester. Your're goal is to take over the galaxy. You take off from your home system,",width/2,height/2-height/12);
-				text("your destination over 100 years away. But you don't make it. ",width/2,height/2-height/20);
-				text("Halfway through the trip, youre convoy is attacked and you're ship gets knocked off-course.",width/2,height/2);
-				text("You wake up at the right time, but not in the right place. Now, you're over 25 years away from help. ",width/2,height/2+height/20); 
-				text("But you have a fleet and troops. You're new goal: Get back home, at whatever costs!",width/2,height/2+height/12);
-				fill(128,128,128);
+				text("save name:",width*0.5,height*0.4);
+				textBox.draw(width*0.375,height*0.45,width*0.25,height*0.05,1);
 				button(width/2-width/8*1.25,height/2+height/8+height/32,width/4*1.25,height/16);
-				textSize(height/32*1.5);
+				textSize(height/32);
 				text("Start Game",width/2,height/2*1.375);
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/2+height/8+height/16+height/32 && mouseY > height/2+height/8+height/32 && mouseIsPressed) {
+					save.info.name.push(textBox.content[1]);
+					save.info.date.push(date.getFullYear()+"/"+date.getMonth()+1+"/"+date.getDate());
+					for(var i=0;i<save.info.name.length;i++){
+						if(save.info.name[i] == textBox.content[1]){
+						   save.selected = i;
+						}
+					}
 					scene = 2;
 				}
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/2+height/8+height/16+height/32 && mouseY > height/2+height/8+height/32 && mouseIsPressed && skip === 1) {
@@ -635,43 +682,70 @@
 				background(0,0,0);
 				image(getImage("/annihilation/models/menu.png"),0,0,width,height);	
 				box(width/10,height/10,width/10*8,height/10*8,"background");
-				for(var i=-1;i<save.name.length;i++){
-					save.draw(save.name[i],save.date.getFullYear()+"/"+parseFloat(save.date.getMonth())+1+"/"+save.date.getDate(),"online",i);
+				for(var i=0;i<save.info.name.length;i++){
+					save.draw(save.info.name[i],save.info.date[i],save.info.type[i],i+1);
 				}
 				textAlign(CENTER,CENTER);
-				//button(width/2-width/16,height/32*26+8,width/8,height/32);
-				textSize(height/(tabText*2));
-				//text("Back",width/2,height/32*27);
-				document.getElementById("inputsave").addEventListener('change', function() {
-					mouseIsPressed = false;
-					var reader = new FileReader();
-					reader.onload = function(){ 
-						save.selected = 0;
-						save.str = reader.result;
-					};
-					reader.readAsText(this.files[0]);					
-				});
-				for(var i=0; i<planet.max; i++){
-					planet.status[i] = 2;
+				button(width/16*2,height/16*12,width/4,height/16);
+				button(width/16*6,height/16*12,width/4,height/16);
+				button(width/16*10,height/16*12,width/4,height/16);
+				button(width/16*4,height/16*13,width/4,height/16);
+				button(width/16*8,height/16*13,width/4,height/16);
+				textSize(height/32);
+				text("Play",width/16*4,height/32*25);
+				text("Delete",width/16*8,height/32*25);
+				text("New",width/16*12,height/32*25);
+				text("Back",width/16*6,height/32*27);
+				text("Upload",width/16*10,height/32*27);
+				if(mouseX > width/16*2 && mouseX < width/16*6 && mouseY > height/16*12 && mouseY < height/16*13 && save.str == null && save.str == undefined){
+					document.body.style.cursor = "not-allowed";
 				}
-				
-				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/32*25 && mouseY > height/32*23 && mouseIsPressed && save.filled == true) {
-[save.json.resource,save.json.planet,save.json.star,save.json.ship,save.json.tech,save.json.tax] = save.str.split("\n/sep/\n");
-					resource = JSON.parse(save.json.resource);
-					planet = JSON.parse(save.json.planet);
-					star = JSON.parse(save.json.star);
-					ship.fleet = JSON.parse(save.json.ship);
-					tech = JSON.parse(save.json.tech);
-					tax = JSON.parse(save.json.tax);
-					element.hide("inputsave");
+				if(mouseX > width/16*2 && mouseX < width/16*6 && mouseY > height/16*12 && mouseY < height/16*13 && mouseIsPressed && save.str != undefined){
+					save.content = JSON.parse(save.str);	 
+					resource = save.content.resource;
+					planet = save.content.planet;
+					star = save.content.star;
+					ship.fleet = save.content.ship;
+					tech = save.content.tech;
+					tax = save.content.tax;
 					scene = 3;
 					sub = 0;
 				}
-				/*if(mouseX < width/2+width/16 && mouseX > width/2-width/16 && mouseY < height/32*28 && mouseY > height/32*27 && mouseIsPressed) {
-					element.hide("inputsave");
+				if(mouseX > width/16*6 && mouseX < width/16*10 && mouseY > height/16*12 && mouseY < height/16*13 && mouseIsPressed){
+					save.info.name.splice(save.selected,1,save.info.name[save.selected+1]);
+					save.info.date.splice(save.selected,1,save.info.date[save.selected+1]);
+					save.info.type.splice(save.selected,1,save.info.type[save.selected+1]);
+					console.log("save deleted!");
+				}
+				if(mouseX > width/16*10 && mouseX < width/16*14 && mouseY > height/16*12 && mouseY < height/16*13 &&mouseIsPressed){
+					scene = 3;
+					sub = 0;
+				}
+				if(mouseX > width/16*4 && mouseX < width/16*8 && mouseY > height/16*13 && mouseY < height/16*14 && mouseIsPressed){
 					scene = 0;
 					sub = 0;
-				}*/
+				}
+				if(mouseX > width/16*8 && mouseX < width/16*12 && mouseY > height/16*13 && mouseY < height/16*14 && mouseIsPressed){
+					save.loaded[2] = false;
+					document.getElementById("inputsave").click();
+				}
+				document.getElementById("inputsave").addEventListener('change', function() {
+					mouseIsPressed = false;
+					var reader = new FileReader();
+					reader.onload = function(){
+						if(save.loaded[2] == false){
+							save.str = reader.result;
+							save.content = JSON.parse(save.str);
+							save.info.name.push(save.content.info.name);
+							save.info.date.push(save.content.info.date);
+							save.info.type.push("uploaded");
+							console.log("loaded save \""+save.content.info.name+"\" from "+save.content.info.date);
+							save.loaded[2] = true;
+						}
+						
+					};
+					reader.readAsText(this.files[0]);					
+				});
 			}
 			if(scene === 1){
 				if(sub===0){
@@ -877,7 +951,7 @@
 				textAlign(CENTER,CENTER);
 				text("Lets Go!",width/2,height/2+height/11);
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/2+height/8 && mouseY > height/2+height/16 && mouseIsPressed) {
-					onceSound("on.mp3");
+					playSound("on.mp3");
 					scene = 3;
 					sub=0;
 				}
@@ -885,12 +959,10 @@
 			if(scene === 3){
 				// Galaxy map GUI
 				drawUI(0);
-				playTime = 20;
-				play = false;
 				fill(255,255,255);
 				noStroke();
 				textAlign(CENTER,CENTER);
-				textSize(height/(tabText*2));
+				textSize(height/32);
 				if(sub===0){
 					object(planet.name[0], planet.status[0], width/16*6, height/16*13, width/24, planet.color.r[0], planet.color.g[0], planet.color.b[0]);
 				}
@@ -994,9 +1066,9 @@
 				noStroke();
 				textSize(height/24);
 				textAlign(CENTER,TOP);
-				text("Metal: "+resource.display.metal(),width/4*1,height/4*1);
-				text("Minerals: "+resource.display.minerals(),width/4*2,height/4*1);
-				text("Fuel: "+resource.display.fuel(),width/4*3,height/4*1);
+				text("Metal: "+displayResource("metal"),width/4*1,height/4*1);
+				text("Minerals: "+displayResource("minerals"),width/4*2,height/4*1);
+				text("Fuel: "+displayResource("fuel"),width/4*3,height/4*1);
 				if (tax.max < 10000){
 					text("Collect Taxes ("+tax.claimed+"/"+tax.max+")",width/4*2,height/24*8);
 				}
@@ -1024,7 +1096,6 @@
 				text("Battleship"+ship.display.level[4]+" ["+ship.num("battleship")+"]",width/8*6,height/16*10);
 				text("Dreadnought"+ship.display.level[5]+" ["+ship.num("dreadnought")+"]",width/8*6,height/16*12);
 				if(mouseX < width/2+width/10 && mouseX > width/2-width/10 && mouseY < height/24*9 && mouseY > height/24*8 && mouseIsPressed && tax.claimed < tax.max){
-					console.log("Here!");
 					resource.metal += planet.max*1000*resource.multiplyer;
 					resource.minerals += planet.max*500*resource.multiplyer;
 					resource.fuel += planet.max*250*resource.multiplyer;
@@ -1203,17 +1274,16 @@
 					playSound("levelup.mp3");
 				}
 			}
-			if(scene === 6){
+			if(scene == 6){
 				// Settings GUI
 				drawUI(1);
-				var finished = 0;
 				noStroke();
 				fill(64,64,64);
 				button(width/2-width/8,height/32*15,width/4,height/16);
 				button(width/2-width/8,height/32*18,width/4,height/16);
 				button(width/2-width/8,height/32*21,width/4,height/16);
 				button(width/2-width/8,height/32*24,width/4,height/16);
-				textSize(height/tabText);
+				textSize(height/16);
 				noStroke();
 				fill(200,200,214);
 				//Options
@@ -1224,40 +1294,40 @@
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/32*17 && mouseY > height/32*15 && mouseIsPressed) {
 					skip = 1;
 					scene = 2;
-					element.hide("download_link");
 				}
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/32*20 && mouseY > height/32*18 && mouseIsPressed) {
 					skip = 1;
 					scene = 1;
 					sub = 0;
-					element.hide("download_link");
 				}
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/32*23 && mouseY > height/32*21 && mouseIsPressed) {
 					skip = 2;
 					scene = 0;
 					sub = 0;
-					element.hide("download_link");
 				}
 				if(mouseX < width/2+width/8 && mouseX > width/2-width/8 && mouseY < height/32*26 && mouseY > height/32*24 && mouseIsPressed) {
-						document.getElementById("download_link").innerHTML="download save";
-						document.getElementById("download_link").download="save.ajson";
-						finished = 3;
-						if(finished === 3){
-							save.url = window.URL.createObjectURL(new Blob([save.data], {type: "text/plain"}));
-							document.getElementById("download_link").href = save.url;
-							if(save.type == offline){
-								localStorage.setItem("localSave"+save.selected,save.data);
-							}
-							if(save.type == online){
-								
-							}
-							finished = 4;
+					var downloadSave;
+					document.getElementById("download_link").download=save.info.name[save.selected]+".json";
+					save.status = 1;
+					save.data.info.name = save.info.name[save.selected];
+					save.data.info.date = save.info.date[save.selected];
+					save.data.info.type = save.info.type[save.selected];
+					if(save.status == 1){
+						save.url = window.URL.createObjectURL(new Blob([JSON.stringify(save.data)], {type: "text/plain"}));
+						document.getElementById("download_link").href = save.url;
+						if(save.type == "offline"){
+							localStorage.setItem("save-"+save.info.name[save.selected],JSON.stringify(save.data));
 						}
-						if(finished === 4){
-							window.alert("game saved!");
-							element.show("download_link");
-							mouseIsPressed = false;
+						if(save.type == "online"){
+							user.saves[user.name][save.selected] = JSON.stringify(save.data);
 						}
+						save.status = 2;
+					}
+					if(save.status = 2){
+						downloadSave = confirm("Download Save?");
+						mouseIsPressed = false;
+						if(downloadSave == true){document.getElementById("download_link").click();} else {save.status = 0}
+					}
 				}
 			}
 			if(scene === 7){
@@ -1347,13 +1417,6 @@
 						ship.fleet.reload[i]--;
 						ship.draw(ship.fleet.type[i],ship.generic.x[i],ship.generic.y[i]);
 						if(ship.fleet.reload[i] <= 0){
-							var typeNum;
-							if(ship.fleet.type[i] == "corvette"){typeNum = 0;}
-							if(ship.fleet.type[i] == "frigate"){typeNum = 1;}
-							if(ship.fleet.type[i] == "crusier"){typeNum = 2;}
-							if(ship.fleet.type[i] == "destroyer"){typeNum = 3;}
-							if(ship.fleet.type[i] == "battleship"){typeNum = 4;}
-							if(ship.fleet.type[i] == "dreadnought"){typeNum = 5;}
 							var destinationX = floor(random(0,enemy.fleet.type[sub].length));
 							var destinationY = floor(random(0,enemy.fleet.type[sub].length));
 							stroke(0,255,255);
@@ -1361,9 +1424,9 @@
 							ship.fleet.reload[i] = ship.generic.reload[typeNum];
 							playSound("laser.wav");
 							if(enemy.fleet.shields[sub][target] < 1){
-								enemy.fleet.health[sub][target]-=(ship.fleet.damage[i]/20)*ship.fleet.level[typeNum];
+							enemy.fleet.health[sub][target]-=ship.fleet.damage[i]/20*(ship.fleet.multiplyer.damage[typeNum]+1);
 							} else if (enemy.fleet.shields[sub][target] > 0){
-								enemy.fleet.shields[sub][target]-=(ship.fleet.damage[i]/20)*ship.fleet.level[typeNum];
+							enemy.fleet.shields[sub][target]-=ship.fleet.damage[i]/20*(ship.fleet.multiplyer.damage[typeNum]+1);
 							}
 						}
 					}
