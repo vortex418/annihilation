@@ -41,7 +41,7 @@
 			<button id="download-windows-button" style="position:absolute;left:10%;top:30%;width:35%;height:40%">Download for Windows</button>
 			<button id="download-chrome-button" style="position:absolute;left:55%;top:30%;width:35%;height:40%">Download for ChromeOS</button>
 			<a id="download-windows-link" download="annihilation.exe" href="/annihilation/downloads/annihilation.exe" style="display:none;"></a>
-			<a id="download-chrome-link" download="annihilation_v0.1-pre1.crx" href="/annihilation/downloads/annihilation_v0.1-pre1.crx" style="display:none;"></a>
+			<a id="download-chrome-link" download="annihilation.crx" href="/annihilation/downloads/annihilation_v0.1-pre1.crx" style="display:none;"></a>
 		</div>
 		<br>
 		<br>
@@ -73,7 +73,7 @@
 				active: false
 			};
 			document.getElementById("latest").addEventListener("click", function(){
-				window.open("/annihilation/play.html?0.2.0&"+session.name, "newwindow", "width=1024,height=576");
+				window.open("/annihilation/play.html?0.3.0&"+session.name, "newwindow", "width=1024,height=576");
 			}, false);
 			document.getElementById("beta").addEventListener("click", function(){
 				window.open("/annihilation/play.html?beta&"+session.name, "newwindow", "width=1024,height=576");
@@ -106,26 +106,26 @@
 				
 			}, false);
 			document.getElementById("signin-button").addEventListener("click", function(){
-					document.getElementById("signup-container").classList.remove("hidden");
+				document.getElementById("signup-container").classList.remove("hidden");
 			}, false);
 			document.getElementById("signup-button").addEventListener("click", function(){
-					document.getElementById("signup-container").classList.add("hidden");
+				document.getElementById("signup-container").classList.add("hidden");
 			}, false);
 			document.getElementById("settings-change").addEventListener("click", function(){
-					alert("No settings to change yet!");
+				alert("No settings to change yet!");
 			}, false);
 			document.getElementById("download-button-open").addEventListener("click", function(){
-					document.getElementById("download-container").classList.remove("hidden");
+				document.getElementById("download-container").classList.remove("hidden");
 			}, false);
 			document.getElementById("download-button-close").addEventListener("click", function(){
-					document.getElementById("download-container").classList.add("hidden");
+				document.getElementById("download-container").classList.add("hidden");
 			}, false);
 			document.getElementById("download-windows-button").addEventListener("click", function(){
-					//document.getElementById("download-windows-link").click();
-					alert("This feature is still in development!");
+				//document.getElementById("download-windows-link").click();
+				alert("This feature is still in development!");
 			}, false);
 			document.getElementById("download-chrome-button").addEventListener("click", function(){
-					document.getElementById("download-chrome-link").click();
+				document.getElementById("download-chrome-link").click();
 			}, false);
 			document.getElementById("settings-logout").addEventListener("click", function(){
 				document.getElementById("settings-container").classList.add("hidden");
