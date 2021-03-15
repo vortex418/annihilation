@@ -1,26 +1,14 @@
 body{
-	font-family: Play, Arial, Sans-Serif;
+	font-family: "Play", "Arial", Sans-Serif;
 	background: rgb(0,0,0);
 	background-image: url("/annihilation/models/background.jpg");
 	background-size: cover;
-	background-position: absolute;
+	background-position: fixed;
 }
-h1,h2,h3,h4,h5,h6{
-	color: rgb(255,0,0);
-	text-shadow:0 0 7px hsla(360,80%,50%,1)
-}
-a{
-	font-family: Play, Arial, Sans-Serif;
-}
-p,label{
-	color: rgb(255,255,255);
-	text-shadow:0 0 7px hsla(200,80%,80%,1);
-}
-table,tr,td{
-	border: 1px solid white;
-	text-shadow: rgb(245, 245, 245) 0px 0px 7px;
-	border-collapse: collapse;
-}
+h1,h2,h3,h4,h5,h6{color: rgb(255,0,0);text-shadow:0 0 7px hsla(360,80%,50%,1)}
+a{font-family: 'Play', 'Arial', Sans-Serif;}
+p,label{color: rgb(255,255,255);text-shadow:0 0 7px hsla(200,80%,80%,1);}
+table,tr,td{border: 1px solid white;text-shadow: rgb(245, 245, 245) 0px 0px 7px;border-collapse: collapse;}
 table{
 	background: hsla(200,50%,0%,1);
 	box-shadow:0 0 6px hsla(200,80%,80%,1);
@@ -32,9 +20,7 @@ table{
 	border-collapse: collapse;
 	margin: 24px;
 }
-td{
-	padding: 3px;
-}
+td{padding: 3px;}
 button{
 	cursor:pointer; 
 	background:radial-gradient(ellipse at center,hsla(200,50%,0%,1) 0,hsla(200,100%,70%,.5) 150%);
@@ -62,35 +48,19 @@ input{
 	color: rgba(255, 255, 255, 0.9); 
 	text-shadow: rgb(245, 245, 245) 0px 0px 7px;
 }
-input:hover{
-	cursor: text;
-}
-div{
+input:hover{cursor: text;}
+div:not(.game),ol,ul:not(#scene_tips_content){
+	background: hsla(200,50%,25%,1);
 	border-radius:4px;
 	box-shadow:0 0 6px hsla(200,100%,80%,1);
 	text-shadow:0 0 7px hsla(200,100%,80%,1);
 	color: hsla(200,100%,90%,.8);
 }
-.hidden{
-	display: none;
-}
-.accordion{
-	width: 500px;	
-}
-.title{
-	padding: 25px;
-	font-size: 50px;
-	text-align: center;
-}
-.table-content{
-	font-size: 15px;
-	padding: 10px;
-}
-.table-title{
-	font-size: 17px;
-	vertical-align: top;
-	padding: 5px;
-}
-.overlay{
-	background: hsla(200,50%,25%,1);
-}
+li:not(#scene_tips_content){border-radius:4px;text-shadow:0 0 7px hsla(200,100%,80%,1);color: hsla(200,100%,90%,.8);}
+.hidden{display: none;}
+.accordion{width: 500px;	}
+.title{padding: 25px;font-size: 50px;text-align: center;}
+.table-content{font-size: 15px;padding: 10px;}
+.table-title{font-size: 17px;vertical-align: top;padding: 5px;}
+.overlay{background: hsla(200,50%,25%,1);}
+.clickable:hover{cursor: pointer}
