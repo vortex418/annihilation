@@ -16,11 +16,11 @@ Indroducing Annihilation, but with HTML. Now supported accross all platforms, an
 
 Complete Revamp! Completely revised ships and battles, changes the lab UI and added 2 new research skills.
 
-### App 0.1
+### App v0.1
 ##### Released: 2021/2/5
 
 *Only on Chrome OS*
-Added basic UI features, currently you are only able to play the beta from Feburary 4th, v0.2 should come out later this month, to include Game version 0.3.0
+Added basic UI features, currently you are only able to play the beta from Feburary 4th.
 
 ### v0.2.0
 ##### Released: 2021/1/7
