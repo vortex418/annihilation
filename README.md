@@ -16,7 +16,7 @@ Indroducing Annihilation, but with HTML. Now supported accross all platforms, an
 
 Complete Revamp! Completely revised ships and battles, changes the lab UI and added 2 new research skills.
 
-### App v0.1
+### App v0.1 (Discontinued)
 ##### Released: 2021/2/5
 
 *Only on Chrome OS*
