@@ -8,25 +8,19 @@
 		<meta name="keywords" content="Annihilation, Space, Battle, Game, Vortex">
 		<meta name="author" content="Vortex418">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link href="models/icon.png" rel="icon" type="image/png">
-		<link href="styles.css" rel="stylesheet">
+		<link href="/models/icon.png" rel="icon" type="image/png">
+		<link href="/styles.css" rel="stylesheet">
 		<style>
 			#latest{
 				padding: 15px 50px;
 				font-size: 25px;
 			}
-			/*#custom-input-size-x{position:absolute;left:40%;top:20%;width:60%;height:5%}
-			#custom-input-size-y{position:absolute;left:40%;top:40%;width:60%;height:5%}
-			#custom-input-radius-min{position:absolute;left:40%;top:60%;width:60%;height:5%}
-			#custom-input-radius-max{position:absolute;left:40%;top:80%;width:60%;height:5%}*/
 		</style>
-		
 	</head>
 	<body id="body">
 		<center/>	
 		<h1 class="title">Annihilation</h1>
-		<button id="latest">PLAY NOW</button>
-		<br>
+		<button id="latest">PLAY NOW</button><br>
 		<button id="beta">Play the Beta</button>
 		<button id="list">Version List</button>
 		<button id="signin-button-main" style="position:absolute;left:90%;top:0%;width:10%;height:5%;">Sign In</button>
@@ -43,20 +37,24 @@
 		</div>
 		<div id="signup-container" style="position:absolute;left:35%;top:20%;width:30%;height:60%" class="hidden overlay" >
 			<h3 style="position:absolute;left:25%;top:0%;width:50%;">Sign Up</h3>
-			<form method="POST" action="/annihilation/index.php" id="signup-form">
-				<input id="signup-username" name="username" type="text" style="position:absolute;left:10%;top:40%;width:80%;height:10%;">
-				<input id="signup-password" type="password" style="position:absolute;left:10%;top:60%;width:80%;height:10%">
-				<button id="signup-submit" style="position:absolute;left:22.5%;top:80%;width:55%;height:8%">Create Account</button>
-				<button type="submit" form="signup-form" value="Create Account" id="signup-post" class="hidden"></button>
-				<input class="hidden" id="postData">
-			</form>
+			<input id="signup-username" type="text" style="position:absolute;left:10%;top:40%;width:80%;height:10%;">
+			<input id="signup-password" type="password" style="position:absolute;left:10%;top:60%;width:80%;height:10%">
+			<button id="signup-submit" style="position:absolute;left:22.5%;top:80%;width:55%;height:8%">Create Account</button>
 			<button id="signup-button" style="position:absolute;left:30%;top:90%;width:40%;height:6%">Sign In</button>
+		</div>
+		<div id="download-container" style="position:absolute;left:30%;top:37.5%;width:40%;height:25%" class="hidden overlay" >
+			<button id="download-button-close" style="position:absolute;left:95%;top:0%;width:5%;height:15%">X</button>
+			<button id="download-windows-button" style="position:absolute;left:10%;top:30%;width:35%;height:40%">Download for Windows</button>
+			<button id="download-chrome-button" style="position:absolute;left:55%;top:30%;width:35%;height:40%">Download for ChromeOS</button>
+			<a id="download-windows-link" download="annihilation.exe" href="/annihilation/downloads/annihilation.exe" style="display:none;"></a>
+			<a id="download-chrome-link" download="annihilation.crx" href="/annihilation/downloads/annihilation_v0.1-pre1.crx" style="display:none;"></a>
 		</div>
 		<br>
 		<br>
 		<br>
-		<h3 id="about">About</h3>
-		<p>Annhilation is a online space battle simultor. <br> It is the theme and content of xcraft, <br> but in the liniear form and progression of island clash. <br><br>The Annihilation website was first released on Novermber 23, 2020<br>Website version 5</p>
+		<button id="download-button-open">Download the app</button>
+		<h3>About</h3>
+		<p>Annhilation is a online space battle simultor. <br> It is the theme and content of xcraft, <br> but in the liniear form and progression of island clash. <br><br>The Annihilation website was first released on Novermber 23, 2020<br>Website version 4a-pre2.</p>
 		<script>
 			var username;
 			var password;
@@ -122,6 +120,19 @@
 			document.getElementById("settings-change").addEventListener("click", function(){
 				alert("No settings to change yet!");
 			}, false);
+			document.getElementById("download-button-open").addEventListener("click", function(){
+				document.getElementById("download-container").classList.remove("hidden");
+			}, false);
+			document.getElementById("download-button-close").addEventListener("click", function(){
+				document.getElementById("download-container").classList.add("hidden");
+			}, false);
+			document.getElementById("download-windows-button").addEventListener("click", function(){
+				//document.getElementById("download-windows-link").click();
+				alert("This feature is still in development!");
+			}, false);
+			document.getElementById("download-chrome-button").addEventListener("click", function(){
+				document.getElementById("download-chrome-link").click();
+			}, false);
 			document.getElementById("settings-logout").addEventListener("click", function(){
 				document.getElementById("settings-container").classList.add("hidden");
 				document.getElementById("signin-button-main").innerHTML = "Sign In";
@@ -132,45 +143,55 @@
 				session.name = null;
 				session.active = false;
 			}, false);
-			var xhr = new XMLHttpRequest();
-			xhr.onreadystatechange = function() {
+			var requestUserInfo = new XMLHttpRequest();
+			requestUserInfo.onreadystatechange = function() {
     				if (this.readyState == 4 && this.status == 200) {
-					tempData = xhr.responseText;
+					tempData = requestUserInfo.responseText;
     				}
 			};
-			xhr.open("GET","/annihilation/userdata.json", false);
-			xhr.send();
+			requestUserInfo.open("GET","/annihilation/userdata.json", false);
+			requestUserInfo.send();
 			userData = JSON.parse(tempData);
-			document.getElementById("signup-subtmit").addEventListener("click",function(){
-				if(userData.keys[signupUsername] != null && userData.keys[signupUsername] != undefined){
-					if(signupUsername != null && signupPassword != null){
-						if(signupUsername != undefined && signupPassword != undefined){
-							userData.key[signupUsername] = signupPassword;
-							userData.saves[signupUsername] = [];
-							document.getElementById("signup-post").click;
-						} else {
-							alert("An unexpected error occured!");
-						}
-					} else {
-						alert("You must enter a username and password!");
-					} 
-				} else {
-					alert("This account already exists!");
-				}
-			});
-			var xhp = new XMLHttpRequest();
+			var postUserInfo = new XMLHttpRequest();
 			document.getElementById("signin-submit").addEventListener("click", function(){
 					if(userData.keys[username] == password){
 						session.name = username;
 						session.active = true;
 						document.getElementById("signin-container").classList.add("hidden");
 						document.getElementById("signin-button-main").innerHTML = session.name;
-					} else if(userData.keys[username] != password || userData.keys[username] == undefined){
-						alert("You entered the wrong username or password!");
+					} else if(userData.keys[username] != password){
+						alert("You entered the wrong password!");
 					} else{
 						alert("An unexpected error occured.");
 					}
-			});
+			}, false);
+			document.getElementById("signup-submit").addEventListener("click", function(){
+				/*if(userData.keys[signupUsername] == null){
+					userData.keys[signupUsername] = signupPassword;
+				if(userData.keys[signupUsername] != null && signupUsername != null){
+					userData.Save1[signupUsername] = {};
+					userData.Save2[signupUsername] = {};
+					userData.Save3[signupUsername] = {};
+					session.name = signupUsername;
+					var body = JSON.stringify(userData);
+					console.log(body);
+					postUserInfo.open("POST","/annihilation/userdata.json");
+					postUserInfo.setRequestHeader("Content-Type", "text/json"); 
+					postUserInfo.send("content="+body);
+					document.getElementById("signin-container").classList.add("hidden");
+					document.getElementById("signup-container").classList.add("hidden");
+					document.getElementById("signin-button-main").innerHTML = session.name;
+					session.active = true;
+				} else if (userData.keys[signupUsername] == null || signupUsername == null){
+					alert("A username and password are required.");
+				} else {
+					alert("An unexpected error occured.");
+				}
+				} else {
+					alert("An account with that username already exisits!");
+				}*/
+				alert("Currently accounts can't be made automatically! Go to #bot-commands and type !create <username> <password> in https://discord.gg/7mQsXb3EdY to make one.");
+			}, false);
 		</script>
 	</body>
 </html>
