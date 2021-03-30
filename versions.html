@@ -14,7 +14,8 @@
 		<button class="accordion" id="button-main">Indev (0.x.x)</button>
 		<br>
 		<div class="accordion hidden" id="content-main">
-			<button id="0.4.0-pre1">v0.4.0 prerelease 1</button>
+			<button id="0.4.0">v0.4.0</button>
+			<button id="0.4.0-pre">v0.4.0 prerelease</button>
 			<button id="0.3.0">v0.3.0</button>
 			<button id="0.2.0">v0.2.0</button>
 			<br>
@@ -42,8 +43,11 @@
 			document.getElementById("beta").addEventListener("click", function(){
 				window.open("/annihilation/play/beta", "newwindow", "width=1280,height=720");
 			}, false);
-			document.getElementById("0.4.0-pre1").addEventListener("click", function(){
-				window.open("/annihilation/play/0.4.0-pre1", "newwindow", "width=1280,height=720");
+			document.getElementById("0.4.0").addEventListener("click", function(){
+				window.open("/annihilation/play/0.4.0", "newwindow", "width=1280,height=720");
+			}, false);
+			document.getElementById("0.4.0-pre").addEventListener("click", function(){
+				window.open("/annihilation/play/0.4.0-pre", "newwindow", "width=1280,height=720");
 			}, false);
 			document.getElementById("0.3.0").addEventListener("click", function(){
 				window.open("/annihilation/play/0.3.0", "newwindow", "width=1280,height=720");
