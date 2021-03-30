@@ -6,8 +6,13 @@
 
 *Note that both the apps and game versions are still in development, and that some features may not work*
 
+### 0.4.0
+#### Released: 2021/3/30
+
+0.4.0 is here! Including all the features from the prerelease, 0.4.0 is not visually different from the prerelease. Although it doesn't seem different, it is. With a massive amount of internal changes. Also some bug fixes! 
+
 ### v0.4.0 prerelease
-##### Release: 2021/3/14
+##### Released: 2021/3/14
 
 Indroducing Annihilation, but with HTML. Now supported accross all platforms, and with a frash new look, its better than ever! Completly updated planet generation, and massive feature improvements! The main release should come soon, but we want your feedback. Head over to the discord to give yours!
 
