@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="/annihilation/styles.css">
+		<link rel="stylesheet" href="/annihilation/libraries/font-awesome-4.css">
+		<title>Annihilation Beta</title> 
+		<link href="/annihilation/models/icon.png" rel="icon" type="image/png">
+		<style>
+			button{font-size:15px}
+			.game{position:fixed;left:0%;top:0%;width:100%;height:100%;font-size:15px;background-color:#000;z-index:0}
+			#scene_menu-main{background-image:url('/annihilation/models/menu.png');background-size:cover;background-repeat:no-repeat;}
+			#scene_menu-main_button-new{position:fixed;left: 37.5%;top: 45%;width: 25%;height: 8%;}
+			#scene_menu-main_button-load{position:fixed;left: 37.5%;top: 60%;width: 25%;height: 8%;}
+			#scene_menu-main_button-exit{position:fixed;left: 37.5%;top: 75%;width: 25%;height: 8%;}
+			#scene_menu-save_input{position:fixed;left:37.5%;top:47.5%;width:25%;height:5%;}
+			#scene_menu-save_button{position:fixed;left:42.5%;top:57.5%;width:15%;height:5%;}
+			#scene_menu-load_content{position:fixed;left:10%;top:10%;width:80%;height:65%;}
+			#scene_menu-load_button-new{position:fixed;left:10%;top:80%;width:26.6%;height:7.5%;}
+			#scene_menu-load_button-play{position:fixed;left:36.6%;top:80%;width:26.6%;height:7.5%;}
+			#scene_menu-load_button-delete{position:fixed;left:63.2%;top:80%;width:26.6%;height:7.5%;}
+			#scene_menu-load_button-upload{position:fixed;left:50%;top:90%;width:26.6%;height:7.5%;}
+			#scene_menu-load_button-back{position:fixed;left:23.3%;top:90%;width:26.6%;height:7.5%;}
+			.scene_menu-load_div{position:absolute;left:5%;width:90%}
+			#scene_menu-load_name{position:absolute;left:10%;}
+			#scene_menu-load_date{position:absolute;left:40%;}
+			#scene_menu-load_type{position:absolute;left:80%;}
+			#scene_tips_content{position:fixed;left:25%;top:20%;width:50%;height:60%;border:0;list-style:none;text-align:center;}
+			#scene_tips_button{position:fixed;left:40%;top:75%;width:20%;height:7.5%;}
+			#nav{position:fixed;left:0%;top:0%;width:100%;height:7.5%;}
+			#nav_button-map{position:absolute;left:12.5%;top:5%;width:25%;height:90%;text-align:center;}
+			#nav_button-yard{position:absolute;left:37.5%;top:5%;width:25%;height:90%;text-align:center;}
+			#nav_button-lab{position:absolute;left:62.5%;top:5%;width:25%;height:90%;text-align:center;}
+			#nav_icon-settings{position:absolute;left:95%;top:5%;font-size:35px;text-align:center;}
+			#nav_icon-settings:hover{cursor:pointer;}
+			#mycanvas{position:fixed;left:0%;top:7.5%;width:100%;height:92.5%;z-index:1;}
+			.content{position:fixed;left:10%;top:10%;width:80%;height:80%}
+			#scene_menu-settings_button-info{position:absolute;left:30%;top:15%;width:40%;height:10%}
+			#scene_menu-settings_button-main{position:absolute;left:30%;top:35%;width:40%;height:10%}
+			#scene_menu-settings_button-save{position:absolute;left:30%;top:55%;width:40%;height:10%}
+			#scene_menu-settings_button-menu{position:absolute;left:30%;top:75%;width:40%;height:10%}
+			#scene_view-map{position:fixed;left:10%;top:10%;width:80%;height:80%;z-index:3;}
+			#scene_view-map_button{position:absolute;left:30%;top:80%;width:40%;height:10%}
+			#scene_view-map_button:disabled:hover{cursor:not-allowed}
+			#scene_view-map_i{position:absolute;left:95%;top:1%;font-size:35px;}
+			#scene_view-map_p{position:absolute;left:30%;top:60%;font-size:20px;}
+			.fa-times-circle:hover{cursor:pointer;}
+			#overlay_dev_map{position:fixed;left:80%;top:7.5%;width:20%;height:15%;z-index:2;}
+			#overlay_dev_map_input{position:absolute;left:5%;top:5%;width:90%;height:20%;}
+			#overlay_dev_map_button{position:absolute;left:5%;top:50%;width:90%;height:30%;}
+			#scene_view-battle{z-index:3;}
+			#scene_view-battle_button{position:fixed;left:1%;top:1%;width:10%;height:5%}
+			#scene_view-battle_content{position:fixed;left:12%;top:1%;width:20%;height:5%}
+			#scene_view-battle_content_advanced{position:fixed;left:33%;top:1%;width:20%;height:5%}
+			#scene_view-battle_content_advanced_ship{position:absolute;left:10%;top:-55%;font-size:15px}
+			#scene_view-battle_content_advanced_enemy{position:absolute;left:10%;top:-5%;font-size:15px}
+			#scene_view-report{position:fixed;left:10%;top:10%;width:80%;height:80%;z-index:2;}
+			#scene_view-report_i{position:absolute;left:95%;top:1%;font-size:35px;}
+			#scene_view-report_p{position:absolute;left:30%;top:40%;font-size:20px;}
+			#scene_view-report_button{position:absolute;left:30%;top:80%;width:40%;height:10%}
+			#scene_view-yard_content_corvette_button-new{position:absolute;left:5%;top:40%;width:40%;height:10%}
+			#scene_view-yard_content_frigate_button-new{position:absolute;left:5%;top:60%;width:40%;height:10%}
+			#scene_view-yard_content_crusier_button-new{position:absolute;left:5%;top:80%;width:40%;height:10%}
+			#scene_view-yard_content_destroyer_button-new{position:absolute;left:55%;top:40%;width:40%;height:10%}
+			#scene_view-yard_content_battleship_button-new{position:absolute;left:55%;top:60%;width:40%;height:10%}
+			#scene_view-yard_content_dreadnought_button-new{position:absolute;left:55%;top:80%;width:40%;height:10%}
+			.fa-arrow-circle-o-up:hover{cursor:pointer;}
+			#scene_view-yard_content_corvette_button-up{position:absolute;left:8%;top:42.5%;font-size:25px;}
+			#scene_view-yard_content_frigate_button-up{position:absolute;left:8%;top:62.5%;font-size:25px;}
+			#scene_view-yard_content_crusier_button-up{position:absolute;left:8%;top:82.5%;font-size:25px;}
+			#scene_view-yard_content_destroyer_button-up{position:absolute;left:58%;top:42.5%;font-size:25px;}
+			#scene_view-yard_content_battleship_button-up{position:absolute;left:58%;top:62.5%;font-size:25px;}
+			#scene_view-yard_content_dreadnought_button-up{position:absolute;left:58%;top:82.5%;font-size:25px;}
+			#scene_view-yard_content_corvette_popup{position:absolute;left:5%;top:30%;width:40%;height:10%}
+			#scene_view-yard_content_frigate_popup{position:absolute;left:5%;top:50%;width:40%;height:10%}
+			#scene_view-yard_content_crusier_popup{position:absolute;left:5%;top:70%;width:40%;height:10%}
+			#scene_view-yard_content_destroyer_popup{position:absolute;left:55%;top:30%;width:40%;height:10%}
+			#scene_view-yard_content_battleship_popup{position:absolute;left:55%;top:50%;width:40%;height:10%}
+			#scene_view-yard_content_dreadnought_popup{position:absolute;left:55%;top:70%;width:40%;height:10%}
+			.fa-info-circle:hover{cursor:pointer;}
+			#scene_view-yard_content_corvette_button-i{position:absolute;left:39%;top:42.5%;font-size:25px;}
+			#scene_view-yard_content_frigate_button-i{position:absolute;left:39%;top:62.5%;font-size:25px;}
+			#scene_view-yard_content_crusier_button-i{position:absolute;left:39%;top:82.5%;font-size:25px;}
+			#scene_view-yard_content_destroyer_button-i{position:absolute;left:89%;top:42.5%;font-size:25px;}
+			#scene_view-yard_content_battleship_button-i{position:absolute;left:89%;top:62.5%;font-size:25px;}
+			#scene_view-yard_content_dreadnought_button-i{position:absolute;left:89%;top:82.5%;font-size:25px;}
+			#scene_view-yard_content_resources{position:absolute;left:10%;top:10%;width:80%;height:20%;}
+			#scene_view-yard_content_resources_metal{position:absolute;left:5%;top:-30%;max-width:45%;max-height:45%;font-size:30px;}
+			#scene_view-yard_content_resources_minerals{position:absolute;left:55%;top:-30%;max-width:45%;max-height:45%;font-size:30px;}
+			#scene_view-yard_content_resources_fuel{position:absolute;left:5%;top:10%;max-width:45%;max-height:45%;font-size:30px;}
+			#scene_view-yard_content_resources_tax{position:absolute;left:55%;top:10%;max-width:45%;max-height:45%;font-size:30px;}
+			#scene_view-yard_content_tax-button{position:absolute;left:40%;top:33%;width:20%;height:5%;}
+			#scene_view-lab_content{position:fixed;left:10%;top:10%;width:80%;height:80%}
+			#scene_view-lab_content_points{position:absolute;left:30%;top:0%;max-width:40%;max-height:15%;font-size:30px;}
+			#scene_view-lab_content_armor-button{position:absolute;left:10%;top:25%;width:20%;height:5%;}
+			#scene_view-lab_content_laser-button{position:absolute;left:10%;top:50%;width:20%;height:5%;}
+			#scene_view-lab_content_reload-button{position:absolute;left:10%;top:75%;width:20%;height:5%;}
+			#scene_view-lab_content_construction-button{position:absolute;left:40%;top:37.5%;width:20%;height:5%;}
+			#scene_view-lab_content_shields-button{position:absolute;left:40%;top:25%;width:20%;height:5%;}
+			#scene_view-lab_content_missle-button{position:absolute;left:40%;top:50%;width:20%;height:5%;}
+			#scene_view-lab_content_recharge-button{position:absolute;left:40%;top:75%;width:20%;height:5%;}
+			#scene_view-lab_content_salvage-button{position:absolute;left:70%;top:37.5%;width:20%;height:5%;}
+			#scene_view-lab_content_tax-button{position:absolute;left:40%;top:15%;width:20%;height:5%;}
+			#scene_view-lab_content_armor-icon{position:absolute;left:12%;top:25.5%;font-size:20px;}
+			#scene_view-lab_content_laser-icon{position:absolute;left:12%;top:50.5%;font-size:20px;}
+			#scene_view-lab_content_reload-icon{position:absolute;left:12%;top:75.5%;font-size:20px;}
+			#scene_view-lab_content_construction-icon{position:absolute;left:42%;top:38%;font-size:20px;}
+			#scene_view-lab_content_shields-icon{position:absolute;left:42%;top:25.5%;font-size:20px;}
+			#scene_view-lab_content_missle-icon{position:absolute;left:42%;top:50.5%;font-size:20px;}
+			#scene_view-lab_content_recharge-icon{position:absolute;left:42%;top:75.5%;font-size:20px;}
+			#scene_view-lab_content_salvage-icon{position:absolute;left:72%;top:38%;font-size:20px;}
+			#scene_infopedia-main{position:fixed;left:0%;top:7.5%;width:100%;height:92.5%}
+			#scene_infopedia-main_content{position:fixed;left:10%;top:10%;width:80%;height:80%}
+			#scene_infopedia-main_content_button-ships{position:absolute;left:30%;top:30%;width:40%;height:10%}
+			#scene_infopedia-main_content_button-howto{position:absolute;left:30%;top:50%;width:40%;height:10%}
+			#scene_infopedia-main_content_button-credits{position:absolute;left:30%;top:70%;width:40%;height:10%}
+			#scene_infopedia-ships{position:fixed;left:0%;top:7.5%;width:100%;height:92.5%}
+			#scene_infopedia-ships_content{position:fixed;left:10%;top:10%;width:80%;height:80%}
+			#scene_infopedia-ships_content_button-corvette{position:absolute;left:10%;top:30%;width:35%;height:10%}
+			#scene_infopedia-ships_content_button-frigate{position:absolute;left:10%;top:50%;width:35%;height:10%}
+			#scene_infopedia-ships_content_button-crusier{position:absolute;left:10%;top:70%;width:35%;height:10%}
+			#scene_infopedia-ships_content_button-destroyer{position:absolute;left:55%;top:30%;width:35%;height:10%}
+			#scene_infopedia-ships_content_button-battleship{position:absolute;left:55%;top:50%;width:35%;height:10%}
+			#scene_infopedia-ships_content_button-dreadnought{position:absolute;left:55%;top:70%;width:35%;height:10%}
+			#scene_infopedia-howto{position:fixed;left:0%;top:7.5%;width:100%;height:92.5%}
+			#scene_infopedia-howto_content{position:fixed;left:10%;top:10%;width:80%;height:80%}
+			#scene_infopedia-howto_content_p{position:absolute;left:10%;top:10%;width:80%;height:80%;text-align:center;}
+			#scene_infopedia-credits{position:fixed;left:0%;top:7.5%;width:100%;height:92.5%}
+			#scene_infopedia-credits_content{position:fixed;left:10%;top:10%;width:80%;height:80%}
+			#scene_infopedia-credits_content_p{position:absolute;left:10%;top:10%;width:80%;height:80%;text-align:center;}
+			#scene_infopedia-ships_corvette_content{position:fixed;left:10%;top:10%;width:80%;height:80%}
+			#scene_infopedia-ships_corvette_content_img{position:absolute;left:10%;top:40%;max-width:35%;max-height:20%;}
+			#scene_infopedia-ships_corvette_content_p{position:absolute;left:50%;top:30%;width:45%;height:40%;text-align:center;}
+			#scene_infopedia-ships_frigate_content{position:fixed;left:10%;top:10%;width:80%;height:80%}
+			#scene_infopedia-ships_frigate_content_img{position:absolute;left:10%;top:40%;max-width:35%;max-height:20%;}
+			#scene_infopedia-ships_frigate_content_p{position:absolute;left:50%;top:30%;width:45%;height:40%;text-align:center;}
+			#scene_infopedia-ships_crusier_content{position:fixed;left:10%;top:10%;width:80%;height:80%}
+			#scene_infopedia-ships_crusier_content_img{position:absolute;left:10%;top:40%;max-width:35%;max-height:20%;}
+			#scene_infopedia-ships_crusier_content_p{position:absolute;left:50%;top:30%;width:45%;height:40%;text-align:center;}
+			#scene_infopedia-ships_destroyer_content{position:fixed;left:10%;top:10%;width:80%;height:80%}
+			#scene_infopedia-ships_destroyer_content_img{position:absolute;left:10%;top:40%;max-width:35%;max-height:20%;}
+			#scene_infopedia-ships_destroyer_content_p{position:absolute;left:50%;top:30%;width:45%;height:40%;text-align:center;}
+			#scene_infopedia-ships_battleship_content{position:fixed;left:10%;top:10%;width:80%;height:80%}
+			#scene_infopedia-ships_battleship_content_img{position:absolute;left:10%;top:40%;max-width:35%;max-height:20%;}
+			#scene_infopedia-ships_battleship_content_p{position:absolute;left:50%;top:30%;width:45%;height:40%;text-align:center;}
+			#scene_infopedia-ships_dreadnought_content{position:fixed;left:10%;top:10%;width:80%;height:80%}
+			#scene_infopedia-ships_dreadnought_content_img{position:absolute;left:10%;top:40%;max-width:35%;max-height:20%;}
+			#scene_infopedia-ships_dreadnought_content_p{position:absolute;left:50%;top:30%;width:45%;height:40%;text-align:center;}
+		</style>
+	</head>
+	<body>
+		<!--<canvas id="canvas" class="hidden" style="position:fixed;width:100%;height:100%;"></canvas>-->
+		<a id="download_link" class="hidden" style="position:absolute;left:60%;top:480px;"><button>Save Game</button></a>
+		<input id="scene_menu-load_upload" type="file"  style="display:none;position:absolute;left:50%;top:81.25%;width:25%;height:16.6%;">
+		<input id="namesave" class="hidden" type="text" style="position:absolute;left:40%;top:47.5%;width:20%;height:5%;">
+		<audio id = "audio"><source src="" type="audio/mp3"></audio>
+		<div id="scene_menu-main" class="game">
+			<button id="scene_menu-main_button-new">New Game</button>
+			<button id="scene_menu-main_button-load">Load Game</button>
+			<button id="scene_menu-main_button-exit">Exit Game</button>
+		</div>
+		<div id="scene_menu-save" class="game hidden">
+			<input id="scene_menu-save_input" placeholder="save name">
+			<button id="scene_menu-save_button">Start</button>
+		</div>
+		<div id="scene_menu-load" class="game hidden">
+			<div id="scene_menu-load_content" class="overlay"></div>
+			<button id="scene_menu-load_button-new">New</button>
+			<button id="scene_menu-load_button-play">Play</button>
+			<button id="scene_menu-load_button-delete">Delete</button>
+			<button id="scene_menu-load_button-upload">Upload</button>
+			<button id="scene_menu-load_button-back">Back</button>
+		</div>
+		<div id="scene_tips" class="game hidden">
+			<ul id="scene_tips_content">
+				<li><p><br>Build ships in the shipyard!</p></li>
+				<li><p><br>Use the labratory to buff your ships abilities!</p></li>
+				<li><p><br>Attack planets to get rewards!</p></li>
+				<li><p><br>Collect taxes to get resources, though only 10 per game!</p></li>
+				<li><p><br>Go to the infopedia in the settings menu for more info!</p></li>
+			</ul>
+			<button id="scene_tips_button">Start the Game</button>
+		</div>
+		<div id="scene_view-map" class="background hidden">
+			<center/>
+			<i id="scene_view-map_i" class="fa fa-times-circle"></i>
+			<p id="scene_view-map_p"></p>
+			<button id="scene_view-map_button">Attack</button>
+		</div>
+		<div id="overlay_dev_map" class="background hidden">
+			<input id="overlay_dev_map_input">
+			<button id="overlay_dev_map_button">Select Planet</button>
+		</div>
+		<div id="scene_view-battle" class="hidden">
+			<button id="scene_view-battle_button">Surrender</button>
+			<div id="scene_view-battle_content" class="content background">
+				<svg id="scene_view-battle_content_svg" width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
+					<rect x="10" y="10" width="80" height="30" fill="rgb(200,200,214)" stroke="rgb(200,200,214)"/>
+					<rect x="10" y="60" width="80" height="30" fill="rgb(200,200,214)" stroke="rgb(200,200,214)"/>
+					<rect id="scene_view-battle_content_svg_ship-health" x="10" y="10" width="80" height="30" fill="rgb(0,255,0)"/>
+					<rect id="scene_view-battle_content_svg_ship-shields" x="10" y="10" width="80" height="30" fill="rgb(0,255,255)"/>
+					<rect id="scene_view-battle_content_svg_enemy-health" x="10" y="60" width="80" height="30" fill="rgb(255,0,0)"/>
+					<rect id="scene_view-battle_content_svg_enemy-shields" x="10" y="60" width="80" height="30" fill="rgb(128,64,192)"/>
+    			</svg>
+				<div id="scene_view-battle_content_advanced" class="hidden background">
+					<p id="scene_view-battle_content_advanced_ship"></p>
+					<p id="scene_view-battle_content_advanced_enemy"></p>
+				</div>
+			</div>
+		</div>
+		<div id="scene_view-report" class="background hidden">
+			<center/>
+				<i id="scene_view-report_i" class="fa fa-times-circle"></i>
+				<p id="scene_view-report_p"></p>
+				<button id="scene_view-report_button">Accept</button>
+		</div>
+		<canvas id="mycanvas" class="hidden"></canvas>
+		<div id="scene_view-yard" class="game hidden">
+			<div id="scene_view-yard_content" class="content background">
+				<button id="scene_view-yard_content_tax-button">Collect Taxes</button>
+				<button id="scene_view-yard_content_corvette_button-new">Corvette</button>
+				<button id="scene_view-yard_content_frigate_button-new">Frigate</button>
+				<button id="scene_view-yard_content_crusier_button-new">Crusier</button>
+				<button id="scene_view-yard_content_destroyer_button-new">Destroyer</button>
+				<button id="scene_view-yard_content_battleship_button-new">Battleship</button>
+				<button id="scene_view-yard_content_dreadnought_button-new">Dreadnought</button>
+				<i id="scene_view-yard_content_corvette_button-up" class="fa fa-arrow-circle-o-up" aria-hidden="true"></i>
+				<i id="scene_view-yard_content_frigate_button-up" class="fa fa-arrow-circle-o-up" aria-hidden="true"></i>
+				<i id="scene_view-yard_content_crusier_button-up" class="fa fa-arrow-circle-o-up" aria-hidden="true"></i>
+				<i id="scene_view-yard_content_destroyer_button-up" class="fa fa-arrow-circle-o-up" aria-hidden="true"></i>
+				<i id="scene_view-yard_content_battleship_button-up" class="fa fa-arrow-circle-o-up" aria-hidden="true"></i>
+				<i id="scene_view-yard_content_dreadnought_button-up" class="fa fa-arrow-circle-o-up" aria-hidden="true"></i>
+				<i id="scene_view-yard_content_corvette_button-i" class="fa fa-info-circle" aria-hidden="true"></i>
+				<i id="scene_view-yard_content_frigate_button-i" class="fa fa-info-circle" aria-hidden="true"></i>
+				<i id="scene_view-yard_content_crusier_button-i" class="fa fa-info-circle" aria-hidden="true"></i>
+				<i id="scene_view-yard_content_destroyer_button-i" class="fa fa-info-circle" aria-hidden="true"></i>
+				<i id="scene_view-yard_content_battleship_button-i" class="fa fa-info-circle" aria-hidden="true"></i>
+				<i id="scene_view-yard_content_dreadnought_button-i" class="fa fa-info-circle" aria-hidden="true"></i>
+				<div id="scene_view-yard_content_corvette_popup" class="overlay hidden"><p>Loading...</p></div>
+				<div id="scene_view-yard_content_frigate_popup" class="overlay hidden"><p>Loading...</p></div>
+				<div id="scene_view-yard_content_crusier_popup" class="overlay hidden"><p>Loading...</p></div>
+				<div id="scene_view-yard_content_destroyer_popup" class="overlay hidden"><p>Loading...</p></div>
+				<div id="scene_view-yard_content_battleship_popup" class="overlay hidden"><p>Loading...</p></div>
+				<div id="scene_view-yard_content_dreadnought_popup" class="overlay hidden"><p>Loading...</p></div>
+				<div id="scene_view-yard_content_resources">
+					<p id="scene_view-yard_content_resources_metal"></p>
+					<p id="scene_view-yard_content_resources_minerals"></p>
+					<p id="scene_view-yard_content_resources_fuel"></p>
+					<p id="scene_view-yard_content_resources_tax"></p>
+				</div>
+			</div>
+		</div>
+		<div id="scene_view-lab" class="game hidden">
+			<div id="scene_view-lab_content" class="background">
+				<p id="scene_view-lab_content_points"></p>
+				<button id="scene_view-lab_content_armor-button">Armor</button>
+				<button id="scene_view-lab_content_laser-button">Laser</button>
+				<button id="scene_view-lab_content_reload-button">Reload</button>
+				<button id="scene_view-lab_content_construction-button">Construction</button>
+				<button id="scene_view-lab_content_shields-button">Shields</button>
+				<button id="scene_view-lab_content_missle-button">Missle</button>
+				<button id="scene_view-lab_content_recharge-button">Recharge</button>
+				<button id="scene_view-lab_content_salvage-button">Salvage</button>
+				<button id="scene_view-lab_content_tax-button">Collect Taxes</button>
+				<i id="scene_view-lab_content_construction-icon" class="fa fa-lock"></i>
+				<i id="scene_view-lab_content_shields-icon" class="fa fa-lock"></i>
+				<i id="scene_view-lab_content_missle-icon" class="fa fa-lock"></i>
+				<i id="scene_view-lab_content_recharge-icon" class="fa fa-lock"></i>
+				<i id="scene_view-lab_content_salvage-icon" class="fa fa-lock"></i>
+				<svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
+					<line x1="30" x2="40" y1="27.5" y2="27.5" stroke="rgb(200,200,214)"/>
+					<line x1="30" x2="40" y1="52.5" y2="52.5" stroke="rgb(200,200,214)"/>
+					<line x1="30" x2="40" y1="77.5" y2="77.5" stroke="rgb(200,200,214)"/>
+					<line x1="30" x2="40" y1="27.5" y2="40" stroke="rgb(200,200,214)"/>
+					<line x1="60" x2="70" y1="40" y2="40" stroke="rgb(200,200,214)"/>
+    			</svg>
+			</div>
+		</div>
+		<div id="scene_menu-settings" class="game hidden">
+			<div id="scene_menu-settings_content" class="content background">
+				<button id="scene_menu-settings_button-info">Infopedia</button>
+				<button id="scene_menu-settings_button-main">Advanced</button>
+				<button id="scene_menu-settings_button-menu">Main Menu</button>
+				<button id="scene_menu-settings_button-save">Download Save</button>
+			</div>
+		</div>
+		<div id="scene_menu-settings_main" class="game hidden">
+			<div id="scene_menu-settings_main_content" class="content background">
+				<center>
+				<label for="scene_menu-settings_main_content_key">Key Scroll Speed</label>
+				<input type="range" id="scene_menu-settings_main_content_key" name="scene_menu-settings_main_content_key" min="1" max="10" step="1" value="2">
+				</center>
+			</div>
+		</div>
+		<div id="scene_infopedia-main" class="game hidden">
+			<div id="scene_infopedia-main_content" class="background">
+				<button id="scene_infopedia-main_content_button-ships">Ships</button>
+				<button id="scene_infopedia-main_content_button-howto">How To Play</button>
+				<button id="scene_infopedia-main_content_button-credits">Credits</button>
+			</div>
+		</div>
+		<div id="scene_infopedia-ships" class="game hidden">
+			<div id="scene_infopedia-ships_content" class="background">
+				<button id="scene_infopedia-ships_content_button-corvette">Corvette</button>
+				<button id="scene_infopedia-ships_content_button-frigate">Frigate</button>
+				<button id="scene_infopedia-ships_content_button-crusier">Crusier</button>
+				<button id="scene_infopedia-ships_content_button-destroyer">Destroyer</button>
+				<button id="scene_infopedia-ships_content_button-battleship">Battleship</button>
+				<button id="scene_infopedia-ships_content_button-dreadnought">Dreadnought</button>
+			</div>
+		</div>
+		<div id="scene_infopedia-ships_corvette" class="game hidden">
+			<div id="scene_infopedia-ships_corvette_content">
+				<img id="scene_infopedia-ships_corvette_content_img" src="/annihilation/models/ships/corvette.png">
+				<p id="scene_infopedia-ships_corvette_content_p"></p>
+			</div>
+		</div>
+		<div id="scene_infopedia-ships_frigate" class="game hidden">
+			<div id="scene_infopedia-ships_frigate_content">
+				<img id="scene_infopedia-ships_frigate_content_img" src="/annihilation/models/ships/frigate.png">
+				<p id="scene_infopedia-ships_frigate_content_p"></p>
+			</div>
+		</div>
+		<div id="scene_infopedia-ships_crusier" class="game hidden">
+			<div id="scene_infopedia-ships_crusier_content">
+				<img id="scene_infopedia-ships_crusier_content_img" src="/annihilation/models/ships/crusier.png">
+				<p id="scene_infopedia-ships_crusier_content_p"></p>
+			</div>
+		</div>
+		<div id="scene_infopedia-ships_destroyer" class="game hidden">
+			<div id="scene_infopedia-ships_destroyer_content">
+				<img id="scene_infopedia-ships_destroyer_content_img" src="/annihilation/models/ships/destroyer.png">
+				<p id="scene_infopedia-ships_destroyer_content_p"></p>
+			</div>
+		</div>
+		<div id="scene_infopedia-ships_battleship" class="game hidden">
+			<div id="scene_infopedia-ships_battleship_content">
+				<img id="scene_infopedia-ships_battleship_content_img" src="/annihilation/models/ships/battleship.png">
+				<p id="scene_infopedia-ships_battleship_content_p"></p>
+			</div>
+		</div>
+		<div id="scene_infopedia-ships_dreadnought" class="game hidden">
+			<div id="scene_infopedia-ships_dreadnought_content">
+				<img id="scene_infopedia-ships_dreadnought_content_img" src="/annihilation/models/ships/dreadnought.png">
+				<p id="scene_infopedia-ships_dreadnought_content_p"></p>
+			</div>
+		</div>
+		<div id="scene_infopedia-howto" class="game hidden">
+			<div id="scene_infopedia-howto_content" class="background">
+				<p id="scene_infopedia-howto_content_p">Make ships, do research for buffs, and more. Make sure your health doesn't reach 0 or you die! Use WASD to move around the map, and upgrade your ships with rare items to increase your health and damage.</p>
+			</div>
+		</div>
+		<div id="scene_infopedia-credits" class="game hidden">
+			<div id="scene_infopedia-credits_content" class="background">
+				<p id="scene_infopedia-credits_content_p">All credit goes to Vortex418</p>
+			</div>
+		</div>
+		<div id="nav" class="hidden">
+			<button id="nav_button-map"><i class="fa fa-map" aria-hidden="true"></i> Map</button>
+			<button id="nav_button-yard"><i class="fa fa-wrench" aria-hidden="true"></i> Shipyard</button>
+			<button id="nav_button-lab"><i class="fa fa-flask" aria-hidden="true"></i> Labratory</button>
+			<i id="nav_icon-settings" class="fa fa-cog" aria-hidden="true"></i>
+		</div>
+	</body>
+	<script src="/annihilation/libraries/processing.js"></script>
+	<script>
+		var sketchProc = function(processingInstance) {
+var mouseIsPressed = false;
+processingInstance.mousePressed = function () { mouseIsPressed = true};
+processingInstance.mouseReleased = function () { mouseIsPressed = false};
+processingInstance.touchStarted = function () { mouseIsPressed = true};
+processingInstance.touchEnded = function () { mouseIsPressed = false};
+var keyIsPressed = false;
+processingInstance.keyPressed = function () { keyIsPressed = true};
+processingInstance.keyReleased = function () { keyIsPressed = false};
+function getImage(url) {
+	processingInstance.externals.sketch.imageCache.add(url);
+	return processingInstance.loadImage(url);
+};
+with (processingInstance) {
+	size(innerWidth,innerHeight);
+	var view = "map";
+	var cord = [0,0];
+	var borders = [1024,512];
+	var radius = [25,75];
+	var devMode = false;
+	var date = new Date();
+	var selectedPlanet = 0;
+	var winData = window.location.search.substring(1).split("&");
+	var user = {
+		loaded: false,
+		name: "",
+		keys: {},
+		meta: {},
+		saves: {},
+		savesLoaded: false
+	};
+	var settings = {
+		keySpeed: 2
+	};
+	function sound(src) {
+		document.getElementById("audio").src="/annihilation/sound/"+src;
+  		document.getElementById("audio").play();
+	};
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function() {
+    		if (this.readyState == 4 && this.status == 200) {
+			var parsedUserData = JSON.parse(this.responseText);
+			for(var i in parsedUserData){
+				user[i] = parsedUserData[i];
+			}
+			user.loaded = 1;
+    		}
+	};
+	xhr.open("GET", "/annihilation/userdata.json", true);
+	xhr.send();
+	if(winData[0] != null && winData != null && winData[0] != undefined && winData != undefined && winData != ""){
+		var worldData = JSON.parse(decodeURIComponent(winData[0]));
+		if(typeof worldData == "object"){
+			if(typeof worldData.borders != undefined && worldData.borders != undefined){
+				borders[0] = parseFloat(worldData.borders[0]);
+				borders[1] = parseFloat(worldData.borders[1]);
+			} else {console.log("Could not load custom borders")}
+			if(typeof worldData.radius != undefined && worldData.radius != undefined){
+				radius[0] = parseFloat(worldData.radius[0]);
+				radius[1] = parseFloat(worldData.radius[1]);
+			} else {console.log("Could not load custom radius")}
+		}
+	}
+	var star = {
+		x: [round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0]))],
+		y: [round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1]))],
+		size: [round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20))]
+	};
+	var planet = {
+		name: ["crash site","[1] Abrigato","[2] Beta-Keralis","[3] Suzum","[4] Vespa","[5] Coruscare","[6] Vulca","[7] Jaeger","[8] Kashyyyk","[9] Outpost-42","[10] Victoria Alpha","[11] Victoria Bravo","[12] Gesht","[13] Sanctuary","[14] Snowmass","[15] Ja","[16] Keeg","[17]Haemeiguli","[18]Borebalae","[19]Albataetarius","[20]Hataerius","[21]Achernaiphoros","[22]Antadrophei","[23]Hoemeirai","[24]Antabalis","[25]Hoereo","[26]Pazadam","[27]Equidor","[28]Pax","[29]Xena","[30]Titan","[31]Oturn","[32]Thuamia","[33]Heuthea","[34]Ditharus","[35]Muxater","[36]Trukovis","[37]Bichotune","[38]Etis","[39]Leorus","[40]Aphus","[41]Harophos","[42]Athena","[43]Hades","[44]Icarus","[45]Ureus","[46]Xentos Prime","[47]Delta Ketlak","[48]Aerox","[49]Thryox","[50]Stratus","[51]Nox","[52]Sanctum","[53]Pastūra","[54] Tinctus","[55]Morbus","[56]Neos","[57]Nomen","[58]Numerus","[59]","[60]Fornax","[61]","[62]","[63]","[64] Home!"],
+		status: [0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+		x: [round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0]))],
+		y: [round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1]))],
+		r:[round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1]))],
+		color: {
+			r: [128,round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),200],
+			g: [128,round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),200],
+			b: [128,round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),200],
+		},
+		difficulty: ["very easy","easy","easy-medium","medium","medium-hard","hard","very hard","extremly hard","hard-insane","insane"]
+	};
+	/*
+	//FUTURE PLANET GEN CONCEPT
+	
+	for(var i=0;i<planet.status.length;i++){
+		var factor = [null,100((64-i)/64)^i,2,3,function(){
+			if(i > 32){return ((i+32)^2)/64*1.5625}
+		},5,6,7,(1+i)^i];
+		var random = random(0,100);
+		if(factor[1] > random){planet.sys.system[i] = 1}
+		else if(factor[2] > random){planet.sys.system[i] = 2}
+		else if(factor[3] > random){planet.sys.system[i] = 3}
+		else if(factor[4] > random){planet.sys.system[i] = 4}
+		else if(factor[5] > random){planet.sys.system[i] = 5}
+		else if(factor[6] > random){planet.sys.system[i] = 6}
+		else if(factor[7] > random){planet.sys.system[i] = 7}
+		else if(factor[8] > random){planet.sys.system[i] = 8}
+		else{alert("An error occured in planet generation.")}
+		
+	}*/
+	var element = {
+		show: function(id){
+			for(var i = 0;i<id.length;i++){
+				if(document.getElementById(id[i]).classList.contains("hidden") == true){
+					document.getElementById(id[i]).classList.remove("hidden");
+				}
+			}
+		},
+		hide: function(id){
+			for(var i = 0;i<id.length;i++){
+				if(document.getElementById(id[i]).classList.contains("hidden") == false){
+					document.getElementById(id[i]).classList.add("hidden");
+				}
+			}
+		},
+		addClass: function(id,cls){
+			for(var i = 0;i<id.length;i++){
+				for(var j = 0;j<cls.length;j++){
+					if(document.getElementById(id[i]).classList.contains(cls[j]) == false){
+						document.getElementById(id[i]).classList.add(cls[j]);
+					}
+				}
+			}
+		},
+		removeClass: function(id,cls){
+			for(var i = 0;i<id.length;i++){
+				for(var j = 0;j<cls.length;j++){
+					if(document.getElementById(id[i]).classList.contains(cls[j]) == true){
+						document.getElementById(id[i]).classList.remove(cls[j]);
+					}
+				}
+			}
+		}	
+	};
+	function dist(a1,a2,b1,b2){
+		var a,b;
+		if(a1 > a2){a = a1-a2}else{a=a2-a1}
+		if(b1 > b2){b = b1-b2}else{b=b2-b1}
+		return Math.sqrt(a**2 + b**2);
+	};
+	function object(name,alligence,x,y,z,a,b,c){
+		fill(255,255,255);
+		if(alligence == 0){noStroke();}
+		if(alligence < 0){stroke(255,0,0);}
+		if(alligence > 0){stroke(0,255,0);}
+		text(name,x,y+(z*0.6));
+		fill(a,b,c);
+		ellipse(x,y,z,z);
+	};
+	var tech = {
+		points: 100,
+		cost: [5,5,5,10,10,10,10,20],
+		costInc: 1,
+		price: [0],
+		level: {
+			base: 5,
+			armor: 0,
+			shield: 0,
+			laser: 0,
+			missle: 0,
+			reload: 0,
+			recharge: 0,
+			construction: 0,
+			salvage: 0,
+			max: [50,50,50,50,25,50,50,25]
+		}
+	};
+	var numeral = ["","I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII","XIII","XIV","XV","XVI","XVII","XVIII","XIX","XX","XXI","XXII","XXIII","XXIV","XXV","XXVII","XXVII","XXVIII","XXIX","XXX","XXXI","XXXII","XXXIII","XXXIV","XXXV","XXXVI","XXXVII","XXXVIII","XXXIX","XL","XLI","XLII","XLIII","XLIV","XLV","XLVI","XLVII","XLVIII","XLIX","L","LI","LII","LIII","LIV","LV","LVI","LVII","LVIII","LIX","LX","LXI","LXII","LXIII","LXIV","LXV","LXVI","LXVII","LXVIII","LXIX","LXX","LXXI","LXXII","LXXIII","LXXIV","LXXV","LXXVI","LXXVII","LXXVIII","LXXIX","LXXX","LXXXI","LXXXII","LXXXIII","LXXXIV","LXXXV","LXXXVI","LXXXVII","LXXXVIII","LXXXIX","XC","XCI","XCII","XCIII","XCIV","XCV","XCVI","XCVII","XCVIII","XCIX","C"];
+	var resource = {
+		metal: 10000,
+		minerals: 5000,
+		fuel: 2500,
+		ancient_tech: 0,
+		code_snippets: 0,
+		multiplyer: 1,
+		claimed: 0,
+		max: 10
+	};
+	function minimize(name){
+		if(name > 999999){
+			return name/1000000+"M";
+		}
+		else if(name > 999){
+			return name/1000+"K";
+		}
+		else if(name < 1000){
+			return name;
+		}
+		
+		
+	};
+	// everything ship related!
+	var ship = {
+		generic: {
+			type: ["corvette","frigate","crusier","destroyer","battleship","dreadnought"],
+			health: [10,25,50,100,250,1000],
+			shields: [20,40,75,250,500,2000],
+			damage: [1,5,10,25,100,250],
+			reload: [0.5,1,2,1,1,1],
+			width: [25,36,75,100,150,160,0,0,0,0,25,35,75,100,150,160],
+			height: [24,18,50,50,60,131,0,0,0,0,24,18,50,50,60,131],
+			x: [width/64*28,width/64*28,width/64*28,width/64*28,width/64*28,width/64*28,width/64*28,width/64*20,width/64*20,width/64*20,width/64*20,width/64*20,width/64*20,width/64*20,width/64*12,width/64*12,width/64*12,width/64*12,width/64*12,width/64*12,width/64*12,width/64*4,width/64*4,width/64*4,width/64*4],
+			y: [width/64*16,width/64*12,width/64*20,width/64*8,width/64*24,width/64*4,width/64*28,width/64*2,width/64*36,width/64*56,width/64*41,width/64*51,width/64*48,width/64*10,width/64*31,width/64*31,width/64*8,width/64*40,width/64*4,width/64*10,width/64*59,width/64*52,width/64*29,width/64*10,width/64*27],
+			cost: {
+				metal: [1000,2000,4000,10000,25000,100000],
+				minerals: [500,2000,1000,4000,10000,50000],
+				fuel: [250,500,1000,2500,5000,25000]
+			}
+		},
+		display: {
+			level: ["","","","","",""]
+		},
+		cost: {
+			upgrade: {
+				ancient_tech: [
+					[1,2,4,8,16,32],
+					[2,4,7,9,12,15],
+					[3,5,8,12,18,26],
+					[8,12,20,35,60,75],
+					[10,25,45,70,100,135],
+					[25,50,100,150,250,400]
+				],
+				code_snippets: [
+					[1,2,5,10,20,35,50],
+					[5,10,20,30,35,40],
+					[10,20,30,40,50,60],
+					[25,40,60,85,100,125],
+					[20,25,40,55,70,85],
+					[50,75,88,100,125,150]
+				]
+			}
+		},
+		fleet: {
+			type: [],
+			health: [],
+			shields: [],
+			damage: [],
+			reload: [],
+			level: [0,0,0,0,0,0],
+			crit: {
+				chance: 30+tech.level.missle,
+				damage: 50+tech.level.missle*5
+			},
+			multiplyer: {
+				damage: 1+tech.level.laser*0.2,
+				shields: 1+tech.level.shield*0.4,
+				health: 1+tech.level.armor*0.15
+			}
+		},
+		frozen: {
+			health: [0],
+			shields: [0],
+			reload: [0]
+		},
+		draw: function(type,x,y){
+			var typeNum;
+			if(type == "corvette"){typeNum = 0;}
+			if(type == "frigate"){typeNum = 1;}
+			if(type == "crusier"){typeNum = 2;}
+			if(type == "destroyer"){typeNum = 3;}
+			if(type == "battleship"){typeNum = 4;}
+			if(type == "dreadnought"){typeNum = 5;}
+			image(getImage("/annihilation/models/ships/"+type+".png"),x-20,y-20,ship.generic.width[typeNum],ship.generic.height[typeNum]);
+		},
+		num: function(filter){
+			var count = 0;
+			for(var i=0;i < ship.fleet.type.length;i++){
+				if(ship.fleet.type[i] == filter){count++;}
+			}
+			return count;
+		},
+		total: {
+			health: 0,
+			shields: 0,
+			reload: 0
+		},
+		add: function(type){
+			var typeNum;
+			if(type == "corvette"){typeNum = 0;}
+			if(type == "frigate"){typeNum = 1;}
+			if(type == "crusier"){typeNum = 2;}
+			if(type == "destroyer"){typeNum = 3;}
+			if(type == "battleship"){typeNum = 4;}
+			if(type == "dreadnought"){typeNum = 5;}
+			ship.fleet.type.push(ship.generic.type[typeNum]);
+			ship.fleet.health.push(ship.generic.health[typeNum]);
+			ship.fleet.shields.push(ship.generic.shields[typeNum]);
+			ship.fleet.damage.push(ship.generic.damage[typeNum]);
+			ship.fleet.reload.push(ship.generic.reload[typeNum]);
+		}
+	};
+	var enemy = {
+		generic: {
+			type: ["corvette","frigate","crusier","destroyer","battleship","dreadnought"],
+			health: [10,25,50,100,250,1000],
+			shields: [20,40,75,250,500,2000],
+			damage: [1,5,10,25,100,250],
+			reload: [0.5,1,2,1,1,1],
+			x: [width/64*50,width/64*50,width/64*50,width/64*50,width/64*50,width/64*50,width/64*50,width/64*44,width/64*44,width/64*44,width/64*44,width/64*44,width/64*44,width/64*44,width/64*38,width/64*38,width/64*38,width/64*38,width/64*38,width/64*38,width/64*38],
+			y: [height/64*32,height/64*24,height/64*40,height/64*16,height/64*48,height/64*8,height/64*56,height/64*32,height/64*24,height/64*40,height/64*16,height/64*48,height/64*8,height/64*56,height/64*32,height/64*24,height/64*40,height/64*16,height/64*48,height/64*8,height/64*56,height/64*32,height/64*24,height/64*40,height/64*16,height/64*48,height/64*8,height/64*56]
+		},
+		fleet: {
+			type: [
+				[null]
+				["frigate","corvette","corvette"],
+				["frigate","corvette","corvette","corvette","corvette"],
+				["frigate","frigate","frigate","frigate","frigate"],
+				["crusier","frigate","frigate","corvette","corvette"],
+				["crusier","frigate","frigate","frigate","frigate"],
+				["crusier","crusier","crusier","corvette","corvette"],
+				["destroyer","crusier","crusier","corvette","corvette","corvette","corvette"],
+				["destroyer","crusier","crusier","frigate","frigate"],
+				["destroyer","crusier","crusier","crusier","crusier"],
+				["destroyer","destroyer","destroyer","crusier","crusier"],
+				["destroyer","destroyer","destroyer","destroyer","destroyer"],
+				["battleship","destroyer","destroyer","destroyer","destroyer"],
+				["battleship","battleship","battleship","destroyer","destroyer"],
+				["battleship","battleship","battleship","destroyer","destroyer","destroyer","destroyer","destroyer"],
+				["battleship","battleship","battleship","battleship","battleship","crusier","crusier","crusier"],
+				["battleship","battleship","battleship","battleship","battleship","frigate","frigate","frigate","frigate","frigate"],
+				["battleship","battleship","battleship","battleship","battleship","crusier","crusier","crusier","destroyer","destroyer"],
+				["crusier","battleship","battleship","battleship","battleship","battleship","battleship","destroyer","destroyer","destroyer","corvette","corvette"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["battleship","battleship","battleship","battleship","battleship"],
+				["dreadnought","dreadnought","dreadnought","dreadnought","dreadnought"]
+			],
+			health: [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],
+			shields: [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],
+			damage: [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],
+			reload: [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],
+		},
+			frozen: {
+			health: [],
+			shields: [],
+			reload: []
+		},
+		draw: function(type,x,y){
+			var typeNum;
+			if(type == "corvette"){typeNum = 0;}
+			if(type == "frigate"){typeNum = 1;}
+			if(type == "crusier"){typeNum = 2;}
+			if(type == "destroyer"){typeNum = 3;}
+			if(type == "battleship"){typeNum = 4;}
+			if(type == "dreadnought"){typeNum = 5;}
+			image(getImage("/annihilation/models/ships/enemy-"+type+".png"),x-20,y-20,ship.generic.width[typeNum],ship.generic.height[typeNum]);
+		},
+		total: {
+			health: 0,
+			shields: 0,
+			damage: 0
+		}
+	};
+	for(var i=1;i < planet.status.length-1;i++){
+		for(var j=0;j<enemy.fleet.type[i].length;j++){
+			var typeNum;
+			if(enemy.fleet.type[i][j] == "corvette"){typeNum = 0;}
+			if(enemy.fleet.type[i][j] == "frigate"){typeNum = 1;}
+			if(enemy.fleet.type[i][j] == "crusier"){typeNum = 2;}
+			if(enemy.fleet.type[i][j] == "destroyer"){typeNum = 3;}
+			if(enemy.fleet.type[i][j] == "battleship"){typeNum = 4;}
+			if(enemy.fleet.type[i][j] == "dreadnought"){typeNum = 5;}
+			enemy.fleet.health[i][j] = enemy.generic.health[typeNum];
+			enemy.fleet.shields[i][j] = enemy.generic.shields[typeNum];
+			enemy.fleet.damage[i][j] = enemy.generic.damage[typeNum];
+			enemy.fleet.reload[i][j] = enemy.generic.reload[typeNum];
+		}
+	}
+	var InBattle = false;
+	var battleWon = false;
+	var command = {};
+	var save = {
+		selected: 0,
+		loaded: false,
+		url: null,
+		str: "",
+		valid: false,
+		new: 0,
+		num: 0,
+		data: {
+			info: {},
+			planet: {},
+			star: {},
+			ship: {},
+			tech: {}
+		},
+		info: {
+			name: [],
+			date: [],
+			type: [],
+			content: []
+		},
+		create: function(name,date,type,content){
+			save.info.name.push(name);
+			save.info.date.push(date);
+			save.info.type.push(type);
+			save.info.content.push(content);
+			var container = document.createElement("DIV");
+			var pName = document.createElement("P");
+			var pDate = document.createElement("P");
+			var pType = document.createElement("P");
+			container.setAttribute("id","scene_menu-load_save-"+name);
+			document.getElementById("scene_menu-load_content").appendChild(container);
+			element.addClass(["scene_menu-load_save-"+name],["background","clickable"]);
+			container.style.position = "absolute";
+			container.style.width = "80%";
+			container.style.height = "10%";
+			container.style.left = "10%";
+			container.style.top = (save.num*16+12)+"%";
+			pName.innerHTML = name;
+			pDate.innerHTML = date;
+			pType.innerHTML = type;
+			[pName.style.fontSize,pDate.style.fontSize,pType.style.fontSize] = ["18px","18px","18px"];
+			[pName.style.position,pDate.style.position,pType.style.position] = ["absolute","absolute","absolute"];
+			[pName.style.left,pDate.style.left,pType.style.left] = ["10%","40%","70%"];
+			[pName.style.top,pDate.style.top,pType.style.top] = ["-30%","-30%","-30%"];
+			container.appendChild(pName);
+			container.appendChild(pDate);
+			container.appendChild(pType);
+			container.addEventListener("mouseover",function(){document.body.cursor = "pointer"});
+			container.addEventListener("mouseout",function(){document.body.cursor = "default"});
+			container.addEventListener("click",function(){
+				for(var i=0;i<save.info.name.length;i++){
+					if(save.info.name[i] == name){
+						save.selected = i;
+						console.log("Selected save \""+name+"\" at position "+save.selected);
+					}
+				}
+			});
+			element.show(["scene_menu-load_save-"+name]);
+			save.num++;
+		}
+	};
+	document.getElementById("scene_menu-main_button-new").addEventListener("click",function(){
+		element.hide(["scene_menu-main"]);
+		element.show(["scene_menu-save"]);
+	});
+	document.getElementById("scene_menu-main_button-load").addEventListener("click",function(){
+		element.hide(["scene_menu-main"]);
+		element.show(["scene_menu-load"]);
+	});
+	document.getElementById("scene_menu-main_button-exit").addEventListener("click",function(){close()});
+	document.getElementById("scene_menu-save_button").addEventListener("click",function(){
+		save.create(document.getElementById("scene_menu-save_input").value,date.getFullYear()+"/"+date.getMonth()+1+"/"+date.getDate(),"offline",save.data);
+		element.hide(["scene_menu-save"]);
+		element.show(["scene_tips"]);
+	});
+	document.getElementById("scene_menu-load_button-back").addEventListener("click",function(){
+		element.hide(["scene_menu-load"]);
+		element.show(["scene_menu-main"]);
+	});
+	document.getElementById("scene_menu-load_button-new").addEventListener("click",function(){
+		element.hide(["scene_menu-load"]);
+		element.show(["scene_menu-save"]);
+	});
+	document.getElementById("scene_menu-load_button-delete").addEventListener("click",function(){
+		save.num--;
+		for(var i=0;i<save.info.name.length;i++){
+			if(i > save.selected){
+				document.getElementById("scene_menu-load_save-"+save.info.name[i]).style.top = ((i-1)*16+12)+"%";
+			}
+			else if(save.info.name[i] != save.info.name[save.selected]){
+				document.getElementById("scene_menu-load_save-"+save.info.name[i]).style.top = (i*16+12)+"%";
+			} else {
+				document.getElementById("scene_menu-load_save-"+save.info.name[i]).remove();
+			}
+		}
+	});
+	document.getElementById("scene_menu-load_button-upload").addEventListener("click",function(){
+		save.loaded = false;
+		document.getElementById("scene_menu-load_upload").click();
+	});
+	document.getElementById("scene_menu-load_button-play").addEventListener("click",function(){
+		console.log("Attempting to load save \""+save.info.name[save.selected]+"\" at position "+save.selected);
+		if(save.info.content[save.selected] != undefined && save.info.content[save.selected] != null && save.info.content[save.selected] != ""){
+			save.content = save.info.content[save.selected];	 
+			resource = save.content.resource;
+			planet = save.content.planet;
+			star = save.content.star;
+			ship.fleet = save.content.ship;
+			tech = save.content.tech;
+			settings = save.content.settings;
+			element.hide(["scene_menu-load"]);
+			element.show(["nav","mycanvas"]);
+		} else {alert("An unexpected error occured!")}
+	});
+	document.getElementById("scene_menu-load_upload").addEventListener("change", function() {
+		var reader = new FileReader();
+		reader.onload = function(){
+			if(save.loaded == false){
+				save.uploadedContent = JSON.parse(reader.result);
+				save.create(save.uploadedContent.info.name,save.uploadedContent.info.date,save.uploadedContent.info.type,save.uploadedContent);
+				console.log("Loaded save \""+save.uploadedContent.info.name+"\" from "+save.uploadedContent.info.date);
+				save.loaded = true;
+			}
+		};
+		reader.readAsText(this.files[0]);	
+	});	
+	document.getElementById("scene_tips_button").addEventListener("click",function(){
+		element.hide(["scene_tips"]);element.show(["nav","mycanvas"]);
+	});
+	document.getElementById("nav_button-map").addEventListener("click",function(){battleWon=null;view="map";element.hide(["scene_menu-settings","scene_view-yard","scene_view-lab","scene_infopedia-main","scene_infopedia-ships","scene_infopedia-ships_corvette","scene_infopedia-ships_frigate","scene_infopedia-ships_crusier","scene_infopedia-ships_destroyer","scene_infopedia-ships_battleship","scene_infopedia-ships_dreadnought","scene_infopedia-howto","scene_infopedia-credits","scene_view-report","scene_menu-settings_main"]);element.show(["mycanvas"])});
+	document.getElementById("nav_button-yard").addEventListener("click",function(){battleWon=null;view="map";element.hide(["scene_menu-settings","scene_view-map","scene_view-lab","scene_infopedia-main","scene_infopedia-ships","scene_infopedia-ships_corvette","scene_infopedia-ships_frigate","scene_infopedia-ships_crusier","scene_infopedia-ships_destroyer","scene_infopedia-ships_battleship","scene_infopedia-ships_dreadnought","scene_infopedia-howto","scene_infopedia-credits","mycanvas","scene_view-report","scene_menu-settings_main"]);element.show(["scene_view-yard"]);});
+	document.getElementById("nav_button-lab").addEventListener("click",function(){battleWon=null;view="map";element.hide(["scene_menu-settings","scene_view-yard","scene_view-map","scene_infopedia-main","scene_infopedia-ships","scene_infopedia-ships_corvette","scene_infopedia-ships_frigate","scene_infopedia-ships_crusier","scene_infopedia-ships_destroyer","scene_infopedia-ships_battleship","scene_infopedia-ships_dreadnought","scene_infopedia-howto","scene_infopedia-credits","mycanvas","scene_view-report","scene_menu-settings_main"]);element.show(["scene_view-lab"]);});
+	document.getElementById("nav_icon-settings").addEventListener("click",function(){battleWon=null;view="map";element.hide(["scene_view-map","scene_view-yard","scene_view-lab","scene_infopedia-main","scene_infopedia-ships","scene_infopedia-ships_corvette","scene_infopedia-ships_frigate","scene_infopedia-ships_crusier","scene_infopedia-ships_destroyer","scene_infopedia-ships_battleship","scene_infopedia-ships_dreadnought","scene_infopedia-howto","scene_infopedia-credits","mycanvas","scene_view-report","scene_menu-settings_main"]);element.show(["scene_menu-settings"])});
+	document.getElementById("scene_menu-settings_button-menu").addEventListener("click",function(){element.hide(["scene_menu-settings","nav"]);element.show(["scene_menu-main"]);});
+	document.getElementById("scene_menu-settings_button-info").addEventListener("click",function(){element.hide(["scene_menu-settings"]);element.show(["scene_infopedia-main"]);});
+	document.getElementById("scene_menu-settings_button-main").addEventListener("click",function(){element.hide(["scene_menu-settings"]);element.show(["scene_menu-settings_main"]);});
+	document.getElementById("scene_menu-settings_button-save").addEventListener("click",function(){
+		document.getElementById("download_link").click();
+	});
+	document.getElementById("scene_infopedia-main_content_button-ships").addEventListener("click",function(){
+		element.hide(["scene_infopedia-main"]);element.show(["scene_infopedia-ships"]);
+	});
+	document.getElementById("scene_infopedia-main_content_button-howto").addEventListener("click",function(){
+		element.hide(["scene_infopedia-main"]);element.show(["scene_infopedia-howto"]);
+	});
+	document.getElementById("scene_infopedia-main_content_button-credits").addEventListener("click",function(){
+		element.hide(["scene_infopedia-main"]);element.show(["scene_infopedia-credits"]);
+	});
+	document.getElementById("scene_infopedia-ships_content_button-corvette").addEventListener("click",function(){
+		element.hide(["scene_infopedia-ships"]);element.show(["scene_infopedia-ships_corvette"]);
+	});
+	document.getElementById("scene_infopedia-ships_content_button-frigate").addEventListener("click",function(){
+		element.hide(["scene_infopedia-ships"]);element.show(["scene_infopedia-ships_frigate"]);
+	});
+	document.getElementById("scene_infopedia-ships_content_button-crusier").addEventListener("click",function(){
+		element.hide(["scene_infopedia-ships"]);element.show(["scene_infopedia-ships_crusier"]);
+	});
+	document.getElementById("scene_infopedia-ships_content_button-destroyer").addEventListener("click",function(){
+		element.hide(["scene_infopedia-ships"]);element.show(["scene_infopedia-ships_destroyer"]);
+	});
+	document.getElementById("scene_infopedia-ships_content_button-battleship").addEventListener("click",function(){
+		element.hide(["scene_infopedia-ships"]);element.show(["scene_infopedia-ships_battleship"]);
+	});
+	document.getElementById("scene_infopedia-ships_content_button-dreadnought").addEventListener("click",function(){
+		element.hide(["scene_infopedia-ships"]);element.show(["scene_infopedia-ships_dreadnought"]);
+	});
+	document.getElementById("scene_view-yard_content_corvette_button-new").addEventListener("click",function(){
+		if(resource.metal >= ship.cost.metal[0] && resource.minerals >= ship.cost.minerals[0] && resource.fuel >= ship.cost.fuel[0]){
+			resource.metal -= ship.cost.metal[0];
+			resource.minerals -= ship.cost.minerals[0];
+			resource.fuel -= ship.cost.fuel[0];
+			ship.add("corvette");   
+		}
+	});
+	document.getElementById("scene_view-yard_content_frigate_button-new").addEventListener("click",function(){
+		if(resource.metal >= ship.cost.metal[1] && resource.minerals >= ship.cost.minerals[1] && resource.fuel >= ship.cost.fuel[1]){
+			resource.metal -= ship.cost.metal[1];
+			resource.minerals -= ship.cost.minerals[1];
+			resource.fuel -= ship.cost.fuel[1];
+			ship.add("frigate");   
+		}
+	});
+	document.getElementById("scene_view-yard_content_crusier_button-new").addEventListener("click",function(){
+		if(resource.metal >= ship.cost.metal[2] && resource.minerals >= ship.cost.minerals[2] && resource.fuel >= ship.cost.fuel[2]){
+			resource.metal -= ship.cost.metal[2];
+			resource.minerals -= ship.cost.minerals[2];
+			resource.fuel -= ship.cost.fuel[2];
+			ship.add("crusier");   
+		}
+	});
+	document.getElementById("scene_view-yard_content_destroyer_button-new").addEventListener("click",function(){
+		if(resource.metal >= ship.cost.metal[3] && resource.minerals >= ship.cost.minerals[3] && resource.fuel >= ship.cost.fuel[3]){
+			resource.metal -= ship.cost.metal[3];
+			resource.minerals -= ship.cost.minerals[3];
+			resource.fuel -= ship.cost.fuel[3];
+			ship.add("destroyer");   
+		}
+	});
+	document.getElementById("scene_view-yard_content_battleship_button-new").addEventListener("click",function(){
+		if(resource.metal >= ship.cost.metal[4] && resource.minerals >= ship.cost.minerals[4] && resource.fuel >= ship.cost.fuel[4]){
+			resource.metal -= ship.cost.metal[4];
+			resource.minerals -= ship.cost.minerals[4];
+			resource.fuel -= ship.cost.fuel[4];
+			ship.add("battleship");   
+		}
+	});
+	document.getElementById("scene_view-yard_content_dreadnought_button-new").addEventListener("click",function(){
+		if(resource.metal >= ship.cost.metal[5] && resource.minerals >= ship.cost.minerals[5] && resource.fuel >= ship.cost.fuel[5]){
+			resource.metal -= ship.cost.metal[5];
+			resource.minerals -= ship.cost.minerals[5];
+			resource.fuel -= ship.cost.fuel[5];
+			ship.add("dreadnought");   
+		} 
+	});
+	document.getElementById("scene_view-yard_content_corvette_button-up").addEventListener("click",function(){
+		if(ship.fleet.level[0] < 5 && resource.ancient_tech >= ship.cost.upgrade.ancient_tech[0][ship.fleet.level[0]] && resource.code_snippets >= ship.cost.upgrade.code_snippets[0][ship.fleet.level[0]]){
+			resource.ancient_tech -= ship.cost.upgrade.ancient_tech[0][ship.fleet.level[0]];
+			resource.code_snippets -= ship.cost.upgrade.code_snippets[0][ship.fleet.level[0]];
+			ship.fleet.level[0]++;
+			ship.display.level[0] += "*";
+		}
+	});
+	document.getElementById("scene_view-yard_content_frigate_button-up").addEventListener("click",function(){
+		if(ship.fleet.level[1] < 5 && resource.ancient_tech >= ship.cost.upgrade.ancient_tech[1][ship.fleet.level[1]] && resource.code_snippets >= ship.cost.upgrade.code_snippets[1][ship.fleet.level[1]]){
+			resource.ancient_tech -= ship.cost.upgrade.ancient_tech[1][ship.fleet.level[1]];
+			resource.code_snippets -= ship.cost.upgrade.code_snippets[1][ship.fleet.level[1]];
+			ship.fleet.level[1]++;
+			ship.display.level[1] += "*";
+		}
+	});
+	document.getElementById("scene_view-yard_content_crusier_button-up").addEventListener("click",function(){
+		if(ship.fleet.level[2] < 5 && resource.ancient_tech >= ship.cost.upgrade.ancient_tech[2][ship.fleet.level[2]] && resource.code_snippets >= ship.cost.upgrade.code_snippets[2][ship.fleet.level[2]]){
+			resource.ancient_tech -= ship.cost.upgrade.ancient_tech[2][ship.fleet.level[2]];
+			resource.code_snippets -= ship.cost.upgrade.code_snippets[2][ship.fleet.level[2]];
+			ship.fleet.level[2]++;
+			ship.display.level[2] += "*";
+		}
+	});
+	document.getElementById("scene_view-yard_content_destroyer_button-up").addEventListener("click",function(){
+		if(ship.fleet.level[3] < 5 && resource.ancient_tech >= ship.cost.upgrade.ancient_tech[3][ship.fleet.level[3]] && resource.code_snippets >= ship.cost.upgrade.code_snippets[3][ship.fleet.level[3]]){
+			resource.ancient_tech -= ship.cost.upgrade.ancient_tech[3][ship.fleet.level[3]];
+			resource.code_snippets -= ship.cost.upgrade.code_snippets[3][ship.fleet.level[3]];
+			ship.fleet.level[3]++;
+			ship.display.level[3] += "*";
+		}
+	});
+	document.getElementById("scene_view-yard_content_battleship_button-up").addEventListener("click",function(){
+		if(ship.fleet.level[4] < 5 && resource.ancient_tech >= ship.cost.upgrade.ancient_tech[4][ship.fleet.level[4]] && resource.code_snippets >= ship.cost.upgrade.code_snippets[4][ship.fleet.level[4]]){
+			resource.ancient_tech -= ship.cost.upgrade.ancient_tech[4][ship.fleet.level[4]];
+			resource.code_snippets -= ship.cost.upgrade.code_snippets[4][ship.fleet.level[4]];
+			ship.fleet.level[4]++;
+			ship.display.level[4] += "*";
+		}
+	});
+	document.getElementById("scene_view-yard_content_dreadnought_button-up").addEventListener("click",function(){
+		if(ship.fleet.level[5] < 5 && resource.ancient_tech >= ship.cost.upgrade.ancient_tech[5][ship.fleet.level[5]] && resource.code_snippets >= ship.cost.upgrade.code_snippets[5][ship.fleet.level[5]]){
+			resource.ancient_tech -= ship.cost.upgrade.ancient_tech[5][ship.fleet.level[5]];
+			resource.code_snippets -= ship.cost.upgrade.code_snippets[5][ship.fleet.level[5]];
+			ship.fleet.level[5]++;
+			ship.display.level[5] += "*";
+		}
+	});
+	document.getElementById("scene_view-yard_content_corvette_button-up").addEventListener("mouseover",function(){element.show(["scene_view-yard_content_corvette_popup"])});
+	document.getElementById("scene_view-yard_content_frigate_button-up").addEventListener("mouseover",function(){element.show(["scene_view-yard_content_frigate_popup"])});
+	document.getElementById("scene_view-yard_content_crusier_button-up").addEventListener("mouseover",function(){element.show(["scene_view-yard_content_crusier_popup"])});
+	document.getElementById("scene_view-yard_content_destroyer_button-up").addEventListener("mouseover",function(){element.show(["scene_view-yard_content_destroyer_popup"])});
+	document.getElementById("scene_view-yard_content_battleship_button-up").addEventListener("mouseover",function(){element.show(["scene_view-yard_content_battleship_popup"])});
+	document.getElementById("scene_view-yard_content_dreadnought_button-up").addEventListener("mouseover",function(){element.show(["scene_view-yard_content_dreadnought_popup"])});
+	document.getElementById("scene_view-yard_content_corvette_button-up").addEventListener("mouseout",function(){element.hide(["scene_view-yard_content_corvette_popup"])});
+	document.getElementById("scene_view-yard_content_frigate_button-up").addEventListener("mouseout",function(){element.hide(["scene_view-yard_content_frigate_popup"])});
+	document.getElementById("scene_view-yard_content_crusier_button-up").addEventListener("mouseout",function(){element.hide(["scene_view-yard_content_crusier_popup"])});
+	document.getElementById("scene_view-yard_content_destroyer_button-up").addEventListener("mouseout",function(){element.hide(["scene_view-yard_content_destroyer_popup"])});
+	document.getElementById("scene_view-yard_content_battleship_button-up").addEventListener("mouseout",function(){element.hide(["scene_view-yard_content_battleship_popup"])});
+	document.getElementById("scene_view-yard_content_dreadnought_button-up").addEventListener("mouseout",function(){element.hide(["scene_view-yard_content_dreadnought_popup"])});
+	document.getElementById("scene_view-yard_content_corvette_button-i").addEventListener("click",function(){element.hide(["scene_view-yard"]);element.show(["scene_infopedia-ships_corvette"])});
+	document.getElementById("scene_view-yard_content_frigate_button-i").addEventListener("click",function(){element.hide(["scene_view-yard"]);element.show(["scene_infopedia-ships_frigate"])});
+	document.getElementById("scene_view-yard_content_crusier_button-i").addEventListener("click",function(){element.hide(["scene_view-yard"]);element.show(["scene_infopedia-ships_crusier"])});
+	document.getElementById("scene_view-yard_content_destroyer_button-i").addEventListener("click",function(){element.hide(["scene_view-yard"]);element.show(["scene_infopedia-ships_destroyer"])});
+	document.getElementById("scene_view-yard_content_battleship_button-i").addEventListener("click",function(){element.hide(["scene_view-yard"]);element.show(["scene_infopedia-ships_battleship"])});
+	document.getElementById("scene_view-yard_content_dreadnought_button-i").addEventListener("click",function(){element.hide(["scene_view-yard"]);element.show(["scene_infopedia-ships_dreadnought"])});
+	document.getElementById("scene_view-lab_content_armor-button").addEventListener("click",function(){
+		if(tech.points >= tech.cost[0]+tech.level.armor*tech.costInc && tech.level.armor < tech.level.max[0]){
+			tech.points -= tech.cost[0]+tech.level.armor*tech.costInc;
+			tech.level.armor++;
+		}
+	});
+	document.getElementById("scene_view-lab_content_laser-button").addEventListener("click",function(){
+		if(tech.points >= tech.cost[1]+tech.level.laser*tech.costInc && tech.level.laser < tech.level.max[1]){
+			tech.points -= tech.cost[1]+tech.level.laser*tech.costInc;
+			tech.level.laser++;
+		}
+	});
+	document.getElementById("scene_view-lab_content_reload-button").addEventListener("click",function(){
+		if(tech.points >= tech.cost[2]+tech.level.reload*tech.costInc && tech.level.reload < tech.level.max[2]){
+			tech.points -= tech.cost[2]+tech.level.reload*tech.costInc;
+			tech.level.reload++;
+		}
+	});
+	document.getElementById("scene_view-lab_content_construction-button").addEventListener("click",function(){
+		if(tech.points >= tech.cost[3]+tech.level.construction*tech.costInc && tech.level.construction < tech.level.max[3] && tech.level.armor > 9){
+			tech.points -= tech.cost[3]+tech.level.construction*tech.costInc;
+			tech.level.construction++;
+		}
+	});
+	document.getElementById("scene_view-lab_content_shields-button").addEventListener("click",function(){
+		if(tech.points >= tech.cost[4]+tech.level.shield*tech.costInc && tech.level.shield < tech.level.max[4] && tech.level.armor > 4){
+			tech.points -= tech.cost[4]+tech.level.shield*tech.costInc;
+			tech.level.shield++;
+		}
+	});
+	document.getElementById("scene_view-lab_content_missle-button").addEventListener("click",function(){
+		if(tech.points >= tech.cost[5]+tech.level.missle*tech.costInc && tech.level.missle < tech.level.max[5] && tech.level.laser > 4){
+			tech.points -= tech.cost[5]+tech.level.missle*tech.costInc;
+			tech.level.missle++;
+		}
+	});
+	document.getElementById("scene_view-lab_content_recharge-button").addEventListener("click",function(){
+		if(tech.points > tech.cost[6]+tech.level.recharge*tech.costInc && tech.level.recharge < tech.level.max[6] && tech.level.reload > 4){
+			tech.points -= tech.cost[6]+tech.level.recharge*tech.costInc;
+			tech.level.recharge++;
+		}
+	});
+	document.getElementById("scene_view-lab_content_salvage-button").addEventListener("click",function(){
+		if(tech.points > tech.cost[7]+tech.level.salvage*tech.costInc && tech.level.salvage < tech.level.max[7] && tech.level.construction > 4){
+			tech.points -= tech.cost[7]+tech.level.salvage*tech.costInc;
+			tech.level.salvage++;
+		}
+	});
+	document.getElementById("scene_view-yard_content_tax-button").addEventListener("click",function(){
+		if(resource.claimed < 10){
+			resource.claimed++;
+			for(var i=0;i<planet.status.length;i++){
+				if(planet.status[i] > 0){
+					resource.metal += i*1000*resource.multiplyer;
+					resource.minerals += i*500*resource.multiplyer;
+					resource.fuel += i*400*resource.multiplyer;
+					tech.points += i*resource.multiplyer;
+				}
+			}
+		}
+	});
+	document.getElementById("scene_view-map_i").addEventListener("click",function(){element.hide(["scene_view-map"])});
+	document.getElementById("scene_view-map_button").addEventListener("click",function(){view = "battle";element.hide(["scene_view-map","nav"]);element.show(["scene_view-battle"])});
+	document.getElementById("scene_view-report_i").addEventListener("click",function(){battleWon=null;element.hide(["scene_view-report"])});
+	document.getElementById("scene_view-report_button").addEventListener("click",function(){battleWon=null;element.hide(["scene_view-report"])});
+	document.getElementById("scene_view-battle_button").addEventListener("click",function(){
+		InBattle = false;
+		battleWon=false;
+		element.hide(["scene_view-battle"]);
+		element.show(["scene_view-report","nav"]);
+		view = "map"
+	});
+	document.getElementById("overlay_dev_map_button").addEventListener("click",function(){
+		mouseIsPressed=false;
+		selectedPlanet=document.getElementById("overlay_dev_map_input").value;
+		document.body.style.cursor = "default";
+		element.show(["scene_view-map"])
+	});//BM_DOM
+	
+	
+	
+	
+	draw = function(){
+		background(0,0,0);
+		ship.cost.metal = [ship.generic.cost.metal[0]*(1-tech.level.construction/100),ship.generic.cost.metal[1]*(1-tech.level.construction/100),ship.generic.cost.metal[2]*(1-tech.level.construction/100),ship.generic.cost.metal[3]*(1-tech.level.construction/100),ship.generic.cost.metal[4]*(1-tech.level.construction/100),ship.generic.cost.metal[5]*(1-tech.level.construction/100)];
+		ship.cost.minerals = [ship.generic.cost.minerals[0]*(1-tech.level.construction/100),ship.generic.cost.minerals[1]*(1-tech.level.construction/100),ship.generic.cost.minerals[2]*(1-tech.level.construction/100),ship.generic.cost.minerals[3]*(1-tech.level.construction/100),ship.generic.cost.minerals[4]*(1-tech.level.construction/100),ship.generic.cost.minerals[5]*(1-tech.level.construction/100)];
+		ship.cost.fuel = [ship.generic.cost.fuel[0]*(1-tech.level.construction/100),ship.generic.cost.fuel[0]*(1-tech.level.construction/100),ship.generic.cost.fuel[2]*(1-tech.level.construction/100),ship.generic.cost.fuel[3]*(1-tech.level.construction/100),ship.generic.cost.fuel[4]*(1-tech.level.construction/100),ship.generic.cost.fuel[5]*(1-tech.level.construction/100)];
+		save.data.resource = resource;
+		save.data.planet = planet; 
+		save.data.star = star;
+		save.data.ship = ship.fleet;
+		save.data.tech = tech;
+		save.data.settings = settings;
+		if(planet.status[planet.status.length] == 2){
+			alert("The endgame screen has not been added yet");
+		}
+		if(user.savesLoaded == false && user.loaded == true && user.name != null && user.name == undefined && user.name != "defaultuser0" ){
+			for(var i=0;i<user.saves[user.name].length;i++){
+				save.info.name.push(user.meta.names[user.name][i]);
+				save.info.date.push(user.meta.dates[user.name][i]);
+				save.info.type.push("online");
+			}
+			user.savesLoaded = true;
+		}
+		ship.total.damage = 0;
+		ship.total.health = 0;
+		ship.total.shields = 0;
+		enemy.total.damage = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+		enemy.total.health = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+		enemy.total.shields = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+		for(var i = 0; i<ship.fleet.type.length; i++){
+			ship.total.damage = 0;
+			ship.total.health = 0;
+			ship.total.shields = 0;
+			ship.total.damage += ship.fleet.damage[i];
+			ship.total.health += ship.fleet.health[i];
+			ship.total.shields += ship.fleet.shields[i];
+		}
+		for(var i = 1; i < planet.status.length-1;i++){
+			enemy.total.damage[i] = 0;
+			enemy.total.health[i] = 0;
+			enemy.total.shields[i] = 0;
+			for(var j=0;j<enemy.fleet.type[i].length; j++){
+				enemy.total.damage[i] += enemy.fleet.damage[i][j];
+				enemy.total.health[i] += enemy.fleet.health[i][j];
+				enemy.total.shields[i] += enemy.fleet.shields[i][j];
+			}
+		}
+		if(InBattle == false){
+			var typeNum;
+			for(var i = 1;i < planet.status.length-1;i++){
+				ship.frozen.health = ship.total.health;
+				ship.frozen.shields = ship.total.shields;
+				enemy.frozen.health[i] = enemy.total.health[i];
+				enemy.frozen.shields[i] = enemy.total.shields[i];
+				if(ship.fleet.type[i] == "corvette"){typeNum = 0;}
+				if(ship.fleet.type[i] == "frigate"){typeNum = 1;}
+				if(ship.fleet.type[i] == "crusier"){typeNum = 2;}
+				if(ship.fleet.type[i] == "destroyer"){typeNum = 3;}
+				if(ship.fleet.type[i] == "battleship"){typeNum = 4;}
+				if(ship.fleet.type[i] == "dreadnought"){typeNum = 5;}
+			}
+			for(var i = 0;i<ship.fleet.type.length;i++){
+				if(ship.fleet.type[i] == "corvette"){typeNum = 0;}
+				if(ship.fleet.type[i] == "frigate"){typeNum = 1;}
+				if(ship.fleet.type[i] == "crusier"){typeNum = 2;}
+				if(ship.fleet.type[i] == "destroyer"){typeNum = 3;}
+				if(ship.fleet.type[i] == "battleship"){typeNum = 4;}
+				if(ship.fleet.type[i] == "dreadnought"){typeNum = 5;}
+				ship.fleet.shields[i] = ship.generic.shields[typeNum];
+			}
+		}
+		tech.points = parseFloat(tech.points);
+		resource.metal = parseFloat(resource.metal);
+		resource.minerals = parseFloat(resource.minerals);
+		resource.fuel = parseFloat(resource.fuel);
+		resource.ancient_tech = parseFloat(resource.ancient_tech);
+		resource.code_snippets = parseFloat(resource.code_snippets);
+		borders[0] = Number(borders[0]);
+		borders[1] = Number(borders[1]);
+		radius[0] = Number(radius[0]);
+		radius[1] = Number(radius[1]);
+		for(var i=0;i<planet.status.length-1;i++){
+			planet.color.r[i] = parseFloat(planet.color.r[i]);
+			planet.color.g[i] = parseFloat(planet.color.g[i]);
+			planet.color.b[i] = parseFloat(planet.color.b[i]);
+		}
+		tech.price = [Number(tech.level.armor)+5,Number(tech.level.shield)+10,Number(tech.level.laser)+5,parseFloat(tech.level.missle)+10,Number(tech.level.reload)+5,parseFloat(tech.level.recharge)+10];
+		if(save.info.name[save.selected] != null && save.info.name[save.selected] != undefined){
+			document.getElementById("download_link").download=save.info.name[save.selected]+".json";
+		} else {document.getElementById("download_link").download="save.json";}
+		save.data.info.name = save.info.name[save.selected];
+		save.data.info.date = save.info.date[save.selected];
+		save.data.info.type = save.info.type[save.selected];
+		save.url = window.URL.createObjectURL(new Blob([JSON.stringify(save.data)], {type: "text/plain"}));
+		document.getElementById("download_link").href = save.url;
+		if(save.type == "offline"){
+			localStorage.setItem("save-"+save.info.name[save.selected],JSON.stringify(save.data));
+		}
+		if(save.type == "online"){
+			user.saves[user.name][save.selected] = JSON.stringify(save.data);
+		}
+		settings.keySpeed = Number(document.getElementById("scene_menu-settings_main_content_key").value);
+		document.getElementById("scene_view-yard_content_resources_metal").innerHTML = "Metal: "+minimize(resource.metal);
+		document.getElementById("scene_view-yard_content_resources_minerals").innerHTML = "Minerals: "+minimize(resource.minerals);
+		document.getElementById("scene_view-yard_content_resources_fuel").innerHTML = "Fuel: "+minimize(resource.fuel);
+		document.getElementById("scene_view-yard_content_resources_tax").innerHTML = "Taxes: "+resource.claimed+"/"+resource.max;
+		document.getElementById("scene_view-yard_content_corvette_button-new").innerHTML = "Corvette"+ship.display.level[0]+" ["+ship.num("corvette")+"]";
+		document.getElementById("scene_view-yard_content_frigate_button-new").innerHTML = "Frigate"+ship.display.level[1]+" ["+ship.num("frigate")+"]";
+		document.getElementById("scene_view-yard_content_crusier_button-new").innerHTML = "Crusier"+ship.display.level[2]+" ["+ship.num("crusier")+"]";
+		document.getElementById("scene_view-yard_content_destroyer_button-new").innerHTML = "Destroyer"+ship.display.level[3]+" ["+ship.num("destroyer")+"]";
+		document.getElementById("scene_view-yard_content_battleship_button-new").innerHTML = "Battleship"+ship.display.level[4]+" ["+ship.num("battleship")+"]";
+		document.getElementById("scene_view-yard_content_dreadnought_button-new").innerHTML = "Dreadnought"+ship.display.level[5]+" ["+ship.num("dreadnought")+"]";
+		document.getElementById("scene_view-yard_content_corvette_popup").innerHTML = "Ancient Tech: "+resource.ancient_tech+"/"+ship.cost.upgrade.ancient_tech[0][ship.fleet.level[0]]+"<br>"+"Code Snippets: "+resource.code_snippets+"/"+ship.cost.upgrade.code_snippets[0][ship.fleet.level[0]];
+		document.getElementById("scene_view-yard_content_frigate_popup").innerHTML = "Ancient Tech: "+resource.ancient_tech+"/"+ship.cost.upgrade.ancient_tech[1][ship.fleet.level[1]]+"<br>"+"Code Snippets: "+resource.code_snippets+"/"+ship.cost.upgrade.code_snippets[1][ship.fleet.level[1]];
+		document.getElementById("scene_view-yard_content_crusier_popup").innerHTML = "Ancient Tech: "+resource.ancient_tech+"/"+ship.cost.upgrade.ancient_tech[2][ship.fleet.level[2]]+"<br>"+"Code Snippets: "+resource.code_snippets+"/"+ship.cost.upgrade.code_snippets[2][ship.fleet.level[2]];
+		document.getElementById("scene_view-yard_content_destroyer_popup").innerHTML = "Ancient Tech: "+resource.ancient_tech+"/"+ship.cost.upgrade.ancient_tech[3][ship.fleet.level[3]]+"<br>"+"Code Snippets: "+resource.code_snippets+"/"+ship.cost.upgrade.code_snippets[3][ship.fleet.level[3]];
+		document.getElementById("scene_view-yard_content_battleship_popup").innerHTML = "Ancient Tech: "+resource.ancient_tech+"/"+ship.cost.upgrade.ancient_tech[4][ship.fleet.level[4]]+"<br>"+"Code Snippets: "+resource.code_snippets+"/"+ship.cost.upgrade.code_snippets[4][ship.fleet.level[4]];
+		document.getElementById("scene_view-yard_content_dreadnought_popup").innerHTML = "Ancient Tech: "+resource.ancient_tech+"/"+ship.cost.upgrade.ancient_tech[5][ship.fleet.level[5]]+"<br>"+"Code Snippets: "+resource.code_snippets+"/"+ship.cost.upgrade.code_snippets[5][ship.fleet.level[5]];
+		document.getElementById("scene_infopedia-ships_corvette_content_p").innerHTML="Metal: "+ship.generic.cost.metal[0]+"<br>Minerals: "+ship.generic.cost.minerals[0]+"<br>Fuel: "+ship.generic.cost.fuel[0];
+		document.getElementById("scene_infopedia-ships_frigate_content_p").innerHTML="Metal: "+ship.generic.cost.metal[1]+"<br>Minerals: "+ship.generic.cost.minerals[1]+"<br>Fuel: "+ship.generic.cost.fuel[1];
+		document.getElementById("scene_infopedia-ships_crusier_content_p").innerHTML="Metal: "+ship.generic.cost.metal[2]+"<br>Minerals: "+ship.generic.cost.minerals[2]+"<br>Fuel: "+ship.generic.cost.fuel[2];
+		document.getElementById("scene_infopedia-ships_destroyer_content_p").innerHTML="Metal: "+ship.generic.cost.metal[3]+"<br>Minerals: "+ship.generic.cost.minerals[3]+"<br>Fuel: "+ship.generic.cost.fuel[3];
+		document.getElementById("scene_infopedia-ships_battleship_content_p").innerHTML="Metal: "+ship.generic.cost.metal[4]+"<br>Minerals: "+ship.generic.cost.minerals[4]+"<br>Fuel: "+ship.generic.cost.fuel[4];
+		document.getElementById("scene_infopedia-ships_dreadnought_content_p").innerHTML="Metal: "+ship.generic.cost.metal[5]+"<br>Minerals: "+ship.generic.cost.minerals[5]+"<br>Fuel: "+ship.generic.cost.fuel[5];
+		document.getElementById("scene_view-lab_content_points").innerHTML = "Research Points: "+tech.points;
+		document.getElementById("scene_view-lab_content_armor-button").innerHTML = "Armor "+numeral[tech.level.armor];
+		document.getElementById("scene_view-lab_content_laser-button").innerHTML = "Laser "+numeral[tech.level.laser];
+		document.getElementById("scene_view-lab_content_reload-button").innerHTML = "Reload "+numeral[tech.level.reload];
+		document.getElementById("scene_view-lab_content_construction-button").innerHTML = "Construction "+numeral[tech.level.construction];
+		document.getElementById("scene_view-lab_content_shields-button").innerHTML ="Shields "+numeral[tech.level.shield];
+		document.getElementById("scene_view-lab_content_missle-button").innerHTML = "Missles "+numeral[tech.level.missle];
+		document.getElementById("scene_view-lab_content_recharge-button").innerHTML = "Recharge "+numeral[tech.level.recharge];
+		document.getElementById("scene_view-lab_content_salvage-button").innerHTML = "Salvage "+numeral[tech.level.salvage];
+		var statusText;
+		if(planet.status[selectedPlanet] > -1){document.getElementById("scene_view-map_button").disabled = true;statusText="Captured!"}
+		else if(planet.status[selectedPlanet] < 0){document.getElementById("scene_view-map_button").disabled = false;statusText="Occupied!"}
+		document.getElementById("scene_view-map_p").innerHTML = "Planet:&nbsp"+planet.name[selectedPlanet]+"&nbsp&nbsp&nbspStatus:&nbsp"+statusText+"<br><br>";
+		var rareText;
+		if(battleWon==true){statusText="You Won!"}else{statusText="You Lost!"}
+		if(resource.random < 5+tech.level.salvage){rareText="You got "+selectedPlanet+" ancient tech!"}
+		else if(resource.random > 95-tech.level.salvage){rareText="You got "+selectedPlanet+" code snippets!"}
+		else {rareText="You didn't get any rare items!"}
+		document.getElementById("scene_view-report_p").innerHTML = "Planet:&nbsp"+planet.name[selectedPlanet]+"<br><br>"+statusText+"<br><br>"+rareText;
+		if(tech.level.armor > 4){element.removeClass(["scene_view-lab_content_shields-icon"],["fa-lock"])}else{element.addClass(["scene_view-lab_content_shields-icon"],["fa-lock"])}
+		if(tech.level.armor >  9){element.removeClass(["scene_view-lab_content_construction-icon"],["fa-lock"])}else{element.addClass(["scene_view-lab_content_construction-icon"],["fa-lock"])}
+		if(tech.level.laser > 4){element.removeClass(["scene_view-lab_content_missle-icon"],["fa-lock"])}else{element.addClass(["scene_view-lab_content_missle-icon"],["fa-lock"])}
+		if(tech.level.reload > 4){element.removeClass(["scene_view-lab_content_recharge-icon"],["fa-lock"])}else{element.addClass(["scene_view-lab_content_recharge-icon"],["fa-lock"])}
+		if(tech.level.construction > 4){element.removeClass(["scene_view-lab_content_salvage-icon"],["fa-lock"])}else{element.addClass(["scene_view-lab_content_salvage-icon"],["fa-lock"])}
+	//Battle/Map ---> This is the processing.js that is remaining
+		document.addEventListener("keydown",function(e){
+    			if (e.ctrlKey  && e.key == "d") {  // case sensitive
+       				if(devMode == false){devMode = true}else{devMode = false}
+    			}
+		});
+		if(view == "map" && devMode == true){element.show(["overlay_dev_map"])} else {element.hide(["overlay_dev_map"])}
+		if(view == "map"){
+			background(0,0,0);
+			fill(255,255,255);
+			noStroke();
+			for(var i = 0; i < star.size.length; i++){
+				ellipse(innerWidth/2+(star.x[i]-cord[0]), innerHeight/2+(star.y[i]+cord[1]),star.size[i],star.size[i]);
+			}
+			for(var i=0;i<planet.status.length;i++){
+				object(planet.name[i], planet.status[i], innerWidth/2+(planet.x[i]-cord[0]), innerHeight/2+(planet.y[i]+cord[1]), planet.r[i], planet.color.r[i], planet.color.g[i], planet.color.b[i]);
+				if(dist(innerWidth/2+(planet.x[i]-cord[0]),mouseX,innerHeight/2+(planet.y[i]+cord[1]),mouseY) > planet.r[i]){
+					document.body.style.cursor = "default";
+				}
+				if(dist(innerWidth/2+(planet.x[i]-cord[0]),mouseX,innerHeight/2+(planet.y[i]+cord[1]),mouseY) <= planet.r[i]){
+					document.body.style.cursor = "pointer";
+					if(mouseIsPressed){mouseIsPressed=false;selectedPlanet=i;document.body.style.cursor = "default";element.show(["scene_view-map"])}
+				} else {document.body.style.cursor = "default";}
+				//if(dist(innerWidth/2+(planet.x[i]-cord[0]),mouseX,innerHeight/2+(planet.y[i]+cord[1]),mouseY) > planet.r[i])
+			}
+			if(devMode == true){
+				stroke(255,255,0);
+				line(innerWidth/2,0,innerWidth/2,innerHeight);
+				line(0,innerHeight/2,innerWidth,innerHeight/2);
+				stroke(0,255,0);
+				line(innerWidth/2-cord[0],0,innerWidth/2-cord[0],innerHeight);
+				line(0,innerHeight/2+cord[1],innerWidth,innerHeight/2+cord[1]);
+				textSize(innerWidth*0.016);
+				stroke(255,255,255);
+				text("["+cord[0]+", "+cord[1]+"]",innerWidth*0.01,innerHeight*0.94);
+				text(round((cord[0]+mouseX)-innerWidth/2)+", "+round((cord[1]+mouseY)-innerHeight/2),innerWidth*0.01,innerHeight*0.98);
+			}
+			if(keyIsPressed && key.toString() == "a" && borders[0]+cord[0] > 1){
+				cord[0]-=settings.keySpeed;
+			}
+			else if(keyIsPressed && key.toString() == "d" && borders[0]+cord[0] < borders[0]*2){
+				cord[0]+=settings.keySpeed;
+			}
+			else if(keyIsPressed && key.toString() == "w" && borders[1]+cord[1] < borders[1]*2){
+				cord[1]+=settings.keySpeed;
+			}
+			else if(keyIsPressed && key.toString() == "s" && borders[1]+cord[1] > 0){
+				cord[1]-=settings.keySpeed;
+			}
+		}
+		if(view == "battle"){
+			fill(255,255,255);
+			noStroke();
+			for(var i = 0; i < 32; i++){
+				ellipse(star.x[i],star.y[i],star.size[i],star.size[i]);
+			}
+			InBattle = true;
+			object("", planet.status[selectedPlanet], innerWidth*1.25,innerHeight*0.5,innerWidth,planet.color.r[selectedPlanet], planet.color.g[selectedPlanet], planet.color.b[selectedPlanet]);
+			document.getElementById("scene_view-battle_content_svg_ship-health").setAttribute("width",round(ship.total.health/(ship.frozen.health/(width*0.081))));
+			document.getElementById("scene_view-battle_content_svg_ship-shields").setAttribute("width",round(ship.total.shields/(ship.frozen.shields/(width*0.081))));
+			document.getElementById("scene_view-battle_content_svg_enemy-health").setAttribute("width",round(enemy.total.health[selectedPlanet]/(enemy.frozen.health[selectedPlanet]/(width*0.081))));
+			document.getElementById("scene_view-battle_content_svg_enemy-shields").setAttribute("width",round(enemy.total.shields[selectedPlanet]/(enemy.frozen.shields[selectedPlanet]/(width*0.081))));
+			if(devMode == true){
+				textAlign(LEFT,TOP);
+				fill(255,255,255);
+				element.show(["scene_view-battle_content_advanced"])
+				document.getElementById("scene_view-battle_content_advanced_ship").innerHTML = round(ship.total.health)+"/"+round(ship.frozen.health)+" | "+round(ship.total.shields)+"/"+round(ship.frozen.shields);
+				document.getElementById("scene_view-battle_content_advanced_enemy").innerHTML = round(enemy.total.health[selectedPlanet])+"/"+round(enemy.frozen.health[selectedPlanet])+" | "+round(enemy.total.shields[selectedPlanet])+"/"+round(enemy.frozen.shields[selectedPlanet]);
+			}
+			for(var i=0;i<ship.fleet.type.length;i++){
+				var typeNum;
+				if(ship.fleet.type[i] == "corvette"){typeNum = 0;}
+				if(ship.fleet.type[i] == "frigate"){typeNum = 1;}
+				if(ship.fleet.type[i] == "crusier"){typeNum = 2;}
+				if(ship.fleet.type[i] == "destroyer"){typeNum = 3;}
+				if(ship.fleet.type[i] == "battleship"){typeNum = 4;}
+				if(ship.fleet.type[i] == "dreadnought"){typeNum = 5;}
+				var target = floor(random(0,enemy.fleet.type[selectedPlanet].length));
+				if(ship.fleet.health[i] > 0){
+					ship.fleet.reload[i]--;
+					ship.draw(ship.fleet.type[i],ship.generic.x[i],ship.generic.y[i]);
+					if(ship.fleet.reload[i] <= 0){
+						var destinationX = floor(random(0,enemy.fleet.type[selectedPlanet].length));
+						var destinationY = floor(random(0,enemy.fleet.type[selectedPlanet].length));
+						ship.fleet.crit.random = random(0,100);
+						if(ship.fleet.crit.random < ship.fleet.crit.chance){
+							ship.fleet.crit.dmg = 1+ship.fleet.crit.damage/100;
+							textSize(height/32);
+							fill(255, 128, 16);
+							if(devMode == true){
+					text("Crit!",ship.generic.x[i]+ship.generic.width[typeNum]/2,ship.generic.y[i]+ship.generic.height[typeNum]/2);
+							}
+						}
+						else{ship.fleet.crit.dmg = 1}
+						stroke(0,255,255);
+					line(ship.generic.x[i],ship.generic.y[i],enemy.generic.x[destinationX],enemy.generic.y[destinationY]);
+						ship.fleet.reload[i] = ship.generic.reload[typeNum];
+						if(enemy.fleet.shields[selectedPlanet][target] < 1){
+							enemy.fleet.health[selectedPlanet][target]-=ship.fleet.damage[i]/20*(ship.fleet.multiplyer.damage* ship.fleet.crit.dmg*(ship.fleet.level[typeNum]+1));
+						} else if (enemy.fleet.shields[selectedPlanet][target] > 0){
+							enemy.fleet.shields[selectedPlanet][target]-=ship.fleet.damage[i]/20*(ship.fleet.multiplyer.damage* ship.fleet.crit.dmg*(ship.fleet.level[typeNum]+1));
+						}
+					}
+				} else {
+					for(var s=0;s<ship.fleet.type.length;s++){
+						if(s > i){
+							ship.fleet.type[s-1] = ship.fleet.type[s];
+							ship.fleet.health[s-1] = ship.fleet.health[s];
+							ship.fleet.shields[s-1] = ship.fleet.shields[s];
+							ship.fleet.damage[s-1] = ship.fleet.damage[s];
+							ship.fleet.reload[s-1] = ship.fleet.reload[s];
+						}
+					}
+				}
+			}
+			for(var i=0;i<enemy.fleet.type[selectedPlanet].length;i++){
+				var typeNum;
+				if(enemy.fleet.type[selectedPlanet][i] == "corvette"){typeNum = 0;}
+				if(enemy.fleet.type[selectedPlanet][i] == "frigate"){typeNum = 1;}
+				if(enemy.fleet.type[selectedPlanet][i] == "crusier"){typeNum = 2;}
+				if(enemy.fleet.type[selectedPlanet][i] == "destroyer"){typeNum = 3;}
+				if(enemy.fleet.type[selectedPlanet][i] == "battleship"){typeNum = 4;}
+				if(enemy.fleet.type[selectedPlanet][i] == "dreadnought"){typeNum = 5;}
+				var target = floor(random(0,ship.fleet.type.length));
+				if(enemy.fleet.health[selectedPlanet][i] > 0){
+					enemy.draw(enemy.fleet.type[selectedPlanet][i],enemy.generic.x[i],enemy.generic.y[i]);
+					enemy.fleet.reload[selectedPlanet][i]--;
+					if(enemy.fleet.reload[selectedPlanet][i] <= 0){
+						var destinationX = floor(random(0,ship.fleet.type.length));
+						var destinationY = floor(random(0,ship.fleet.type.length));
+						stroke(255,0,0);
+						line(enemy.generic.x[i], enemy.generic.y[i], ship.generic.x[destinationX], ship.generic.y[destinationY]);
+						enemy.fleet.reload[selectedPlanet][i] = enemy.generic.reload[typeNum];
+						if(ship.fleet.shields[target] < 1){
+							ship.fleet.health[target]-=enemy.fleet.damage[selectedPlanet][i]/20;
+						} else if (ship.fleet.shields[target] > 0){
+							ship.fleet.shields[target]-=enemy.fleet.damage[selectedPlanet][i]/20;
+						}
+					}
+				}		
+			}
+			if(enemy.total.health[selectedPlanet] <= 0){
+				planet.status[selectedPlanet] = 2;
+				InBattle = false;
+				resource.metal+= 5000*selectedPlanet*resource.multiplyer;
+				resource.minerals+= 2500*selectedPlanet*resource.multiplyer;
+				resource.fuel+= 2000*selectedPlanet*resource.multiplyer;
+				resource.random = random(0,100);
+				if(resource.random < 5+tech.level.salvage){
+					resource.ancient_tech+=selectedPlanet
+				}
+				if(resource.random > 95-tech.level.salvage){
+					resource.code_snippets+=selectedPlanet
+				}
+				tech.points+= 4*selectedPlanet*resource.multiplyer;
+				battleWon=true;
+				element.hide(["scene_view-battle"]);
+				element.show(["scene_view-report","nav"]);
+				view = "map"
+			}
+			if(ship.total.health <= 0){
+				InBattle = false;
+				battleWon=false;
+				element.hide(["scene_view-battle"]);
+				element.show(["scene_view-report","nav"]);
+				view = "map"
+			}
+		}	
+	};
+	
+}};
+var processingInstance = new Processing(document.getElementById("mycanvas"),sketchProc); 
+	</script>
+</html>
