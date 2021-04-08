@@ -6,6 +6,14 @@
 
 *Note that both the apps and game versions are still in development, and that some features may not work*
 
+### 0.4.1
+#### Released: 2021/4/8
+
+Annihilation v0.4.1 is a small bug fix update. A few features have been added to dev mode, to include hovering over a planet displaying information about it and changeing the outline. Bug fixes:
+
+	A-5: Hitboxes are moved upwards slightly
+	A-6: Reszing the windows would miss align hitboxes, now  
+
 ### 0.4.0
 #### Released: 2021/3/30
 
