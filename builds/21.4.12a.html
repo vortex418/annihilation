@@ -250,11 +250,9 @@ function getImage(url) {
 	return processingInstance.loadImage(url);
 };
 with (processingInstance) {
-	addEventListener("load",function(){//BM_BUILD
-		console.warn("ANNIHILATION: v0.4.2/indev build 21.4.12d");
-	});
 	size(innerWidth,innerHeight);
 	var view = "none";
+	var version = "21.4.12d"
 	var cord = [0,0];
 	var borders = [1024,512];
 	var radius = [25,75];
@@ -276,6 +274,10 @@ with (processingInstance) {
 	var canvas = {
 		clickable: true
 	};
+	addEventListener("load",function(){//BM_BUILD
+		console.warn("ANNIHILATION: v0.4.2/indev build 21.4.12d");
+		document.title.innerHTML = "Annihilation"+version ;
+	});
 	function sound(src) {
 		document.getElementById("audio").src="/annihilation/sound/"+src;
   		document.getElementById("audio").play();
@@ -1116,7 +1118,7 @@ with (processingInstance) {
         }
     });
 	addEventListener("resize",function(){
-        if(innerWidth != 1024 || innerHeight != 576){location.assign("/annihilation/play/beta.html")}
+        if(innerWidth != 1024 || innerHeight != 576){location.assign("/annihilation/play/"+version+".html")}
     });
 	
 	
