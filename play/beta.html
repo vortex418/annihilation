@@ -3,7 +3,7 @@
 	<head>
 		<link rel="stylesheet" href="/annihilation/styles.css">
 		<link rel="stylesheet" href="/annihilation/libraries/font-awesome-4.css">
-		<title>Annihilation Beta</title> 
+		<title id="tab_title">Annihilation [version]</title> 
 		<link href="/annihilation/models/icon.png" rel="icon" type="image/png">
 		<style>
 			button{font-size:15px}
@@ -251,25 +251,22 @@ function getImage(url) {
 };
 with (processingInstance) {
 	size(innerWidth,innerHeight);
-	var view = "map";
+	var view = "none";
 	var cord = [0,0];
 	var borders = [1024,512];
 	var radius = [25,75];
+	var star = {x: [],y: [],size: [],num: 128,};
 	var devMode = false;
 	var date = new Date();
 	var selectedPlanet = 0;
-	var winData = window.location.search.substring(1).split("&");
-	var user = {
-		loaded: false,
-		name: "",
-		keys: {},
-		meta: {},
-		saves: {},
-		savesLoaded: false
-	};
-	var settings = {
-		keySpeed: 2
-	};
+	var winData = location.search.substring(1).split("&");
+	var user = {loaded: false,name: "",keys: {},meta: {},saves: {},savesLoaded: false};
+	var settings = {keySpeed: 2};
+	var canvas = {clickable: true};
+	addEventListener("load",function(){//BM_BUILD
+		console.warn("ANNIHILATION: "+location.href.split("/")[5].split(".")[0]);
+		document.getElementById("tab_title").innerHTML = "Annihilation "+location.href.split("/")[5].split(".")[0];
+	});
 	function sound(src) {
 		document.getElementById("audio").src="/annihilation/sound/"+src;
   		document.getElementById("audio").play();
@@ -292,31 +289,55 @@ with (processingInstance) {
 			if(typeof worldData.borders != undefined && worldData.borders != undefined){
 				borders[0] = parseFloat(worldData.borders[0]);
 				borders[1] = parseFloat(worldData.borders[1]);
-			} else {console.log("Could not load custom borders")}
+			} else {console.error("Could not load custom borders")}
 			if(typeof worldData.radius != undefined && worldData.radius != undefined){
 				radius[0] = parseFloat(worldData.radius[0]);
 				radius[1] = parseFloat(worldData.radius[1]);
-			} else {console.log("Could not load custom radius")}
+			} else {console.error("Could not load custom radius")}
+			if(typeof worldData.stars != undefined && worldData.stars != undefined){
+				star.num = parseFloat(worldData.stars);
+			} else {console.error("Could not load custom stars")}
 		}
 	}
-	var star = {
-		x: [round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0]))],
-		y: [round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1]))],
-		size: [round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20)),round(random(radius[0]/20,radius[1]/20))]
-	};
+	for(var i=0;i<star.num;i++){
+		star.x[i] == round(random(0-borders[0],0+borders[0]));
+		star.y[i] == round(random(0-borders[1],0+borders[1]));
+		star.size[i] == round(random(radius[0]/20,radius[1]/20));
+	}
 	var planet = {
 		name: ["crash site","[1] Abrigato","[2] Beta-Keralis","[3] Suzum","[4] Vespa","[5] Coruscare","[6] Vulca","[7] Jaeger","[8] Kashyyyk","[9] Outpost-42","[10] Victoria Alpha","[11] Victoria Bravo","[12] Gesht","[13] Sanctuary","[14] Snowmass","[15] Ja","[16] Keeg","[17]Haemeiguli","[18]Borebalae","[19]Albataetarius","[20]Hataerius","[21]Achernaiphoros","[22]Antadrophei","[23]Hoemeirai","[24]Antabalis","[25]Hoereo","[26]Pazadam","[27]Equidor","[28]Pax","[29]Xena","[30]Titan","[31]Oturn","[32]Thuamia","[33]Heuthea","[34]Ditharus","[35]Muxater","[36]Trukovis","[37]Bichotune","[38]Etis","[39]Leorus","[40]Aphus","[41]Harophos","[42]Athena","[43]Hades","[44]Icarus","[45]Ureus","[46]Xentos Prime","[47]Delta Ketlak","[48]Aerox","[49]Thryox","[50]Stratus","[51]Nox","[52]Sanctum","[53]Pastūra","[54] Tinctus","[55]Morbus","[56]Neos","[57]Nomen","[58]Numerus","[59]","[60]Fornax","[61]","[62]","[63]","[64] Home!"],
-		status: [0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-		x: [round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0])),round(random(0-borders[0],0+borders[0]))],
-		y: [round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1])),round(random(0-borders[1],0+borders[1]))],
-		r:[round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1])),round(random(radius[0],radius[1]))],
+		status: [],
+		x: [],
+		y: [],
+		r: [],
 		color: {
-			r: [128,round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),200],
-			g: [128,round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),200],
-			b: [128,round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),round(random(0,255)),200],
+			r: [],
+			g: [],
+			b: []
 		},
 		difficulty: ["very easy","easy","easy-medium","medium","medium-hard","hard","very hard","extremly hard","hard-insane","insane"]
 	};
+	for(var i=0;i<planet.name.length;i++){
+		planet.x[i] == round(random(0-borders[0],0+borders[0]));
+		planet.y[i] == round(random(0-borders[1],0+borders[1]));
+		planet.r[i] == round(random(radius[0],radius[1]));
+		planet.status[i] == -1;
+		if(i == 0){
+			planet.color.r[i] == 128;
+			planet.color.g[i] == 128;
+			planet.color.b[i] == 128;
+		}
+		else if(i == 64){
+			planet.color.r[i] == 200;
+			planet.color.g[i] == 200;
+			planet.color.b[i] == 200;
+		}
+		else{
+			planet.color.r[i] == round(random(0,255));
+			planet.color.g[i] == round(random(0,255));
+			planet.color.b[i] == round(random(0,255));
+		}
+	}
 	/*
 	//FUTURE PLANET GEN CONCEPT//
 	
@@ -656,10 +677,12 @@ with (processingInstance) {
 		selected: 0,
 		loaded: false,
 		url: null,
-		str: "",
-		valid: false,
-		new: 0,
-		num: 0,
+        cookie: {
+			name: [],
+			date: [],
+			type: [],
+			content: ["","","","","","","",""]
+		},
 		data: {
 			info: {},
 			planet: {},
@@ -671,13 +694,13 @@ with (processingInstance) {
 			name: [],
 			date: [],
 			type: [],
-			content: []
+			data: []
 		},
-		create: function(name,date,type,content){
+		create: function(name,date,type,data){//BM_SAVE_CREATE
 			save.info.name.push(name);
 			save.info.date.push(date);
 			save.info.type.push(type);
-			save.info.content.push(content);
+			save.info.data.push(data);
 			var container = document.createElement("DIV");
 			var pName = document.createElement("P");
 			var pDate = document.createElement("P");
@@ -689,7 +712,7 @@ with (processingInstance) {
 			container.style.width = "80%";
 			container.style.height = "10%";
 			container.style.left = "10%";
-			container.style.top = (save.num*16+12)+"%";
+			container.style.top = ((save.info.name.length-1)*16+12)+"%";
 			pName.innerHTML = name;
 			pDate.innerHTML = date;
 			pType.innerHTML = type;
@@ -710,8 +733,6 @@ with (processingInstance) {
 					}
 				}
 			});
-			element.show(["scene_menu-load_save-"+name]);
-			save.num++;
 		}
 	};
 	document.getElementById("scene_menu-main_button-new").addEventListener("click",function(){
@@ -738,15 +759,42 @@ with (processingInstance) {
 		element.show(["scene_menu-save"]);
 	});
 	document.getElementById("scene_menu-load_button-delete").addEventListener("click",function(){
-		save.num--;
 		for(var i=0;i<save.info.name.length;i++){
-			if(i > save.selected){
-				document.getElementById("scene_menu-load_save-"+save.info.name[i]).style.top = ((i-1)*16+12)+"%";
-			}
-			else if(save.info.name[i] != save.info.name[save.selected]){
+			if(i < save.selected){
 				document.getElementById("scene_menu-load_save-"+save.info.name[i]).style.top = (i*16+12)+"%";
-			} else {
-				document.getElementById("scene_menu-load_save-"+save.info.name[i]).remove();
+				console.log("Save at position "+i+" was not moved");
+			}
+			else if(i > save.selected){
+				document.getElementById("scene_menu-load_save-"+save.info.name[i]).style.top = ((i-1)*16+12)+"%";
+				console.log("Save at position "+i+" was moved");
+			}
+			else if(i == save.selected){
+				console.warn("Deleted save \""+save.info.name[i]+"\"");
+				if(i == save.info.name.length-1){
+					document.getElementById("scene_menu-load_save-"+save.info.name[i]).remove();
+					save.info.name.pop();
+					save.info.date.pop();
+					save.info.type.pop();
+					save.info.data.pop();
+					document.cookie = "save.info.name="+save.info.name;
+            		document.cookie = "save.info.date="+save.info.date;
+            		document.cookie = "save.info.type="+save.info.type;
+            		localStorage.setItem("save.info.data",JSON.stringify(save.info.data));
+				} else{
+					document.getElementById("scene_menu-load_save-"+save.info.name[i]).remove()
+					save.info.name.splice(save.selected, 1);
+					save.info.date.splice(save.selected, 1);
+					save.info.type.splice(save.selected, 1);
+					save.info.data.splice(save.selected, 1);
+					document.cookie = "save.info.name="+save.info.name;
+            		document.cookie = "save.info.date="+save.info.date;
+            		document.cookie = "save.info.type="+save.info.type;
+            		localStorage.setItem("save.info.data",JSON.stringify(save.info.data));
+				}
+			}
+			else {
+				console.error("An unexpected error occured while deleting a save!");
+				alert("An unexpected error occured while deleting a save!");
 			}
 		}
 	});
@@ -756,16 +804,18 @@ with (processingInstance) {
 	});
 	document.getElementById("scene_menu-load_button-play").addEventListener("click",function(){
 		console.log("Attempting to load save \""+save.info.name[save.selected]+"\" at position "+save.selected);
-		if(save.info.content[save.selected] != undefined && save.info.content[save.selected] != null && save.info.content[save.selected] != ""){
-			save.content = save.info.content[save.selected];	 
-			resource = save.content.resource;
-			planet = save.content.planet;
-			star = save.content.star;
-			ship.fleet = save.content.ship;
-			tech = save.content.tech;
-			settings = save.content.settings;
+		if(save.info.data[save.selected] != undefined && save.info.data[save.selected] != null && save.info.data[save.selected] != ""){
+			save.loadContent = save.info.data[save.selected];	 
+			resource = save.loadContent.resource;
+			planet = save.loadContent.planet;
+			star = save.loadContent.star;
+			ship.fleet = save.loadContent.ship;
+			tech = save.loadContent.tech;
+			settings = save.loadContent.settings;
 			element.hide(["scene_menu-load"]);
 			element.show(["nav","mycanvas"]);
+			canvas.clickable=true;
+			view = "map";
 		} else {alert("An unexpected error occured!")}
 	});
 	document.getElementById("scene_menu-load_upload").addEventListener("change", function() {
@@ -781,13 +831,13 @@ with (processingInstance) {
 		reader.readAsText(this.files[0]);	
 	});	
 	document.getElementById("scene_tips_button").addEventListener("click",function(){
-		element.hide(["scene_tips"]);element.show(["nav","mycanvas"]);
+		element.hide(["scene_tips"]);element.show(["nav","mycanvas"]);view="map";canvas.clickable=true;
 	});
-	document.getElementById("nav_button-map").addEventListener("click",function(){battleWon=null;view="map";element.hide(["scene_menu-settings","scene_view-yard","scene_view-lab","scene_infopedia-main","scene_infopedia-ships","scene_infopedia-ships_corvette","scene_infopedia-ships_frigate","scene_infopedia-ships_crusier","scene_infopedia-ships_destroyer","scene_infopedia-ships_battleship","scene_infopedia-ships_dreadnought","scene_infopedia-howto","scene_infopedia-credits","scene_view-report","scene_menu-settings_main"]);element.show(["mycanvas"])});
-	document.getElementById("nav_button-yard").addEventListener("click",function(){battleWon=null;view="none";element.hide(["scene_menu-settings","scene_view-map","scene_view-lab","scene_infopedia-main","scene_infopedia-ships","scene_infopedia-ships_corvette","scene_infopedia-ships_frigate","scene_infopedia-ships_crusier","scene_infopedia-ships_destroyer","scene_infopedia-ships_battleship","scene_infopedia-ships_dreadnought","scene_infopedia-howto","scene_infopedia-credits","mycanvas","scene_view-report","scene_menu-settings_main"]);element.show(["scene_view-yard"]);});
-	document.getElementById("nav_button-lab").addEventListener("click",function(){battleWon=null;view="none";element.hide(["scene_menu-settings","scene_view-yard","scene_view-map","scene_infopedia-main","scene_infopedia-ships","scene_infopedia-ships_corvette","scene_infopedia-ships_frigate","scene_infopedia-ships_crusier","scene_infopedia-ships_destroyer","scene_infopedia-ships_battleship","scene_infopedia-ships_dreadnought","scene_infopedia-howto","scene_infopedia-credits","mycanvas","scene_view-report","scene_menu-settings_main"]);element.show(["scene_view-lab"]);});
+	document.getElementById("nav_button-map").addEventListener("click",function(){battleWon=null;view="map";canvas.clickable=true;element.hide(["scene_menu-settings","scene_view-yard","scene_view-lab","scene_infopedia-main","scene_infopedia-ships","scene_infopedia-ships_corvette","scene_infopedia-ships_frigate","scene_infopedia-ships_crusier","scene_infopedia-ships_destroyer","scene_infopedia-ships_battleship","scene_infopedia-ships_dreadnought","scene_infopedia-howto","scene_infopedia-credits","scene_view-report","scene_menu-settings_main"]);element.show(["mycanvas"])});
+	document.getElementById("nav_button-yard").addEventListener("click",function(){battleWon=null;view="none";canvas.clickable=false;element.hide(["scene_menu-settings","scene_view-map","scene_view-lab","scene_infopedia-main","scene_infopedia-ships","scene_infopedia-ships_corvette","scene_infopedia-ships_frigate","scene_infopedia-ships_crusier","scene_infopedia-ships_destroyer","scene_infopedia-ships_battleship","scene_infopedia-ships_dreadnought","scene_infopedia-howto","scene_infopedia-credits","mycanvas","scene_view-report","scene_menu-settings_main"]);element.show(["scene_view-yard"]);});
+	document.getElementById("nav_button-lab").addEventListener("click",function(){battleWon=null;view="none";canvas.clickable=false;element.hide(["scene_menu-settings","scene_view-yard","scene_view-map","scene_infopedia-main","scene_infopedia-ships","scene_infopedia-ships_corvette","scene_infopedia-ships_frigate","scene_infopedia-ships_crusier","scene_infopedia-ships_destroyer","scene_infopedia-ships_battleship","scene_infopedia-ships_dreadnought","scene_infopedia-howto","scene_infopedia-credits","mycanvas","scene_view-report","scene_menu-settings_main"]);element.show(["scene_view-lab"]);});
 	document.getElementById("nav_icon-settings").addEventListener("click",function(){battleWon=null;view=
-		"none";element.hide(["scene_view-map","scene_view-yard","scene_view-lab","scene_infopedia-main","scene_infopedia-ships","scene_infopedia-ships_corvette","scene_infopedia-ships_frigate","scene_infopedia-ships_crusier","scene_infopedia-ships_destroyer","scene_infopedia-ships_battleship","scene_infopedia-ships_dreadnought","scene_infopedia-howto","scene_infopedia-credits","mycanvas","scene_view-report","scene_menu-settings_main"]);element.show(["scene_menu-settings"])});
+		"none";canvas.clickable=false;element.hide(["scene_view-map","scene_view-yard","scene_view-lab","scene_infopedia-main","scene_infopedia-ships","scene_infopedia-ships_corvette","scene_infopedia-ships_frigate","scene_infopedia-ships_crusier","scene_infopedia-ships_destroyer","scene_infopedia-ships_battleship","scene_infopedia-ships_dreadnought","scene_infopedia-howto","scene_infopedia-credits","mycanvas","scene_view-report","scene_menu-settings_main"]);element.show(["scene_menu-settings"])});
 	document.getElementById("scene_menu-settings_button-menu").addEventListener("click",function(){element.hide(["scene_menu-settings","nav"]);element.show(["scene_menu-main"]);});
 	document.getElementById("scene_menu-settings_button-info").addEventListener("click",function(){element.hide(["scene_menu-settings"]);element.show(["scene_infopedia-main"]);});
 	document.getElementById("scene_menu-settings_button-main").addEventListener("click",function(){element.hide(["scene_menu-settings"]);element.show(["scene_menu-settings_main"]);});
@@ -996,15 +1046,16 @@ with (processingInstance) {
 			}
 		}
 	});
-	document.getElementById("scene_view-map_i").addEventListener("click",function(){element.hide(["scene_view-map"])});
-	document.getElementById("scene_view-map_button").addEventListener("click",function(){view = "battle";element.hide(["scene_view-map","nav"]);element.show(["scene_view-battle"])});
-	document.getElementById("scene_view-report_i").addEventListener("click",function(){battleWon=null;element.hide(["scene_view-report"])});
-	document.getElementById("scene_view-report_button").addEventListener("click",function(){battleWon=null;element.hide(["scene_view-report"])});
+	document.getElementById("scene_view-map_i").addEventListener("click",function(){canvas.clickable=true;element.hide(["scene_view-map"])});
+	document.getElementById("scene_view-map_button").addEventListener("click",function(){view = "battle";canvas.clickable = true;element.hide(["scene_view-map","nav"]);element.show(["scene_view-battle"])});
+	document.getElementById("scene_view-report_i").addEventListener("click",function(){battleWon=null;canvas.clickable=true;element.hide(["scene_view-report"])});
+	document.getElementById("scene_view-report_button").addEventListener("click",function(){battleWon=null;canvas.clickable=true;element.hide(["scene_view-report"])});
 	document.getElementById("scene_view-battle_button").addEventListener("click",function(){
 		InBattle = false;
 		battleWon=false;
 		element.hide(["scene_view-battle"]);
 		element.show(["scene_view-report","nav"]);
+		canvas.clickable=false;
 		view = "map"
 	});
 	document.getElementById("overlay_dev_map_button").addEventListener("click",function(){
@@ -1019,17 +1070,51 @@ with (processingInstance) {
 			cord = [planet.x[selectedPlanet],planet.y[selectedPlanet]];
 			console.log("Warped view to ("+planet.x[selectedPlanet]+","+planet.y[selectedPlanet]+")");
 		}
+		canvas.clickable=false;
 		element.show(["scene_view-map"])
-	});//BM_DOM
-    addEventListener("resize",function(){
-        if(innerWidth != 1024 || innerHeight != 576){location.assign("/annihilation/play/beta")}
+	});
+	if(document.cookie != null && document.cookie != undefined && document.cookie != ""){
+		save.cookie.name = document.cookie.split('; ').find(function(r){return r.startsWith("save.info.name=")}).split('=')[1].split(",");
+		save.cookie.date = document.cookie.split('; ').find(function(r){return r.startsWith("save.info.date=")}).split('=')[1].split(",");
+		save.cookie.type = document.cookie.split('; ').find(function(r){return r.startsWith("save.info.type=")}).split('=')[1].split(",");
+		save.cookie.data = JSON.parse(localStorage.getItem("save.info.data"));
+	} else {
+		console.warn("Could not find any saves!");
+	}
+	for(var i=0;i<save.cookie.name.length;i++){
+		if(save.cookie.name[i] != null && save.cookie.name[i] != undefined && save.cookie.name[i] != "" && save.cookie.data[i] != null && save.cookie.data[i] != undefined && save.cookie.data[i] != ""){
+			save.create(save.cookie.name[i],save.cookie.date[i],save.cookie.type[i],save.cookie.data[i]);
+			console.log("Added save \""+save.cookie.name[i]+"\"");
+		} else {
+			console.error("Found ghost save while attempting to load saves from cookie/localStorage (position "+parseFloat(i+1)+"/"+save.cookie.name.length+")");
+		}
+	}
+    document.body.addEventListener("click",function(){
+        if(save.info.type[save.selected] == "offline"){
+            document.cookie = "save.info.name="+save.info.name;
+            document.cookie = "save.info.date="+save.info.date;
+            document.cookie = "save.info.type="+save.info.type;
+            localStorage.setItem("save.info.data",JSON.stringify(save.info.data));
+        }
+		else if(save.info.type[save.selected] == "online"){
+			console.warn("Your "+save.info.type[save.selected]+" save \""+save.info.name[save.selected]+"\" could not be saved autmatically! (POST requests disabled for localhost and github pages)");
+		} 
+        else if (view != "none"){
+            console.warn("Your "+save.info.type[save.selected]+" save \""+save.info.name[save.selected]+"\" could not be saved autmatically! (Error: view = none)");
+        } 
+        else if(save.selected == null || save.selected == undefined || typeof save.selected == "string"){
+            console.error("Your game could not be autosaved! Selected save: "+save.info.name[save.selected]);
+        }
+    });
+	addEventListener("resize",function(){
+        if(innerWidth != 1024 || innerHeight != 576){location.assign(location.href)}
     });
 	
 	
 	
-	
-	draw = function(){
+	draw = function(){//BM_DRAW
 		background(0,0,0);
+        save.cookie = document.cookie.split(";");
 		ship.cost.metal = [ship.generic.cost.metal[0]*(1-tech.level.construction/100),ship.generic.cost.metal[1]*(1-tech.level.construction/100),ship.generic.cost.metal[2]*(1-tech.level.construction/100),ship.generic.cost.metal[3]*(1-tech.level.construction/100),ship.generic.cost.metal[4]*(1-tech.level.construction/100),ship.generic.cost.metal[5]*(1-tech.level.construction/100)];
 		ship.cost.minerals = [ship.generic.cost.minerals[0]*(1-tech.level.construction/100),ship.generic.cost.minerals[1]*(1-tech.level.construction/100),ship.generic.cost.minerals[2]*(1-tech.level.construction/100),ship.generic.cost.minerals[3]*(1-tech.level.construction/100),ship.generic.cost.minerals[4]*(1-tech.level.construction/100),ship.generic.cost.minerals[5]*(1-tech.level.construction/100)];
 		ship.cost.fuel = [ship.generic.cost.fuel[0]*(1-tech.level.construction/100),ship.generic.cost.fuel[0]*(1-tech.level.construction/100),ship.generic.cost.fuel[2]*(1-tech.level.construction/100),ship.generic.cost.fuel[3]*(1-tech.level.construction/100),ship.generic.cost.fuel[4]*(1-tech.level.construction/100),ship.generic.cost.fuel[5]*(1-tech.level.construction/100)];
@@ -1039,8 +1124,9 @@ with (processingInstance) {
 		save.data.ship = ship.fleet;
 		save.data.tech = tech;
 		save.data.settings = settings;
-		if(planet.status[planet.status.length] == 2){
-			alert("The endgame screen has not been added yet");
+		save.content = JSON.stringify(save.data);
+		if(planet.status[planet.status.length-1] == 2){
+			alert("This is disabled due to bugs!");
 		}
 		if(user.savesLoaded == false && user.loaded == true && user.name != null && user.name == undefined && user.name != "defaultuser0" ){
 			for(var i=0;i<user.saves[user.name].length;i++){
@@ -1122,13 +1208,7 @@ with (processingInstance) {
 		save.data.info.type = save.info.type[save.selected];
 		save.url = window.URL.createObjectURL(new Blob([JSON.stringify(save.data)], {type: "text/plain"}));
 		document.getElementById("download_link").href = save.url;
-		if(save.type == "offline"){
-			localStorage.setItem("save-"+save.info.name[save.selected],JSON.stringify(save.data));
-		}
-		if(save.type == "online"){
-			user.saves[user.name][save.selected] = JSON.stringify(save.data);
-		}
-		settings.keySpeed = Number(document.getElementById("scene_menu-settings_main_content_key").value);
+ 		settings.keySpeed = Number(document.getElementById("scene_menu-settings_main_content_key").value);
 		document.getElementById("scene_view-yard_content_resources_metal").innerHTML = "Metal: "+minimize(resource.metal);
 		document.getElementById("scene_view-yard_content_resources_minerals").innerHTML = "Minerals: "+minimize(resource.minerals);
 		document.getElementById("scene_view-yard_content_resources_fuel").innerHTML = "Fuel: "+minimize(resource.fuel);
@@ -1178,7 +1258,7 @@ with (processingInstance) {
 	//Battle/Map ---> This is the processing.js that is remaining
 		document.addEventListener("keydown",function(e){
     		if (e.key == "D") {  // case sensitive
-       			if(devMode == false){devMode = true}else{devMode = false}
+       			if(devMode == false && view == "map" || view == "battle"){devMode = true}else{devMode = false}
     		}
 		});
 		if(view == "map" && devMode == true){element.show(["overlay_dev_map"])} else {element.hide(["overlay_dev_map"])}
@@ -1206,7 +1286,7 @@ with (processingInstance) {
 						text(dist(innerWidth/2+(planet.x[i]-cord[0]),mouseX,innerHeight/2+(planet.y[i]+cord[1]),mouseY-(innerHeight*0.075)),innerWidth*0.01,innerHeight*0.90);
 						object("", [255,255,255], innerWidth/2+(planet.x[i]-cord[0]), innerHeight/2+(planet.y[i]+cord[1]), planet.r[i], planet.color.r[i], planet.color.g[i], planet.color.b[i]);
 					}
-					if(mouseIsPressed){mouseIsPressed=false;document.body.style.cursor = "default";element.show(["scene_view-map"])}
+					if(mouseIsPressed && canvas.clickable == true){mouseIsPressed=false;canvas.clickable = false; document.body.style.cursor = "default";element.show(["scene_view-map"])}
 				} else {document.body.style.cursor = "default"}
 				//if(dist(innerWidth/2+(planet.x[i]-cord[0]),mouseX,innerHeight/2+(planet.y[i]+cord[1]),mouseY) > planet.r[i]){
 				//	document.body.style.cursor = "default";
@@ -1238,6 +1318,7 @@ with (processingInstance) {
 			}
 		}
 		if(view == "battle"){
+			console.log("ship in battle");
 			fill(255,255,255);
 			noStroke();
 			for(var i = 0; i < 32; i++){
