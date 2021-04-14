@@ -6,6 +6,15 @@
 
 *Note that both the apps and game versions are still in development, and that some features may not work*
 
+### 0.4.2
+#### Released: 2021/4/14
+
+Fixed some major bugs, and added the ability to crash the game with Shift + C. Bug Fixes:
+
+	A-7: Patched autosaves -- saves now automatically save to cookies
+	A-8: Enemy health was not loading correctly
+	A-9: Now click on the attack button in the planet attack preview will not also attack planets behind the button.
+
 ### 0.4.1
 #### Released: 2021/4/8
 
