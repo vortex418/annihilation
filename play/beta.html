@@ -36,12 +36,13 @@
 			<button id="scene_menu-save_button" style="position:fixed;left:42.5%;top:57.5%;width:15%;height:5%;">Start</button>
 		</div>
 		<div id="scene_menu-load" class="game hidden">
-			<div id="scene_menu-load_content" class="overlay" style="position:fixed;left:10%;top:10%;width:80%;height:65%;"></div>
+			<div id="scene_menu-load_content" class="overlay" style="position:fixed;left:10%;top:10%;width:80%;height:65%;overflow:scroll"></div>
 			<button id="scene_menu-load_button-new" style="position:fixed;left:10%;top:80%;width:26.6%;height:7.5%;">New</button>
 			<button id="scene_menu-load_button-play" style="position:fixed;left:36.6%;top:80%;width:26.6%;height:7.5%;">Play</button>	
-			<button id="scene_menu-load_button-delete"style="position:fixed;left:63.2%;top:80%;width:26.6%;height:7.5%;">Delete</button>
-			<button id="scene_menu-load_button-upload" style="position:fixed;left:50%;top:90%;width:26.6%;height:7.5%;">Upload</button>
-			<button id="scene_menu-load_button-back" style="position:fixed;left:23.3%;top:90%;width:26.6%;height:7.5%;">Back</button>
+			<button id="scene_menu-load_button-delete" style="position:fixed;left:63.2%;top:80%;width:26.6%;height:7.5%;">Delete</button>
+			<button id="scene_menu-load_button-back" style="position:fixed;left:10%;top:90%;width:26.6%;height:7.5%;">Back</button>
+			<button id="scene_menu-load_button-upload" style="position:fixed;left:36.6%;top:90%;width:26.6%;height:7.5%;">Upload</button>
+			<button id="scene_menu-load_button-download" style="position:fixed;left:63.2%;top:90%;width:26.6%;height:7.5%;">Download</button>
 		</div>
 		<div id="scene_tips" class="game hidden">
 			<ul id="scene_tips_content" style="position:fixed;left:25%;top:20%;width:50%;height:60%;border:0;list-style:none;text-align:center;">
@@ -236,26 +237,25 @@
 	</body>
 	<script src="/annihilation/libraries/processing.js"></script>
 	<script>
-		var sketchProc = function(processingInstance) {
+var sketchProc = function(processingInstance){
 var mouseIsPressed = false;
-processingInstance.mousePressed = function () { mouseIsPressed = true};
-processingInstance.mouseReleased = function () { mouseIsPressed = false};
-processingInstance.touchStarted = function () { mouseIsPressed = true};
-processingInstance.touchEnded = function () { mouseIsPressed = false};
+processingInstance.mousePressed = function(){mouseIsPressed = true};
+processingInstance.mouseReleased = function(){mouseIsPressed = false};
+processingInstance.touchStarted = function(){mouseIsPressed = true};
+processingInstance.touchEnded = function(){mouseIsPressed = false};
 var keyIsPressed = false;
-processingInstance.keyPressed = function () { keyIsPressed = true};
-processingInstance.keyReleased = function () { keyIsPressed = false};
+processingInstance.keyPressed = function(){keyIsPressed = true};
+processingInstance.keyReleased = function(){keyIsPressed = false};
 function getImage(url) {
 	processingInstance.externals.sketch.imageCache.add(url);
 	return processingInstance.loadImage(url);
 };
-with (processingInstance) {
+with(processingInstance){
 	size(innerWidth,innerHeight);
 	var view = "none";
 	var cord = [0,0];
 	var borders = [1024,512];
 	var radius = [25,75];
-	var star = {x: [],y: [],size: [],num: 128,};
 	var devMode = false;
 	var date = new Date();
 	var selectedPlanet = 0;
@@ -283,65 +283,71 @@ with (processingInstance) {
 	};
 	xhr.open("GET", "/annihilation/userdata.json", true);
 	xhr.send();
+	var star = {
+		num: 128,
+		x: [],
+		y: [],
+		size: []
+	};
+	var planet = {
+		name: ["crash site", "Abrigato", "Beta-Keralis", "Suzum", "Vespa", "Coruscare", "Vulca", "Jaeger", "Kashyyyk", "Outpost42","Victoria Alpha","Victoria Bravo", "Gesht", "Sanctuary", "Snowmass", "Ja", "Keeg", "Haemeiguli", "Borebalae", "Albataetarius", "Hataerius", "Achernaiphoros", "Antadrophei", "Hoemeirai", "Antabalis", "Hoereo", "Pazadam", "Equidor", "Pax", "Xena", "Titan", "Oturn", "Thuamia", "Heuthea", "Ditharus", "Muxater", "Trukovis", "Bichotune", "Etis", "Leorus", "Aphus", "Harophos", "Athena", "Hades", "Icarus", "Ureus", "Xentos Prime", "Delta Ketlak", "Aerox", "Thryox", "Stratus", "Nox", "Sanctum", "Pastūra", "Tinctus", "Morbus", "Neos", "Nomen", "Numerus", "Pax", "Fornax", "Skorda", "All", "Resurs","Home!"],
+		status: [],x: [],y: [],r: [],color: {r: [],g: [],b: [],},
+		difficulty: ["very easy","easy","easy-medium","medium","medium-hard","hard","very hard","extremly hard","hard-insane","insane"],
+		num: 65
+	};
 	if(winData[0] != null && winData != null && winData[0] != undefined && winData != undefined && winData != ""){
 		var worldData = JSON.parse(decodeURIComponent(winData[0]));
 		if(typeof worldData == "object"){
 			if(typeof worldData.borders != undefined && worldData.borders != undefined){
 				borders[0] = parseFloat(worldData.borders[0]);
 				borders[1] = parseFloat(worldData.borders[1]);
-			} else {console.error("Could not load custom borders")}
+			} else {console.warn("Could not load custom borders")}
 			if(typeof worldData.radius != undefined && worldData.radius != undefined){
 				radius[0] = parseFloat(worldData.radius[0]);
 				radius[1] = parseFloat(worldData.radius[1]);
-			} else {console.error("Could not load custom radius")}
+			} else {console.warn("Could not load custom radius")}
+			if(typeof worldData.planets != undefined && worldData.planets != undefined && worldData.planets > 64){
+				planet.num = parseFloat(worldData.planets);
+			} else if(worldData.planets < 65){console.error("Value of \"planets\" must be greater than 64");alert("Value of \"planets\" must be greater than 64")}else{console.warn("Could not load custom planets")}
 			if(typeof worldData.stars != undefined && worldData.stars != undefined){
 				star.num = parseFloat(worldData.stars);
-			} else {console.error("Could not load custom stars")}
+			} else {console.warn("Could not load custom stars")}
 		}
 	}
-	for(var i=0;i<star.num;i++){
-		star.x[i] == round(random(0-borders[0],0+borders[0]));
-		star.y[i] == round(random(0-borders[1],0+borders[1]));
-		star.size[i] == round(random(radius[0]/20,radius[1]/20));
+	for(var i = 0; i < star.num; i++){
+		star.x[i] = round(random(0-borders[0],0+borders[0]));
+		star.y[i] = round(random(0-borders[1],0+borders[1]));
+		star.size[i] = round(random(radius[0]/20,radius[1]/20));
 	}
-	var planet = {
-		name: ["crash site","[1] Abrigato","[2] Beta-Keralis","[3] Suzum","[4] Vespa","[5] Coruscare","[6] Vulca","[7] Jaeger","[8] Kashyyyk","[9] Outpost-42","[10] Victoria Alpha","[11] Victoria Bravo","[12] Gesht","[13] Sanctuary","[14] Snowmass","[15] Ja","[16] Keeg","[17]Haemeiguli","[18]Borebalae","[19]Albataetarius","[20]Hataerius","[21]Achernaiphoros","[22]Antadrophei","[23]Hoemeirai","[24]Antabalis","[25]Hoereo","[26]Pazadam","[27]Equidor","[28]Pax","[29]Xena","[30]Titan","[31]Oturn","[32]Thuamia","[33]Heuthea","[34]Ditharus","[35]Muxater","[36]Trukovis","[37]Bichotune","[38]Etis","[39]Leorus","[40]Aphus","[41]Harophos","[42]Athena","[43]Hades","[44]Icarus","[45]Ureus","[46]Xentos Prime","[47]Delta Ketlak","[48]Aerox","[49]Thryox","[50]Stratus","[51]Nox","[52]Sanctum","[53]Pastūra","[54] Tinctus","[55]Morbus","[56]Neos","[57]Nomen","[58]Numerus","[59]","[60]Fornax","[61]","[62]","[63]","[64] Home!"],
-		status: [],
-		x: [],
-		y: [],
-		r: [],
-		color: {
-			r: [],
-			g: [],
-			b: []
-		},
-		difficulty: ["very easy","easy","easy-medium","medium","medium-hard","hard","very hard","extremly hard","hard-insane","insane"]
-	};
-	for(var i=0;i<planet.name.length;i++){
-		planet.x[i] == round(random(0-borders[0],0+borders[0]));
-		planet.y[i] == round(random(0-borders[1],0+borders[1]));
-		planet.r[i] == round(random(radius[0],radius[1]));
-		planet.status[i] == -1;
-		if(i == 0){
-			planet.color.r[i] == 128;
-			planet.color.g[i] == 128;
-			planet.color.b[i] == 128;
+	for(var i = 0; i < planet.num; i++){
+		planet.x[i] = round(random(0-borders[0],0+borders[0]));
+		planet.y[i] = round(random(0-borders[1],0+borders[1]));
+		planet.r[i] = round(random(radius[0],radius[1]));
+		if(i > 63){planet.name[i] = "["+i+"]"} else {planet.name[i] = "["+i+"]"+planet.name[i]}
+		if(i == planet.num){
+			planet.color.r[i] = 200;
+			planet.color.g[i] = 200;
+			planet.color.b[i] = 214;
+			planet.status[i] = -1;
+			console.log(planet.status)
 		}
-		else if(i == 64){
-			planet.color.r[i] == 200;
-			planet.color.g[i] == 200;
-			planet.color.b[i] == 200;
+		else if(i == 0){
+			planet.color.r[i] = 128;
+			planet.color.g[i] = 128;
+			planet.color.b[i] = 128;
+			planet.status[i] = 0;
 		}
 		else{
-			planet.color.r[i] == round(random(0,255));
-			planet.color.g[i] == round(random(0,255));
-			planet.color.b[i] == round(random(0,255));
+			planet.color.r[i] = round(random(0,255));
+			planet.color.g[i] = round(random(0,255));
+			planet.color.b[i] = round(random(0,255));
+			planet.status[i] = -1;
 		}
 	}
 	/*
 	//FUTURE PLANET GEN CONCEPT//
 	
-	for(var i=0;i<planet.status.length;i++){
+	for(var i=0;i<planet.name.length;i++){
 		var factor = [null,100((64-i)/64)^i,2,3,function(){
 			if(i > 32){return ((i+32)^2)/64*1.5625}
 		},5,6,7,(1+i)^i];
@@ -390,6 +396,9 @@ with (processingInstance) {
 				}
 			}
 		}	
+	};
+	function crash(type,code,etc){
+		document.body.innerHTML = "<p style='background-image:none;background-color:blue;font-family:courier;font-size:14px;text-align:left;position:fixed;left:0%;width:100%;top:0%;height:100%;'>If you didn't do this on purpose, just reload the page.<br>Here are some helpful key combos:<br>Shift + C: Crashes the game<br>Shift + D: Toggle developer mode<br>Ctrl + Shift + I: Open devtools<br><br>Below is some data about your crash:<br><br>"+type+"<br>Error Code: "+code+"<br>Comments: "+etc+"<br><br>If this crash was not intentional, please open a bug report and send a screenshot or the above info.</p>";
 	};
 	function dist(a1,a2,b1,b2){
 		var a,b;
@@ -627,12 +636,12 @@ with (processingInstance) {
 				["battleship","battleship","battleship","battleship","battleship"],
 				["battleship","battleship","battleship","battleship","battleship"],
 				["dreadnought","dreadnought","dreadnought","dreadnought","dreadnought"],
-				["dreadnought","dreadnought","dreadnought","dreadnought","dreadnought","dreadnought","dreadnought","dreadnought","dreadnought"]
+["dreadnought","dreadnought","dreadnought","dreadnought","dreadnought","dreadnought","dreadnought","dreadnought","dreadnought"]
 			],
-			health: [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],
-			shields: [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],
-			damage: [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],
-			reload: [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],
+			health: [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],
+			shields: [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],
+			damage: [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],
+			reload: [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],
 		},
 			frozen: {
 			health: [],
@@ -655,7 +664,7 @@ with (processingInstance) {
 			damage: 0
 		}
 	};
-	for(var i=1;i < planet.status.length-1;i++){
+	for(var i=1;i < enemy.fleet.type.length;i++){
 		for(var j=0;j<enemy.fleet.type[i].length;j++){
 			var typeNum;
 			if(enemy.fleet.type[i][j] == "corvette"){typeNum = 0;}
@@ -757,6 +766,9 @@ with (processingInstance) {
 	document.getElementById("scene_menu-load_button-new").addEventListener("click",function(){
 		element.hide(["scene_menu-load"]);
 		element.show(["scene_menu-save"]);
+	});
+	document.getElementById("scene_menu-load_button-download").addEventListener("click",function(){
+		document.getElementById("download_link").click();//BM_DOWN
 	});
 	document.getElementById("scene_menu-load_button-delete").addEventListener("click",function(){
 		for(var i=0;i<save.info.name.length;i++){
@@ -1036,7 +1048,7 @@ with (processingInstance) {
 	document.getElementById("scene_view-yard_content_tax-button").addEventListener("click",function(){
 		if(resource.claimed < 10){
 			resource.claimed++;
-			for(var i=0;i<planet.status.length;i++){
+			for(var i=0;i<planet.name.length;i++){
 				if(planet.status[i] > 0){
 					resource.metal += i*1000*resource.multiplyer;
 					resource.minerals += i*500*resource.multiplyer;
@@ -1125,7 +1137,7 @@ with (processingInstance) {
 		save.data.tech = tech;
 		save.data.settings = settings;
 		save.content = JSON.stringify(save.data);
-		if(planet.status[planet.status.length-1] == 2){
+		if(planet.status[planet.name.length-1] == 2){
 			alert("This is disabled due to bugs!");
 		}
 		if(user.savesLoaded == false && user.loaded == true && user.name != null && user.name == undefined && user.name != "defaultuser0" ){
@@ -1143,18 +1155,22 @@ with (processingInstance) {
 		enemy.total.health = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 		enemy.total.shields = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 		for(var i = 0; i<ship.fleet.type.length; i++){
-			ship.total.damage = 0;
-			ship.total.health = 0;
-			ship.total.shields = 0;
+			if(i == 0){
+				ship.total.damage = 0;
+				ship.total.health = 0;
+				ship.total.shields = 0;
+			}
 			ship.total.damage += ship.fleet.damage[i];
 			ship.total.health += ship.fleet.health[i];
 			ship.total.shields += ship.fleet.shields[i];
 		}
-		for(var i = 1; i < enemy.fleet.type-1;i++){
-			enemy.total.damage[i] = 0;
-			enemy.total.health[i] = 0;
-			enemy.total.shields[i] = 0;
+		for(var i = 1; i < enemy.fleet.type.length;i++){
 			for(var j=0;j<enemy.fleet.type[i].length; j++){
+				if(i == 0){
+					enemy.total.damage[i] = 0;
+					enemy.total.health[i] = 0;
+					enemy.total.shields[i] = 0;   
+				}
 				enemy.total.damage[i] += enemy.fleet.damage[i][j];
 				enemy.total.health[i] += enemy.fleet.health[i][j];
 				enemy.total.shields[i] += enemy.fleet.shields[i][j];
@@ -1194,7 +1210,7 @@ with (processingInstance) {
 		borders[1] = Number(borders[1]);
 		radius[0] = Number(radius[0]);
 		radius[1] = Number(radius[1]);
-		for(var i=0;i<planet.status.length-1;i++){
+		for(var i=0;i<planet.name.length-1;i++){
 			planet.color.r[i] = parseFloat(planet.color.r[i]);
 			planet.color.g[i] = parseFloat(planet.color.g[i]);
 			planet.color.b[i] = parseFloat(planet.color.b[i]);
@@ -1259,7 +1275,7 @@ with (processingInstance) {
 		document.addEventListener("keydown",function(e){
     		if (e.key == "D") {  // case sensitive
        			if(devMode == false && view == "map" || view == "battle"){devMode = true}else{devMode = false}
-    		}
+    		} else if (e.key == "C"){crash("Non-Fatal (2)","MANUAL_CRASH_INIT","This is suposed to crash the game, freezing all data so you can check it in the devtools.<br>Unfortunatly, the one time I want to crash the game fully it won't.<br>I'm to lazy to spend hours researching how to do it, so here is this screen.<br>Not sure if it breaks the game, but hopefully it does.")}
 		});
 		if(view == "map" && devMode == true){element.show(["overlay_dev_map"])} else {element.hide(["overlay_dev_map"])}
 		if(view == "map"){
@@ -1269,11 +1285,11 @@ with (processingInstance) {
 			for(var i = 0; i < star.size.length; i++){
 				ellipse(innerWidth/2+(star.x[i]-cord[0]), innerHeight/2+(star.y[i]+cord[1]),star.size[i],star.size[i]);
 			}
-			for(var i=0;i<planet.status.length;i++){
+			for(var i=0;i<planet.name.length;i++){
 				object(planet.name[i], planet.status[i], innerWidth/2+(planet.x[i]-cord[0]), innerHeight/2+(planet.y[i]+cord[1]), planet.r[i], planet.color.r[i], planet.color.g[i], planet.color.b[i]);
 				//if(dist(innerWidth/2+(planet.x[i]-cord[0]),mouseX,innerHeight/2+(planet.y[i]+cord[1]),mouseY) > planet.r[i]){
 				//	document.body.style.cursor = "default";
-				//}
+				//
 				if(dist(innerWidth/2+(planet.x[i]-cord[0]),mouseX,innerHeight/2+(planet.y[i]+cord[1]),mouseY-(innerHeight*0.075)) <= planet.r[i]*0.75){
 					document.body.style.cursor = "pointer";
 					selectedPlanet=i;
@@ -1303,6 +1319,7 @@ with (processingInstance) {
 				stroke(255,255,255);
 				text("["+cord[0]+", "+cord[1]+"]",innerWidth*0.01,innerHeight*0.05);
 				text(round((cord[0]+mouseX)-innerWidth/2)+", "+round((cord[1]+mouseY)-innerHeight/2),innerWidth*0.01,innerHeight*0.10);
+				text(performance.memory.usedJsHeapSize,innerWidth*0.8,innerHeight*0.25);
 			}
 			if(keyIsPressed && key.toString() == "a" && borders[0]+cord[0] > 1){
 				cord[0]-=settings.keySpeed;
@@ -1329,6 +1346,7 @@ with (processingInstance) {
 			document.getElementById("scene_view-battle_content_svg_ship-health").setAttribute("width",round(ship.total.health/(ship.frozen.health/(width*0.081))));
 			document.getElementById("scene_view-battle_content_svg_ship-shields").setAttribute("width",round(ship.total.shields/(ship.frozen.shields/(width*0.081))));
 			document.getElementById("scene_view-battle_content_svg_enemy-health").setAttribute("width",round(enemy.total.health[selectedPlanet]/(enemy.frozen.health[selectedPlanet]/(width*0.081))));
+			console.log("Total Health: "+enemy.total.health[selectedPlanet]+"/"+enemy.frozen.health[selectedPlanet]);
 			document.getElementById("scene_view-battle_content_svg_enemy-shields").setAttribute("width",round(enemy.total.shields[selectedPlanet]/(enemy.frozen.shields[selectedPlanet]/(width*0.081))));
 			if(devMode == true){
 				textAlign(LEFT,TOP);
@@ -1338,6 +1356,7 @@ with (processingInstance) {
 				document.getElementById("scene_view-battle_content_advanced_enemy").innerHTML = round(enemy.total.health[selectedPlanet])+"/"+round(enemy.frozen.health[selectedPlanet])+" | "+round(enemy.total.shields[selectedPlanet])+"/"+round(enemy.frozen.shields[selectedPlanet]);
 			}
 			for(var i=0;i<ship.fleet.type.length;i++){
+				
 				var typeNum;
 				if(ship.fleet.type[i] == "corvette"){typeNum = 0;}
 				if(ship.fleet.type[i] == "frigate"){typeNum = 1;}
@@ -1367,6 +1386,7 @@ with (processingInstance) {
 						ship.fleet.reload[i] = ship.generic.reload[typeNum];
 						if(enemy.fleet.shields[selectedPlanet][target] < 1){
 							enemy.fleet.health[selectedPlanet][target]-=ship.fleet.damage[i]/20*(ship.fleet.multiplyer.damage* ship.fleet.crit.dmg*(ship.fleet.level[typeNum]+1));
+							console.log("Health: "+enemy.fleet.health[selectedPlanet][target]);
 						} else if (enemy.fleet.shields[selectedPlanet][target] > 0){
 							enemy.fleet.shields[selectedPlanet][target]-=ship.fleet.damage[i]/20*(ship.fleet.multiplyer.damage* ship.fleet.crit.dmg*(ship.fleet.level[typeNum]+1));
 						}
@@ -1437,7 +1457,6 @@ with (processingInstance) {
 			}
 		}	
 	};
-	
 }};
 var processingInstance = new Processing(document.getElementById("mycanvas"),sketchProc); 
 	</script>
