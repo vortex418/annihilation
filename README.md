@@ -6,6 +6,16 @@
 
 *Note that both the apps and game versions are still in development, and that some features may not work*
 
+### 0.4.3
+#### Released: 2021/4/22
+
+Added the ability to download a save from the load menu. Added custom planet numbers and star numbers to worldGen (exmaple below)
+
+
+*Notes on worldgen*
+Custom worlds are made via JSON at the end of the [base URL](https://vortex418.github.io/annihilation/play/beta)?{JSON here}
+`https://vortex418.github.io/annihilation/play/0.4.3?{"planets":250,"stars":500,"borders":[2050,1150],"radius":[50,100]}`
+
 ### 0.4.2
 #### Released: 2021/4/14
 
