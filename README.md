@@ -13,7 +13,7 @@ Added the ability to download a save from the load menu. Added custom planet num
 
 
 *Notes on worldgen*
-Custom worlds are made via JSON at the end of the [base URL](https://vortex418.github.io/annihilation/play/beta)?{JSON here}
+Custom worlds are made via JSON at the end of the [base URL](https://vortex418.github.io/annihilation/play/0.4.3) by adding ?{JSON here}
 `https://vortex418.github.io/annihilation/play/0.4.3?{"planets":250,"stars":500,"borders":[2050,1150],"radius":[50,100]}`
 
 ### 0.4.2
