@@ -283,158 +283,67 @@ with(processingInstance){
 	};
 	xhr.open("GET", "/annihilation/userdata.json", true);
 	xhr.send();
-	var star = {
-		num: 128,
-		x: [],
-		y: [],
-		size: []
-	};
-	var planet = {
-		name: ["crash site", "Abrigato", "Beta-Keralis", "Suzum", "Vespa", "Coruscare", "Vulca", "Jaeger", "Kashyyyk", "Outpost42","Victoria Alpha","Victoria Bravo", "Gesht", "Sanctuary", "Snowmass", "Ja", "Keeg", "Haemeiguli", "Borebalae", "Albataetarius", "Hataerius", "Achernaiphoros", "Antadrophei", "Hoemeirai", "Antabalis", "Hoereo", "Pazadam", "Equidor", "Pax", "Xena", "Titan", "Oturn", "Thuamia", "Heuthea", "Ditharus", "Muxater", "Trukovis", "Bichotune", "Etis", "Leorus", "Aphus", "Harophos", "Athena", "Hades", "Icarus", "Ureus", "Xentos Prime", "Delta Ketlak", "Aerox", "Thryox", "Stratus", "Nox", "Sanctum", "Pastūra", "Tinctus", "Morbus", "Neos", "Nomen", "Numerus", "Pax", "Fornax", "Skorda", "All", "Resurs","Home!"],
-		status: [],x: [],y: [],r: [],color: {r: [],g: [],b: [],},
-		difficulty: ["very easy","easy","easy-medium","medium","medium-hard","hard","very hard","extremly hard","hard-insane","insane"],
-		num: 65
-	};
-	function crash(type,code,etc){
-		document.body.style.backgroundImage = "none";
-		document.body.style.backgroundColor = "blue";
-		document.body.style.fontFamily = "courier";
-		document.body.innerHTML = "<p style='font-size:14px;text-align:left;position:fixed;left:0%;width:100%;top:0%;height:100%;'>If this crash was not intentional, please open a bug report and send a screenshot or the below info, then just reload the page.<br><br><br><br><br><br><br><br><br><br>Below is some data about your crash:<br><br>Crash Type: "+type+"<br>Error Code: "+code+"<br>Other Info: "+etc+"</p>";
-	};
-	function dist(a1,a2,b1,b2){
-		var a,b;
-		if(a1 > a2){a = a1-a2}else{a=a2-a1}
-		if(b1 > b2){b = b1-b2}else{b=b2-b1}
-		return Math.sqrt(a**2 + b**2);
-	};
-	if(winData[0] != null && winData != null && winData[0] != undefined && winData != undefined && winData != ""){
-		var worldData = JSON.parse(decodeURIComponent(winData[0]));
-		if(typeof worldData == "object"){
-			if(typeof worldData.borders != undefined && worldData.borders != undefined){
-				if(worldData.borders[0] > 0 && worldData.borders[1] > 0){
-					borders[0] = parseFloat(worldData.borders[0]);
-					borders[1] = parseFloat(worldData.borders[1]);
-				}
-				else if(worldData.borders[0] < 1 || worldData.borders[1] < worldData.borders[0]){borders = [innerWidth,innerHeight]}
-			}
-			else {console.warn("Could not load custom borders")}
-			if(typeof worldData.radius != undefined && worldData.radius != undefined){
-				if(worldData.radius[0] > 0 && worldData.radius[1] > worldData.radius[0]){
-					radius[0] = parseFloat(worldData.radius[0]);
-					radius[1] = parseFloat(worldData.radius[1]);
-				}
-				else if(worldData.radius[0] < 1){radius[0] = 25}
-				else if(worldData.radius[1] < worldData.radius[0]+1){radius[1] = radius[0]+50}
-			} 
-			else {console.warn("Could not load custom radius")}
-			if(typeof worldData.planets != undefined && worldData.planets != undefined){
-				if(worldData.planets > 64){
-					planet.num = parseFloat(worldData.planets);
-				}
-				else if(worldData.planets < 65){planet.num = 65}
-			} 
-			else{console.warn("Could not load custom planets")}
-			if(typeof worldData.stars != undefined && worldData.stars != undefined){
-				if(worldData.stars > 0){
-					star.num = parseFloat(worldData.stars);
-				}
-				else if(worldData.stars < 1){star.num = 128}
-			}
-			else {console.warn("Could not load custom stars")}
-		}
-	}
-	for(var i = 0; i < star.num; i++){
-		star.x[i] = round(random(0-borders[0],0+borders[0]));
-		star.y[i] = round(random(0-borders[1],0+borders[1]));
-		star.size[i] = round(random(radius[0]/20,radius[1]/20));
-	}
-	for(var i = 0; i < planet.num; i++){
-		planet.x[i] = round(random(0-borders[0],0+borders[0]));
-		planet.y[i] = round(random(0-borders[1],0+borders[1]));
-		planet.r[i] = round(random(radius[0],radius[1]));
-		if(i > 64){planet.name[i] = "["+i+"]"} else {planet.name[i] = "["+i+"]"+planet.name[i]}
-		if(i == planet.num){
-			planet.color.r[i] = 200;
-			planet.color.g[i] = 200;
-			planet.color.b[i] = 214;
-			planet.status[i] = -1;
-		}
-		else if(i == 0){
-			planet.color.r[i] = 128;
-			planet.color.g[i] = 128;
-			planet.color.b[i] = 128;
-			planet.status[i] = 0;
-		}
-		else{
-			planet.color.r[i] = round(random(0,255));
-			planet.color.g[i] = round(random(0,255));
-			planet.color.b[i] = round(random(0,255));
-			planet.status[i] = -1;
-		}
-	}
-	/*
-	//FUTURE PLANET GEN CONCEPT//
-	
-	for(var i=0;i<planet.name.length;i++){
-		var factor = [null,100((64-i)/64)^i,2,3,function(){
-			if(i > 32){return ((i+32)^2)/64*1.5625}
-		},5,6,7,(1+i)^i];
-		var random = random(0,100);
-		if(factor[1] > random){planet.sys.system[i] = 1}
-		else if(factor[2] > random){planet.sys.system[i] = 2}
-		else if(factor[3] > random){planet.sys.system[i] = 3}
-		else if(factor[4] > random){planet.sys.system[i] = 4}
-		else if(factor[5] > random){planet.sys.system[i] = 5}
-		else if(factor[6] > random){planet.sys.system[i] = 6}
-		else if(factor[7] > random){planet.sys.system[i] = 7}
-		else if(factor[8] > random){planet.sys.system[i] = 8}
-		else{alert("An error occured in planet generation.")}
-		
-	}*/
-	var element = {
-		show: function(id){
-			for(var i = 0;i<id.length;i++){
-				if(document.getElementById(id[i]).classList.contains("hidden") == true){
-					document.getElementById(id[i]).classList.remove("hidden");
-				}
-			}
+	var save = {
+		selected: 0,
+		loaded: false,
+		url: null,
+        cookie: {
+			name: [],
+			date: [],
+			type: [],
+			content: ["","","","","","","",""]
 		},
-		hide: function(id){
-			for(var i = 0;i<id.length;i++){
-				if(document.getElementById(id[i]).classList.contains("hidden") == false){
-					document.getElementById(id[i]).classList.add("hidden");
-				}
-			}
+		data: {
+			info: {},
+			planet: {},
+			star: {},
+			ship: {},
+			tech: {}
 		},
-		addClass: function(id,cls){
-			for(var i = 0;i<id.length;i++){
-				for(var j = 0;j<cls.length;j++){
-					if(document.getElementById(id[i]).classList.contains(cls[j]) == false){
-						document.getElementById(id[i]).classList.add(cls[j]);
+		info: {
+			name: [],
+			date: [],
+			type: [],
+			data: []
+		},
+		create: function(name,date,type,data){//BM_SAVE_CREATE
+			save.info.name.push(name);
+			save.info.date.push(date);
+			save.info.type.push(type);
+			save.info.data.push(data);
+			var container = document.createElement("DIV");
+			var pName = document.createElement("P");
+			var pDate = document.createElement("P");
+			var pType = document.createElement("P");
+			container.setAttribute("id","scene_menu-load_save-"+name);
+			document.getElementById("scene_menu-load_content").appendChild(container);
+			element.addClass(["scene_menu-load_save-"+name],["background","clickable"]);
+			container.style.position = "absolute";
+			container.style.width = "80%";
+			container.style.height = "10%";
+			container.style.left = "10%";
+			container.style.top = ((save.info.name.length-1)*16+12)+"%";
+			pName.innerHTML = name;
+			pDate.innerHTML = date;
+			pType.innerHTML = type;
+			[pName.style.fontSize,pDate.style.fontSize,pType.style.fontSize] = ["18px","18px","18px"];
+			[pName.style.position,pDate.style.position,pType.style.position] = ["absolute","absolute","absolute"];
+			[pName.style.left,pDate.style.left,pType.style.left] = ["10%","40%","70%"];
+			[pName.style.top,pDate.style.top,pType.style.top] = ["-30%","-30%","-30%"];
+			container.appendChild(pName);
+			container.appendChild(pDate);
+			container.appendChild(pType);
+			container.addEventListener("mouseover",function(){document.body.cursor = "pointer"});
+			container.addEventListener("mouseout",function(){document.body.cursor = "default"});
+			container.addEventListener("click",function(){
+				for(var i=0;i<save.info.name.length;i++){
+					if(save.info.name[i] == name){
+						save.selected = i;
+						console.log("Selected save \""+name+"\" at position "+save.selected);
 					}
 				}
-			}
-		},
-		removeClass: function(id,cls){
-			for(var i = 0;i<id.length;i++){
-				for(var j = 0;j<cls.length;j++){
-					if(document.getElementById(id[i]).classList.contains(cls[j]) == true){
-						document.getElementById(id[i]).classList.remove(cls[j]);
-					}
-				}
-			}
-		}	
-	};
-	function object(name,alligence,x,y,z,a,b,c){
-		fill(255,255,255);
-		if(alligence == 0){noStroke()}
-		else if(alligence < 0){stroke(255,0,0)}
-		else if(alligence > 0){stroke(0,255,0)}
-        else if(typeof alligence == "object" && alligence != null && alligence.length == 3){stroke(alligence[0],alligence[1],alligence[2])}
-        else {console.error("GAME ERROR: parameter alligence ("+alligence+") not set or invalid for object \""+name+"\"");crash("Fatal (4)","CANVAS_RENDER_VALUE_INVALID","Alligence of object \""+name+"\" was not set or is invalid!")}
-		text(name,x,y+(z*0.6));
-		fill(a,b,c);
-		ellipse(x,y,z,z);
+			});
+		}
 	};
 	var tech = {
 		points: 100,
@@ -465,18 +374,12 @@ with(processingInstance){
 		claimed: 0,
 		max: 10
 	};
-	function minimize(name){
-		if(name > 999999){
-			return name/1000000+"M";
-		}
-		else if(name > 999){
-			return name/1000+"K";
-		}
-		else if(name < 1000){
-			return name;
-		}
-		
-		
+	var star = {x:[],y:[],size:[],num:128};
+	var planet = {
+		name: ["crash site", "Abrigato", "Beta-Keralis", "Suzum", "Vespa", "Coruscare", "Vulca", "Jaeger", "Kashyyyk", "Outpost42","Victoria Alpha","Victoria Bravo", "Gesht", "Sanctuary", "Snowmass", "Ja", "Keeg", "Haemeiguli", "Borebalae", "Albataetarius", "Hataerius", "Achernaiphoros", "Antadrophei", "Hoemeirai", "Antabalis", "Hoereo", "Pazadam", "Equidor", "Pax", "Xena", "Titan", "Oturn", "Thuamia", "Heuthea", "Ditharus", "Muxater", "Trukovis", "Bichotune", "Etis", "Leorus", "Aphus", "Harophos", "Athena", "Hades", "Icarus", "Ureus", "Xentos Prime", "Delta Ketlak", "Aerox", "Thryox", "Stratus", "Nox", "Sanctum", "Pastūra", "Tinctus", "Morbus", "Neos", "Nomen", "Numerus", "Pax", "Fornax", "Skorda", "All", "Resurs","Home!"],
+		status: [],x: [],y: [],r: [],color: {r: [],g: [],b: [],},
+		difficulty: ["very easy","easy","easy-medium","medium","medium-hard","hard","very hard","extremly hard","hard-insane","insane"],
+		num: 65
 	};
 	// everything ship related!
 	var ship = {
@@ -683,6 +586,170 @@ with(processingInstance){
 			damage: 0
 		}
 	};
+	function crash(type,code,etc){
+		document.body.style.backgroundImage = "none";
+		document.body.style.backgroundColor = "blue";
+		document.body.style.fontFamily = "courier";
+		document.body.innerHTML = "<p style='font-size:14px;text-align:left;position:fixed;left:0%;width:100%;top:0%;height:100%;'>If this crash was not intentional, please open a bug report and send a screenshot or the below info, then just reload the page.<br><br><br><br><br><br><br><br><br><br>Below is some data about your crash:<br><br>Crash Type: "+type+"<br>Error Code: "+code+"<br>Other Info: "+etc+"</p>";
+	};
+	function dist(a1,a2,b1,b2){
+		var a,b;
+		if(a1 > a2){a = a1-a2}else{a=a2-a1}
+		if(b1 > b2){b = b1-b2}else{b=b2-b1}
+		return Math.sqrt(a**2 + b**2);
+	};
+	var winObj = {};
+	for(var i=0; i<winData.length;i++){
+		winObj[winData[i].split("=")[0]] = decodeURIComponent(winData[i].split("=")[1]);
+		if(i == winData.length-1){
+			console.log("Imported world data: ");
+			console.log(winObj);
+		}
+	}
+	if(winData != undefined && winObj.worldgen != undefined && winObj.worldgen != null && winObj.worldgen != ""){
+		var worldData = JSON.parse(winObj.worldgen);
+		if(typeof worldData == "object"){
+			if(typeof worldData.borders != undefined && worldData.borders != undefined){
+				if(worldData.borders[0] > 0 && worldData.borders[1] > 0){
+					borders[0] = c(worldData.borders[0]);
+					borders[1] = parseFloat(worldData.borders[1]);
+				}
+				else if(worldData.borders[0] < 1 || worldData.borders[1] < worldData.borders[0]){borders = [innerWidth,innerHeight]}
+			}
+			else {console.warn("Could not load custom borders")}
+			if(typeof worldData.radius != undefined && worldData.radius != undefined){
+				if(worldData.radius[0] > 0 && worldData.radius[1] > worldData.radius[0]){
+					radius[0] = parseFloat(worldData.radius[0]);
+					radius[1] = parseFloat(worldData.radius[1]);
+				}
+				else if(worldData.radius[0] < 1){radius[0] = 25}
+				else if(worldData.radius[1] < worldData.radius[0]+1){radius[1] = radius[0]+50}
+			} 
+			else {console.warn("Could not load custom radius")}
+			if(typeof worldData.planets != undefined && worldData.planets != undefined){
+				if(worldData.planets > 64){
+					planet.num = parseFloat(worldData.planets);
+				}
+				else if(worldData.planets < 65){planet.num = 65}
+			} 
+			else{console.warn("Could not load custom planets")}
+			if(typeof worldData.stars != undefined && worldData.stars != undefined){
+				if(worldData.stars > 0){
+					star.num = parseFloat(worldData.stars);
+				}
+				else if(worldData.stars < 1){star.num = 128}
+			}
+			else {console.warn("Could not load custom stars")}
+		} else {
+			crash("Fatal (3)","DATA_IMPORT_FAILURE","typeof worldgen must be object");
+		}
+	}
+	for(var i = 0; i < star.num; i++){
+		star.x[i] = round(random(0-borders[0],0+borders[0]));
+		star.y[i] = round(random(0-borders[1],0+borders[1]));
+		star.size[i] = round(random(radius[0]/20,radius[1]/20));
+	}
+	for(var i = 0; i < planet.num; i++){
+		planet.x[i] = round(random(0-borders[0],0+borders[0]));
+		planet.y[i] = round(random(0-borders[1],0+borders[1]));
+		planet.r[i] = round(random(radius[0],radius[1]));
+		if(i > 64){planet.name[i] = "["+i+"]"} else {planet.name[i] = "["+i+"]"+planet.name[i]}
+		if(i == planet.num){
+			planet.color.r[i] = 200;
+			planet.color.g[i] = 200;
+			planet.color.b[i] = 214;
+			planet.status[i] = -1;
+		}
+		else if(i == 0){
+			planet.color.r[i] = 128;
+			planet.color.g[i] = 128;
+			planet.color.b[i] = 128;
+			planet.status[i] = 0;
+		}
+		else{
+			planet.color.r[i] = round(random(0,255));
+			planet.color.g[i] = round(random(0,255));
+			planet.color.b[i] = round(random(0,255));
+			planet.status[i] = -1;
+		}
+	}
+	/*
+	//FUTURE PLANET GEN CONCEPT//
+	
+	for(var i=0;i<planet.name.length;i++){
+		var factor = [null,100((64-i)/64)^i,2,3,function(){
+			if(i > 32){return ((i+32)^2)/64*1.5625}
+		},5,6,7,(1+i)^i];
+		var random = random(0,100);
+		if(factor[1] > random){planet.sys.system[i] = 1}
+		else if(factor[2] > random){planet.sys.system[i] = 2}
+		else if(factor[3] > random){planet.sys.system[i] = 3}
+		else if(factor[4] > random){planet.sys.system[i] = 4}
+		else if(factor[5] > random){planet.sys.system[i] = 5}
+		else if(factor[6] > random){planet.sys.system[i] = 6}
+		else if(factor[7] > random){planet.sys.system[i] = 7}
+		else if(factor[8] > random){planet.sys.system[i] = 8}
+		else{alert("An error occured in planet generation.")}
+		
+	}*/
+	var element = {
+		show: function(id){
+			for(var i = 0;i<id.length;i++){
+				if(document.getElementById(id[i]).classList.contains("hidden") == true){
+					document.getElementById(id[i]).classList.remove("hidden");
+				}
+			}
+		},
+		hide: function(id){
+			for(var i = 0;i<id.length;i++){
+				if(document.getElementById(id[i]).classList.contains("hidden") == false){
+					document.getElementById(id[i]).classList.add("hidden");
+				}
+			}
+		},
+		addClass: function(id,cls){
+			for(var i = 0;i<id.length;i++){
+				for(var j = 0;j<cls.length;j++){
+					if(document.getElementById(id[i]).classList.contains(cls[j]) == false){
+						document.getElementById(id[i]).classList.add(cls[j]);
+					}
+				}
+			}
+		},
+		removeClass: function(id,cls){
+			for(var i = 0;i<id.length;i++){
+				for(var j = 0;j<cls.length;j++){
+					if(document.getElementById(id[i]).classList.contains(cls[j]) == true){
+						document.getElementById(id[i]).classList.remove(cls[j]);
+					}
+				}
+			}
+		}	
+	};
+	function object(name,alligence,x,y,z,a,b,c){
+		fill(255,255,255);
+		if(alligence == 0){noStroke()}
+		else if(alligence < 0){stroke(255,0,0)}
+		else if(alligence > 0){stroke(0,255,0)}
+        else if(typeof alligence == "object" && alligence != null && alligence.length == 3){stroke(alligence[0],alligence[1],alligence[2])}
+        else {console.error("GAME ERROR: parameter alligence ("+alligence+") not set or invalid for object \""+name+"\"");crash("Fatal (4)","CANVAS_RENDER_VALUE_INVALID","Alligence of object \""+name+"\" was not set or is invalid!")}
+		text(name,x,y+(z*0.6));
+		fill(a,b,c);
+		ellipse(x,y,z,z);
+	};
+	function minimize(name){
+		if(name > 999999){
+			return name/1000000+"M";
+		}
+		else if(name > 999){
+			return name/1000+"K";
+		}
+		else if(name < 1000){
+			return name;
+		}
+		
+		
+	};
 	for(var i=1;i < enemy.fleet.type.length;i++){
 		for(var j=0;j<enemy.fleet.type[i].length;j++){
 			var typeNum;
@@ -701,68 +768,6 @@ with(processingInstance){
 	var InBattle = false;
 	var battleWon = false;
 	var command = {};
-	var save = {
-		selected: 0,
-		loaded: false,
-		url: null,
-        cookie: {
-			name: [],
-			date: [],
-			type: [],
-			content: ["","","","","","","",""]
-		},
-		data: {
-			info: {},
-			planet: {},
-			star: {},
-			ship: {},
-			tech: {}
-		},
-		info: {
-			name: [],
-			date: [],
-			type: [],
-			data: []
-		},
-		create: function(name,date,type,data){//BM_SAVE_CREATE
-			save.info.name.push(name);
-			save.info.date.push(date);
-			save.info.type.push(type);
-			save.info.data.push(data);
-			var container = document.createElement("DIV");
-			var pName = document.createElement("P");
-			var pDate = document.createElement("P");
-			var pType = document.createElement("P");
-			container.setAttribute("id","scene_menu-load_save-"+name);
-			document.getElementById("scene_menu-load_content").appendChild(container);
-			element.addClass(["scene_menu-load_save-"+name],["background","clickable"]);
-			container.style.position = "absolute";
-			container.style.width = "80%";
-			container.style.height = "10%";
-			container.style.left = "10%";
-			container.style.top = ((save.info.name.length-1)*16+12)+"%";
-			pName.innerHTML = name;
-			pDate.innerHTML = date;
-			pType.innerHTML = type;
-			[pName.style.fontSize,pDate.style.fontSize,pType.style.fontSize] = ["18px","18px","18px"];
-			[pName.style.position,pDate.style.position,pType.style.position] = ["absolute","absolute","absolute"];
-			[pName.style.left,pDate.style.left,pType.style.left] = ["10%","40%","70%"];
-			[pName.style.top,pDate.style.top,pType.style.top] = ["-30%","-30%","-30%"];
-			container.appendChild(pName);
-			container.appendChild(pDate);
-			container.appendChild(pType);
-			container.addEventListener("mouseover",function(){document.body.cursor = "pointer"});
-			container.addEventListener("mouseout",function(){document.body.cursor = "default"});
-			container.addEventListener("click",function(){
-				for(var i=0;i<save.info.name.length;i++){
-					if(save.info.name[i] == name){
-						save.selected = i;
-						console.log("Selected save \""+name+"\" at position "+save.selected);
-					}
-				}
-			});
-		}
-	};
 	document.getElementById("scene_menu-main_button-new").addEventListener("click",function(){
 		element.hide(["scene_menu-main"]);
 		element.show(["scene_menu-save"]);
@@ -1139,8 +1144,41 @@ with(processingInstance){
             console.error("Your game could not be autosaved! Selected save: "+save.info.name[save.selected]);
         }
     });
+	if(winData != undefined && winObj.save != undefined && winObj.save != null && winObj.save != ""){
+		if(winObj.view == "map" || winObj.view == "yard" || winObj.view == "lab" || winObj.view == "settings"){
+			for(var i = 0;i < save.info.name.length; i++){
+				if(save.info.name[i] == winObj.save){
+					save.loadContent = save.info.data[i];	 
+					resource = save.loadContent.resource;
+					planet = save.loadContent.planet;
+					star = save.loadContent.star;
+					ship.fleet = save.loadContent.ship;
+					tech = save.loadContent.tech;
+					settings = save.loadContent.settings;
+					save.selected = i;
+					if(winObj.view == "map"){
+						view="map";element.hide(["scene_menu-main"]);element.show(["nav","mycanvas"])
+					}
+					else if(winObj.view == "yard"){
+						element.hide(["scene_menu-main"]);element.show(["nav","scene_view-yard"])
+					}
+					else if(winObj.view == "lab"){
+						element.hide(["scene_menu-main"]);element.show(["nav","scene_view-lab"])
+					}
+					else if(winObj.view == "settings"){
+						element.hide(["scene_menu-main"]);element.show(["nav","scene_menu-settings"])
+					}
+					else{crash("Fatal (4)","DATA_IMPORT_FAILURE","uncaught invalid imported view value")}
+				}
+				else if(i == save.info.name.length-1){
+					console.error("Couldn't find save \""+winObj.save+"\"");
+					alert("Couldn't find save \""+winObj.save+"\"");
+				}
+			}
+		}else{crash("Not-Fatal (2)","DATA_IMPORT_FAILURE","imported view value must be map, yard, lab, or settings")}
+	}
 	addEventListener("resize",function(){
-        if(innerWidth != 1024 || innerHeight != 576){location.assign(location.href)}
+        if(innerWidth != 1024 || innerHeight != 576){location.assign(location.protocol+"//"+location.host+location.pathname+"?save="+save.info.name[save.selected]+"&view=map&worldgen="+JSON.stringify(worldData))}
     });
 	
 	
