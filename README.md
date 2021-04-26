@@ -4,7 +4,15 @@
  
 # Changelog
 
-*Note that both the apps and game versions are still in development, and that some features may not work*
+### 0.4.4
+#### Released: 2021/4/26
+
+Changed added URL data slightly
+
+	World Generation: `worldgen={...}`
+	Automatic save loading - this allows you to automatically load a save and start playing without all the UI stuff! `save=<save name here>` and `view= <view>`. Currently the only aloud views are map, lab, yard, and settings. Make sure to seperate the arguments with ampersands! Also not that the save must already exist. Example below.
+	
+`https://vortex418.github.io/annihilation/play/0.4.4?worldgen={"planets":69}&save=Test Save&view=map`
 
 ### 0.4.3
 #### Released: 2021/4/22
