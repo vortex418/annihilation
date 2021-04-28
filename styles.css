@@ -1,7 +1,11 @@
+@font-face {
+    font-family: azonix;
+    src: url("/annihilation/libraries/azonix.otf") format("opentype");
+}
 body{
 	font-family: "Play", "Arial", Sans-Serif;
 	background: rgb(0,0,0);
-	background-image: url("/annihilation/models/background.jpg");
+	background-image: url("/annihilation/assets/background.jpg");
 	background-size: cover;
 	background-position: fixed;
 }
@@ -62,5 +66,6 @@ li:not(#scene_tips_content){border-radius:4px;text-shadow:0 0 7px hsla(200,100%,
 .title{padding: 25px;font-size: 50px;text-align: center;}
 .table-content{font-size: 15px;padding: 10px;}
 .table-title{font-size: 17px;vertical-align: top;padding: 5px;}
-.overlay{background: hsla(200,50%,25%,1);}
+.overlay{background: hsla(200,50%,25%,1)}
 .clickable:hover{cursor: pointer}
+.selected{border: 1px solid hsla(200,100%,100%,1)}
