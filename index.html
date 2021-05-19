@@ -4,7 +4,7 @@
 		<title>Annihilation - Home</title>
 		<meta charset="UTF-8">
 		<meta name="name" content="Annihilation">
-		<meta name="description" content="Welcome to Annihilation! Annihilation is a free, online space game. It is the theme and content of xcraft, but in the liniear form and progression of island clash. Play it now and join the Annihilation Discord Server (https://discord.gg/7mQsXb3EdY)!">
+		<meta name="description" content="Annihilation is a free, online space game. With unlimited cabability for customization, and fun game mecahnics, you'll love it! Play it now and join the Annihilation Discord Server (https://discord.gg/7mQsXb3EdY)!">
 		<meta name="keywords" content="Annihilation, Space, Battle, Game, Vortex">
 		<meta name="author" content="Vortex418">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -76,8 +76,8 @@
 		$("#custom-radis-max").on("change",function(){custom.radius[1] = $("#custom-radius-max").val()});
 		$("#custom-planets").on("change",function(){custom.planets = $("#custom-planets").val()});
 		$("#custom-stars").on("change",function(){custom.stars = $("#custom-stars").val()});
-	$("#play-latest").on("click", function(){open("/annihilation/play/0.4.4.html","newwindow","width=1024,height=576")});
-	$("#play-beta").on("click", function(){open("/annihilation/play/beta.html","newwindow","width=1024,height=576")});
+	$("#play-latest").on("click", function(){open("/annihilation/play/0.5.0","newwindow","width=1024,height=576")});
+	$("#play-beta").on("click", function(){open("/annihilation/play/beta","newwindow","width=1024,height=576")});
 		$("#play-custom").on("click", function(){
 			$("#custom").show();
 		});
@@ -87,7 +87,7 @@
 		$("#custom-x").on("click",function(){$("#custom").hide()});
 		$("#signin-x").on("click",function(){$("#signin").hide()});
 		$("#signup-x").on("click",function(){$("#signin").hide();$("#signup").hide()});
-		$("#custom-button").on("click",function(){open("/annihilation/play/0.4.4.html?worldgen="+JSON.stringify(custom),"newwindow","width=1024,height=576")});
+		$("#custom-button").on("click",function(){open("/annihilation/play/0.5.0?worldgen="+JSON.stringify(custom),"newwindow","width=1024,height=576")});
 		$("#settings-change").on("click", function(){alert("No settings to change yet!")});
 		$("#settings-logout").on("click", function(){
 			user.name = null;user.active = false;$("#signin-username").val(null);$("#signin-password").val(null);
