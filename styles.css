@@ -53,19 +53,42 @@ input{
 	text-shadow: rgb(245, 245, 245) 0px 0px 7px;
 }
 input:hover{cursor: text;}
-div:not(.game),ol,ul:not(#scene_tips_content){
+div:not(.game,.contextmenu),ol,ul:not(#scene_tips_content){
 	background: hsla(200,50%,25%,1);
 	border-radius:4px;
 	box-shadow:0 0 6px hsla(200,100%,80%,1);
 	text-shadow:0 0 7px hsla(200,100%,80%,1);
 	color: hsla(200,100%,90%,.8);
 }
-li:not(#scene_tips_content){border-radius:4px;text-shadow:0 0 7px hsla(200,100%,80%,1);color: hsla(200,100%,90%,.8);}
-.hidden{display: none;}
-.accordion{width: 500px;	}
+li:not(#sp_tips_content,.game){border-radius:4px;text-shadow:0 0 7px hsla(200,100%,80%,1);color: hsla(200,100%,90%,.8);}
+input[type=range]{
+	-webkit-appearance: none;
+	overflow: hidden;
+	height: 10px;
+	background: hsla(200,50%,25%,.8);
+}
+input[type=range]::-webkit-slider-runnable-track {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 100%;
+	height: 25px;
+ 	border-radius: 5px; 
+	background: hsla(200,50%,25%,.8);
+	outline: none;
+}
+input[type=range]::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 25px;
+	height: 25px;
+	border-radius: 25%; 
+	background: hsla(200,100%,90%,.8);
+	cursor: pointer;
+}
+.contextmenu{border-radius:4px;box-shadow:0 0 6px hsla(200,100%,80%,1);text-shadow:0 0 7px hsla(200,100%,80%,1);color: hsla(200,100%,90%,.8);background: hsla(200,50%,90%,0.75)}
+.accordion{width: 500px}
 .title{padding: 25px;font-size: 50px;text-align: center;}
 .table-content{font-size: 15px;padding: 10px;}
 .table-title{font-size: 17px;vertical-align: top;padding: 5px;}
-.overlay{background: hsla(200,50%,25%,1)}
 .clickable:hover{cursor: pointer}
 .selected{border: 1px solid hsla(200,100%,100%,1)}
