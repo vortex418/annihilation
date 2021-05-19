@@ -4,7 +4,29 @@
  
 # Changelog
 
-### 0.4.4
+### 0.5.0
+#### Release: 2021/5/18
+
+Massive internal changes and a few external changes.
+*Helpful tips: access the console with Ctrl + Shift + J and when we reference num, its just any number, don't actually try something like `planet[num]`, instead do `planet[0]` or `planet[1]`*
+
+- Changed how data is stored, from objects of arrays (`{x:[0,1],y:[0,1]}`) to arrays of objects  (`[{x:0,y:0},{x:1,y:1}]`), This pretty much means that you will be able to access planet data with `planet[num]` instead of `planet.x[num], planet.y[num], etc.` This applies to research (`tech`), ships, stars, and planets.
+- Enemy data stored in planet data (`planet[num].enemy`)
+- add the flags system, used in the window query area (`https://vortex418.github.io/annihilation/play/beta?flags=debug`). Notice the end of the string past the `?`. Seperate flags with commas (e.g. `?flags=debug,reload`) The `debug` flag now automatically enables debug/dev mode on page load. The `reload` flag prevents the game from reloading when you resize the screen *Note this is not recommended as resizing the window WILL corrupt the planet hitboxes*. Finally, the `mp` flag enables the multiplayer testing.
+- Multiplayer testing: with the `mp` flag (read above) you can access the expirimental multiplayer features. For 0.5.0 just the UI and data organziation has been added, so you can't connect to any servers (yet).
+- Changed research mechanics (and added really cool tooltips!): Cost now scales (20% or 25% per level). The shield research now is damage reduction, and you now regen (1 + regen level percent per second). 
+- IMPORTANT: Changed save UI. Double click a save or server to play, and right click for options. (Also cool new right-click menu).
+- QOL changes:
+	- save/saver creation menus have a x if you want to stop making a save or server
+	- added more error handing so less crashes
+	- battles are slower and hopefully more enjoyable
+- Bug Fixes:
+	- Fixed the planet hitboxes!
+	- patched the cordinate bugs
+	- fixed a ton of other bugs that got found while in development
+- This update has reduced the code size by 27% AND added a ton of useful stuff, so its worth the month and a half wait.
+
+ ### 0.4.4
 #### Released: 2021/4/26
 
 Changed added URL data slightly
